@@ -1,8 +1,8 @@
 import * as React from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
-import { MinusIcon } from "lucide-react"
 
 import { cn } from "../../utils/cn"
+import { MinusIcon } from "lucide-react"
 
 function InputOTP({
   className,
@@ -15,9 +15,10 @@ function InputOTP({
     <OTPInput
       data-slot="input-otp"
       containerClassName={cn(
-        "flex items-center gap-2 has-disabled:opacity-50",
+        "cn-input-otp flex items-center has-disabled:opacity-50",
         containerClassName
       )}
+      spellCheck={false}
       className={cn("disabled:cursor-not-allowed", className)}
       {...props}
     />
@@ -28,7 +29,10 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-otp-group"
-      className={cn("flex items-center gap-2", className)}
+      className={cn(
+        "flex items-center rounded-lg has-aria-invalid:border-destructive",
+        className
+      )}
       {...props}
     />
   )
@@ -49,7 +53,7 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "data-[active=true]:border-ring data-[active=true]:border-[length:var(--border-width-focus)] aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive bg-input border-[length:var(--border-width)] border-transparent relative flex h-11 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-all outline-none data-[active=true]:z-10",
+        "relative flex size-8 items-center justify-center border-y-[length:var(--border-width)] border-r-[length:var(--border-width)] border-transparent bg-input text-sm transition-all outline-none first:rounded-l-lg first:border-l-[length:var(--border-width)] last:rounded-r-lg aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:aria-invalid:border-destructive",
         className
       )}
       {...props}
@@ -57,7 +61,7 @@ function InputOTPSlot({
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
         </div>
       )}
     </div>
@@ -66,8 +70,14 @@ function InputOTPSlot({
 
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
-      <MinusIcon />
+    <div
+      data-slot="input-otp-separator"
+      className="flex items-center [&_svg:not([class*='size-'])]:size-4"
+      role="separator"
+      {...props}
+    >
+      <MinusIcon
+      />
     </div>
   )
 }

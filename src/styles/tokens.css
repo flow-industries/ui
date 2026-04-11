@@ -40,8 +40,8 @@
   /* Custom palette - dark */
   --color-dark-pink: oklch(0.778 0.185 337.6);
 
-  --border-width: 2px;
-  --border-width-focus: 2px;
+  --border-width: 1.5px;
+  --border-width-focus: 1.5px;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

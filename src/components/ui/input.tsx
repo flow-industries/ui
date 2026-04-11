@@ -1,16 +1,15 @@
 import * as React from "react"
+import { Input as InputPrimitive } from "@base-ui/react/input"
 
 import { cn } from "../../utils/cn"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
-    <input
+    <InputPrimitive
       type={type}
       data-slot="input"
       className={cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-transparent h-11 w-full min-w-0 rounded-md border-[length:var(--border-width)] bg-input px-4 py-2 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-9 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:border-[length:var(--border-width-focus)]",
-        "aria-invalid:border-destructive",
+        "h-8 w-full min-w-0 rounded-lg border-[length:var(--border-width)] border-transparent bg-input px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive md:text-sm dark:aria-invalid:border-destructive/50",
         className
       )}
       {...props}

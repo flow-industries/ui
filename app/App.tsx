@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { Logo } from "../src/components/logo"
 import { XIcon, DiscordIcon, GitHubIcon, BlueskyIcon } from "../src/components/icons"
@@ -32,7 +32,7 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescri
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "../src/components/ui/drawer"
 import { Popover, PopoverTrigger, PopoverContent } from "../src/components/ui/popover"
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "../src/components/ui/hover-card"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuShortcut } from "../src/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuShortcut } from "../src/components/ui/dropdown-menu"
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "../src/components/ui/context-menu"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../src/components/ui/collapsible"
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "../src/components/ui/breadcrumb"
@@ -54,7 +54,7 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuL
 import { toast } from "sonner"
 import {
   AlertCircle, Bold, Italic, Underline,
-  Mail, Plus, Trash2, Settings, Star, Copy, Check, X,
+  Mail, Plus, Trash2, Settings, Star, Copy, Check,
   ChevronsUpDown, Inbox, Search, User, CreditCard, LogOut,
   Home, FileText, Image as ImageIcon,
 } from "lucide-react"
@@ -79,17 +79,26 @@ const palette = {
     { name: "Yellow", fancy: "Banana Light", token: "light-yellow", cls: "bg-light-yellow" },
   ],
   semantic: [
-    { name: "Background", token: "background", cls: "bg-background", border: true },
-    { name: "Foreground", token: "foreground", cls: "bg-foreground" },
-    { name: "Primary", token: "primary", cls: "bg-primary" },
-    { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true },
+    { name: "Background", token: "background", cls: "bg-background", border: true, fg: { token: "foreground", cls: "bg-foreground" } },
+    { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
+    { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
+    { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
+    { name: "Accent", token: "accent", cls: "bg-accent", border: true, fg: { token: "accent-foreground", cls: "bg-accent-foreground" } },
     { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Success", token: "success", cls: "bg-success" },
-    { name: "Card", token: "card", cls: "bg-card", border: true },
+    { name: "Card", token: "card", cls: "bg-card", border: true, fg: { token: "card-foreground", cls: "bg-card-foreground" } },
+    { name: "Popover", token: "popover", cls: "bg-popover", border: true, fg: { token: "popover-foreground", cls: "bg-popover-foreground" } },
+  ],
+  surface: [
+    { name: "Border", token: "border", cls: "bg-border", border: true },
+    { name: "Input", token: "input", cls: "bg-input", border: true },
+    { name: "Ring", token: "ring", cls: "bg-ring" },
+    { name: "Overlay", token: "overlay", cls: "bg-overlay" },
+    { name: "Placeholder", token: "placeholder", cls: "bg-placeholder" },
   ],
 }
 
-type PaletteColor = { name: string; fancy?: string; token: string; cls: string; border?: boolean }
+type PaletteColor = { name: string; fancy?: string; token: string; cls: string; border?: boolean; fg?: { token: string; cls: string } }
 
 function Section({ title, children, wide }: { title: string; children: React.ReactNode; wide?: boolean }) {
   return (
@@ -160,6 +169,7 @@ export function App() {
               <ColorRow label="Standard" colors={palette.standard} />
               <ColorRow label="Light" colors={palette.light} />
               <ColorRow label="Semantic" colors={palette.semantic} />
+              <ColorRow label="Surface" colors={palette.surface} />
             </div>
           </Section>
 
@@ -180,6 +190,23 @@ export function App() {
               </div>
             </div>
           </Section>
+
+          {/* Usage */}
+          <div className="w-full bg-card rounded-xl p-6 space-y-4">
+            <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">Usage</h2>
+            <CodeBlock
+              label="Import a component"
+              code={`import { Button } from "@flow-industries/ui/components/button"`}
+            />
+            <CodeBlock
+              label="Import utilities"
+              code={`import { cn } from "@flow-industries/ui"`}
+            />
+            <CodeBlock
+              label="Import styles"
+              code={`@import "@flow-industries/ui/styles/tokens.css";\n@import "@flow-industries/ui/styles/base.css";`}
+            />
+          </div>
 
           {/* Button */}
           <Section title="Button" wide>
@@ -480,10 +507,8 @@ export function App() {
             <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="max-w-sm space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">3 items</span>
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <ChevronsUpDown className="size-4" />
-                  </Button>
+                <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
+                  <ChevronsUpDown className="size-4" />
                 </CollapsibleTrigger>
               </div>
               <div className="rounded-md border px-4 py-2 text-sm">First item</div>
@@ -530,8 +555,8 @@ export function App() {
           <Section title="Dialog">
             <Preview>
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">Open Dialog</Button>
+                <DialogTrigger render={<Button variant="outline" />}>
+                  Open Dialog
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -545,8 +570,8 @@ export function App() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
+                    <DialogClose render={<Button variant="outline" />}>
+                      Cancel
                     </DialogClose>
                     <Button>Save</Button>
                   </DialogFooter>
@@ -559,8 +584,8 @@ export function App() {
           <Section title="Alert Dialog">
             <Preview>
               <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive"><Trash2 /> Delete Account</Button>
+                <AlertDialogTrigger render={<Button variant="destructive" />}>
+                  <Trash2 /> Delete Account
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
@@ -580,8 +605,8 @@ export function App() {
           <Section title="Sheet">
             <Preview>
               <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline">Open Sheet</Button>
+                <SheetTrigger render={<Button variant="outline" />}>
+                  Open Sheet
                 </SheetTrigger>
                 <SheetContent>
                   <SheetHeader>
@@ -608,8 +633,8 @@ export function App() {
           <Section title="Drawer">
             <Preview>
               <Drawer>
-                <DrawerTrigger asChild>
-                  <Button variant="outline">Open Drawer</Button>
+                <DrawerTrigger render={<Button variant="outline" />}>
+                  Open Drawer
                 </DrawerTrigger>
                 <DrawerContent>
                   <div className="mx-auto w-full max-w-sm">
@@ -630,8 +655,8 @@ export function App() {
           <Section title="Popover">
             <Preview>
               <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline">Open Popover</Button>
+                <PopoverTrigger render={<Button variant="outline" />}>
+                  Open Popover
                 </PopoverTrigger>
                 <PopoverContent className="w-64">
                   <div className="space-y-2">
@@ -656,8 +681,8 @@ export function App() {
           <Section title="Hover Card">
             <Preview>
               <HoverCard>
-                <HoverCardTrigger asChild>
-                  <Button variant="link">@flow-industries</Button>
+                <HoverCardTrigger render={<Button variant="link" />}>
+                  @flow-industries
                 </HoverCardTrigger>
                 <HoverCardContent className="w-64">
                   <div className="flex gap-3">
@@ -678,8 +703,8 @@ export function App() {
           <Section title="Tooltip">
             <Preview>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline">Hover me</Button>
+                <TooltipTrigger render={<Button variant="outline" />}>
+                  Hover me
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>This is a tooltip</p>
@@ -692,15 +717,17 @@ export function App() {
           <Section title="Dropdown Menu">
             <Preview>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">Options</Button>
+                <DropdownMenuTrigger render={<Button variant="outline" />}>
+                  Options
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
-                  <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
-                  <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
+                    <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
+                    <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+                  </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -964,27 +991,10 @@ export function App() {
             </Preview>
           </Section>
 
-          {/* Usage */}
-          <Section title="Usage" wide>
-            <div className="space-y-4">
-              <CodeBlock
-                label="Import a component"
-                code={`import { Button } from "@flow-industries/ui/components/button"`}
-              />
-              <CodeBlock
-                label="Import utilities"
-                code={`import { cn } from "@flow-industries/ui"`}
-              />
-              <CodeBlock
-                label="Import styles"
-                code={`@import "@flow-industries/ui/styles/tokens.css";\n@import "@flow-industries/ui/styles/base.css";`}
-              />
-            </div>
-          </Section>
         </main>
 
         <footer className="px-6 md:px-12 py-8 mt-12 mb-8 max-w-5xl mx-auto">
-          <div className="bg-muted rounded-xl p-6 flex items-center justify-between">
+          <div className="bg-card rounded-xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Logo size={16} />
               <span className="text-sm tracking-widest font-extralight text-muted-foreground">
@@ -1115,121 +1125,125 @@ function CopyIcon({ copied }: { copied: boolean }) {
   )
 }
 
-function ColorPopup({ name, fancy, color, position, onClose }: {
-  name: string
-  fancy?: string
-  color: string
-  position: { x: number; y: number }
-  onClose: () => void
+function ColorPopover({
+  swatchRef,
+  computedColor,
+  label,
+  children,
+}: {
+  swatchRef: React.RefObject<HTMLDivElement | null>
+  computedColor: string | null
+  label: string
+  children: React.ReactNode
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const parsed = parseColor(color)
+  const [color, setColor] = useState<string | null>(computedColor)
   const [copied, setCopied] = useState<string | null>(null)
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
+  const handleOpen = (open: boolean) => {
+    if (open && swatchRef.current) {
+      setColor(getComputedStyle(swatchRef.current).backgroundColor)
     }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
-  }, [onClose])
+  }
 
-  const copy = (value: string, label: string) => {
+  const copy = (value: string, l: string) => {
     navigator.clipboard.writeText(value)
-    setCopied(label)
+    setCopied(l)
     setTimeout(() => setCopied(null), 1500)
   }
 
-  const formats = [
-    { label: "HEX", value: parsed.hex },
-    { label: "RGB", value: parsed.rgb },
-    { label: "HSL", value: parsed.hsl },
-    { label: "OKLCH", value: parsed.oklch },
-  ]
+  const parsed = color ? parseColor(color) : null
+  const formats = parsed
+    ? [
+        { label: "HEX", value: parsed.hex },
+        { label: "RGB", value: parsed.rgb },
+        { label: "HSL", value: parsed.hsl },
+        { label: "OKLCH", value: parsed.oklch },
+      ]
+    : []
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: -4, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -4, scale: 0.98 }}
-      transition={{ duration: 0.15 }}
-      className="fixed z-50 bg-card border border-border rounded-xl shadow-lg p-4 w-80"
-      style={{ left: position.x, top: position.y }}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-md" style={{ backgroundColor: color }} />
-          <span className="text-sm font-medium">{fancy ?? name}</span>
-        </div>
-        <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
-          <X className="size-4" />
-        </button>
-      </div>
-      <div className="space-y-1">
-        {formats.map((f) => (
-          <button
-            key={f.label}
-            onClick={() => copy(f.value, f.label)}
-            className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors group text-left"
+    <Popover onOpenChange={handleOpen}>
+      {children}
+      <PopoverContent side="right" sideOffset={12} className="w-80 p-4">
+        {parsed && (
+          <>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-6 h-6 rounded-md" style={{ backgroundColor: color! }} />
+              <span className="text-sm font-medium">{label}</span>
+            </div>
+            <div className="space-y-1">
+              {formats.map((f) => (
+                <button
+                  key={f.label}
+                  onClick={() => copy(f.value, f.label)}
+                  className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors group text-left"
+                >
+                  <span className="text-xs text-muted-foreground w-11 shrink-0">{f.label}</span>
+                  <span className="text-xs font-mono flex-1">{f.value}</span>
+                  <CopyIcon copied={copied === f.label} />
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+function ColorSwatch({ c }: { c: PaletteColor }) {
+  const swatchRef = useRef<HTMLDivElement>(null)
+  const fgRef = useRef<HTMLDivElement>(null)
+  const [fgHovered, setFgHovered] = useState(false)
+
+  return (
+    <div className="flex items-center gap-4">
+      <div className="relative shrink-0">
+        <ColorPopover swatchRef={swatchRef} computedColor={null} label={c.fancy ?? c.name}>
+          <PopoverTrigger
+            render={<button />}
+            className="group/bg cursor-pointer"
+            onMouseEnter={() => setFgHovered(false)}
           >
-            <span className="text-xs text-muted-foreground w-11 shrink-0">{f.label}</span>
-            <span className="text-xs font-mono flex-1">{f.value}</span>
-            <CopyIcon copied={copied === f.label} />
-          </button>
-        ))}
+            <div
+              ref={swatchRef}
+              className={`w-10 h-10 rounded-lg transition-transform ${fgHovered ? "" : "group-hover/bg:scale-110"} ${c.cls} ${c.border ? "border border-border" : ""}`}
+            />
+          </PopoverTrigger>
+        </ColorPopover>
+        {c.fg && (
+          <ColorPopover swatchRef={fgRef} computedColor={null} label={`${c.name} Foreground`}>
+            <PopoverTrigger
+              render={<button />}
+              className="group/fg absolute -bottom-1.5 -right-1.5 cursor-pointer z-10"
+              onMouseEnter={() => setFgHovered(true)}
+              onMouseLeave={() => setFgHovered(false)}
+            >
+              <div
+                ref={fgRef}
+                className={`w-5 h-5 rounded-full border-2 border-background transition-transform group-hover/fg:scale-125 ${c.fg.cls}`}
+              />
+            </PopoverTrigger>
+          </ColorPopover>
+        )}
       </div>
-    </motion.div>
+      <div className="flex flex-col min-w-0">
+        <span className="text-sm font-medium">{c.fancy ?? c.name}</span>
+        <span className="text-xs text-muted-foreground font-mono">{c.token}</span>
+      </div>
+    </div>
   )
 }
 
 function ColorRow({ label, colors }: { label: string; colors: PaletteColor[] }) {
-  const [popup, setPopup] = useState<{ name: string; fancy?: string; color: string; position: { x: number; y: number } } | null>(null)
-
-  const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>, c: PaletteColor) => {
-    const swatch = e.currentTarget.querySelector("[data-swatch]") as HTMLElement
-    const computed = getComputedStyle(swatch).backgroundColor
-    const rect = swatch.getBoundingClientRect()
-    setPopup({
-      name: c.name,
-      fancy: c.fancy,
-      color: computed,
-      position: { x: Math.min(rect.right + 12, window.innerWidth - 340), y: rect.top },
-    })
-  }, [])
-
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">{label}</p>
       <div className="flex flex-col gap-1.5">
         {colors.map((c) => (
-          <div
-            key={c.token}
-            className="flex items-center gap-4 cursor-pointer group"
-            onClick={(e) => handleClick(e, c)}
-          >
-            <div
-              data-swatch
-              className={`w-10 h-10 rounded-lg shrink-0 group-hover:scale-110 transition-transform ${c.cls} ${c.border ? "border border-border" : ""}`}
-            />
-            <div className="flex flex-col min-w-0">
-              <span className="text-sm font-medium">{c.fancy ?? c.name}</span>
-              <span className="text-xs text-muted-foreground font-mono">{c.token}</span>
-            </div>
-          </div>
+          <ColorSwatch key={c.token} c={c} />
         ))}
       </div>
-      <AnimatePresence>
-        {popup && (
-          <ColorPopup
-            name={popup.name}
-            fancy={popup.fancy}
-            color={popup.color}
-            position={popup.position}
-            onClose={() => setPopup(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   )
 }
@@ -1248,7 +1262,7 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
   return (
     <div>
       <p className="text-xs text-muted-foreground mb-1.5">{label}</p>
-      <pre className="bg-muted rounded-lg px-4 py-3 text-sm font-mono overflow-x-auto">
+      <pre className="bg-background rounded-lg px-4 py-3 text-sm font-mono overflow-x-auto">
         <code>{code}</code>
       </pre>
     </div>
