@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer base {
+  * {
+    @apply border-border;
+    corner-shape: superellipse(1.6);
+  }
+  button, a, [role="button"], [type="button"], [type="submit"], [type="reset"], label[for], select, summary {
+    cursor: pointer;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-light-pink/50 text-dark-pink;
+  }
+}
