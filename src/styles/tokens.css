@@ -4,6 +4,21 @@
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
+  /* Typography scale (default + 10%) */
+  --text-xs: 0.825rem;
+  --text-sm: 0.9625rem;
+  --text-base: 1.1rem;
+  --text-lg: 1.2375rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.65rem;
+  --text-3xl: 2.0625rem;
+  --text-4xl: 2.475rem;
+  --text-5xl: 3.3rem;
+  --text-6xl: 4.125rem;
+  --text-7xl: 4.95rem;
+  --text-8xl: 6.6rem;
+  --text-9xl: 8.8rem;
+
   /* Apple-inspired typography scale */
   --tracking-tighter: -0.03em;
   --tracking-tight: -0.015em;
@@ -54,6 +69,8 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-card-1: var(--card-1);
+  --color-card-1-foreground: var(--card-1-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
@@ -95,6 +112,9 @@
   --card: oklch(0.98 0 0);
   --card-foreground: oklch(0.15 0 0);
 
+  --card-1: oklch(0.98 0 0);
+  --card-1-foreground: oklch(0.15 0 0);
+
   --popover: oklch(0.97 0 0);
   --popover-foreground: oklch(0.15 0 0);
 
@@ -113,10 +133,10 @@
   --destructive: oklch(0.770 0.143 5.0);
 
   --border: oklch(0.93 0 0);
-  --input: oklch(0.976 0.003 264.5);
+  --input: oklch(1 0 0);
   --ring: oklch(0.25 0 0);
 
-  --success: oklch(0.904 0.158 159.0);
+  --success: oklch(0.8 0.2 157);
   --overlay: oklch(0 0 0 / 0.75);
   --placeholder: oklch(0.264 0 0 / 0.2);
 
@@ -145,6 +165,9 @@
   --card: oklch(0.20 0 0);
   --card-foreground: oklch(0.95 0 0);
 
+  --card-1: oklch(0.20 0 0);
+  --card-1-foreground: oklch(0.95 0 0);
+
   --popover: oklch(0.14 0 0);
   --popover-foreground: oklch(0.95 0 0);
 
@@ -163,10 +186,10 @@
   --destructive: oklch(0.770 0.143 5.0);
 
   --border: oklch(0.20 0 0);
-  --input: oklch(0.20 0 0);
+  --input: oklch(0.10 0 0);
   --ring: oklch(0.70 0 0);
 
-  --success: oklch(0.904 0.158 159.0);
+  --success: oklch(0.8 0.2 157);
   --placeholder: oklch(0.95 0 0 / 0.3);
   --overlay: oklch(0 0 0 / 0.5);
 

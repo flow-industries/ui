@@ -15,7 +15,6 @@ import { Separator } from "../src/components/ui/separator"
 import { Skeleton } from "../src/components/ui/skeleton"
 import { Spinner } from "../src/components/ui/spinner"
 import { Avatar, AvatarFallback } from "../src/components/ui/avatar"
-import { Alert, AlertTitle, AlertDescription } from "../src/components/ui/alert"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../src/components/ui/card"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../src/components/ui/tabs"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../src/components/ui/accordion"
@@ -40,23 +39,23 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "../src/components/ui/input-otp"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../src/components/ui/input-group"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription as EmptyDesc } from "../src/components/ui/empty"
-import { Toaster } from "../src/components/ui/sonner"
+import { ToastProvider, toast } from "../src/components/ui/toast"
 import { ButtonGroup } from "../src/components/ui/button-group"
-import { Calendar } from "../src/components/ui/calendar"
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "../src/components/ui/command"
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator as MenubarSep, MenubarShortcut } from "../src/components/ui/menubar"
 import { ScrollArea } from "../src/components/ui/scroll-area"
 import { AspectRatio } from "../src/components/ui/aspect-ratio"
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../src/components/ui/carousel"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../src/components/ui/resizable"
-import { HoverBorderGradient } from "../src/components/ui/hover-border-gradient"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../src/components/ui/navigation-menu"
-import { toast } from "sonner"
+import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
+import { cn } from "../src/utils/cn"
 import {
-  AlertCircle, Bold, Italic, Underline,
+  Bold, Italic, Underline,
   Mail, Plus, Trash2, Settings, Star, Copy, Check,
   ChevronsUpDown, Inbox, Search, User, CreditCard, LogOut,
   Home, FileText, Image as ImageIcon,
+  Bell, Moon, Sun, Send, Filter, Globe, ChevronDown, Type, AlignLeft, LayoutGrid, Component,
+  Clock, MoreHorizontal, Reply, Archive, RefreshCw, Download, PenLine, Eye,
 } from "lucide-react"
 
 const palette = {
@@ -80,21 +79,21 @@ const palette = {
   ],
   semantic: [
     { name: "Background", token: "background", cls: "bg-background", border: true, fg: { token: "foreground", cls: "bg-foreground" } },
-    { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
+    { name: "Card", token: "card", cls: "bg-card", border: true, fg: { token: "card-foreground", cls: "bg-card-foreground" } },
+    { name: "Popover", token: "popover", cls: "bg-popover", border: true, fg: { token: "popover-foreground", cls: "bg-popover-foreground" } },
     { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
     { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
     { name: "Accent", token: "accent", cls: "bg-accent", border: true, fg: { token: "accent-foreground", cls: "bg-accent-foreground" } },
-    { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Success", token: "success", cls: "bg-success" },
-    { name: "Card", token: "card", cls: "bg-card", border: true, fg: { token: "card-foreground", cls: "bg-card-foreground" } },
-    { name: "Popover", token: "popover", cls: "bg-popover", border: true, fg: { token: "popover-foreground", cls: "bg-popover-foreground" } },
+    { name: "Destructive", token: "destructive", cls: "bg-destructive" },
+    { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
   ],
   surface: [
-    { name: "Border", token: "border", cls: "bg-border", border: true },
     { name: "Input", token: "input", cls: "bg-input", border: true },
+    { name: "Border", token: "border", cls: "bg-border", border: true },
+    { name: "Placeholder", token: "placeholder", cls: "bg-placeholder" },
     { name: "Ring", token: "ring", cls: "bg-ring" },
     { name: "Overlay", token: "overlay", cls: "bg-overlay" },
-    { name: "Placeholder", token: "placeholder", cls: "bg-placeholder" },
   ],
 }
 
@@ -122,15 +121,1458 @@ function Preview({ label, children }: { label?: string; children: React.ReactNod
   )
 }
 
-export function App() {
-  const [progress] = useState(65)
-  const [collapsibleOpen, setCollapsibleOpen] = useState(false)
-  const [calendarDate, setCalendarDate] = useState<Date | undefined>(new Date())
+function Showcase({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <Card className={cn("overflow-hidden p-6", className)}>
+      {children}
+    </Card>
+  )
+}
+
+function AppShellShowcase() {
+  const sidebarItems = ["Dashboard", "Projects", "Tasks", "Messages", "Analytics", "Documents", "Calendar", "Settings"]
 
   return (
+    <Showcase>
+      <Menubar className="rounded-none border-x-0 border-t-0">
+        <MenubarMenu>
+          <MenubarTrigger>File</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>New <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>N</Kbd></MenubarShortcut></MenubarItem>
+            <MenubarItem>Open <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>O</Kbd></MenubarShortcut></MenubarItem>
+            <MenubarSep />
+            <MenubarItem>Save <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>S</Kbd></MenubarShortcut></MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger>Edit</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>Undo</MenubarItem>
+            <MenubarItem>Redo</MenubarItem>
+            <MenubarSep />
+            <MenubarItem>Cut</MenubarItem>
+            <MenubarItem>Copy</MenubarItem>
+            <MenubarItem>Paste</MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger>View</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>Zoom In</MenubarItem>
+            <MenubarItem>Zoom Out</MenubarItem>
+            <MenubarSep />
+            <MenubarItem>Full Screen</MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
+
+      <div className="flex items-center justify-between px-4 py-2 border-b">
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                Home
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                Projects
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                Settings
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <div className="flex items-center gap-2">
+          <Tooltip>
+            <TooltipTrigger render={<Button variant="ghost" size="icon" />}>
+              <Settings className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent>Settings</TooltipContent>
+          </Tooltip>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="cursor-pointer">
+              <Avatar className="size-8">
+                <AvatarFallback className="text-xs">FL</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48" align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <div className="px-4 py-3">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Projects</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Flow UI</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
+      <div className="px-4 pb-4">
+        <ResizablePanelGroup direction="horizontal" className="rounded-lg border min-h-[300px]">
+          <ResizablePanel defaultSize={30} minSize={20}>
+            <ScrollArea className="h-[300px]">
+              <div className="p-2 space-y-0.5">
+                {sidebarItems.map((item, i) => (
+                  <div key={item}>
+                    <Button variant="ghost" className="w-full justify-start text-sm" size="sm">
+                      {item}
+                    </Button>
+                    {i < sidebarItems.length - 1 && <Separator className="my-0.5" />}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={70}>
+            <div className="p-6">
+              <h3 className="text-lg font-medium mb-2">Flow UI</h3>
+              <p className="text-sm text-muted-foreground">
+                Shared design system and component library for Flow applications.
+                Select an item from the sidebar to navigate between sections.
+              </p>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+    </Showcase>
+  )
+}
+
+function AccountSettingsShowcase() {
+  const [fontSize, setFontSize] = useState(16)
+
+  return (
+    <Showcase>
+      <Card className="border-0 shadow-none">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <CardTitle>Account Settings</CardTitle>
+            <Badge>Pro</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="profile">
+            <TabsList>
+              <TabsTrigger value="profile">Profile</TabsTrigger>
+              <TabsTrigger value="notifications">Notifications</TabsTrigger>
+              <TabsTrigger value="appearance">Appearance</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="profile" className="pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="settings-name">Display Name</Label>
+                  <Input id="settings-name" placeholder="John Doe" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="settings-email">Email</Label>
+                  <Input id="settings-email" type="email" placeholder="john@example.com" />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="settings-bio">Bio</Label>
+                  <Textarea id="settings-bio" placeholder="Tell us about yourself..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Timezone</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select timezone" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="utc-8">UTC-8</SelectItem>
+                      <SelectItem value="utc-5">UTC-5</SelectItem>
+                      <SelectItem value="utc+0">UTC+0</SelectItem>
+                      <SelectItem value="utc+1">UTC+1</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <NativeSelect>
+                    <NativeSelectOption value="en">English</NativeSelectOption>
+                    <NativeSelectOption value="es">Spanish</NativeSelectOption>
+                    <NativeSelectOption value="fr">French</NativeSelectOption>
+                    <NativeSelectOption value="de">German</NativeSelectOption>
+                  </NativeSelect>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-6">
+                <ButtonGroup>
+                  <Button variant="outline">Cancel</Button>
+                  <Button onClick={() => toast.success("Settings saved")}>Save</Button>
+                </ButtonGroup>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="notifications" className="pt-4 space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-email">Email notifications</Label>
+                  <Switch id="notif-email" defaultChecked />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-push">Push notifications</Label>
+                  <Switch id="notif-push" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-digest">Weekly digest</Label>
+                  <Switch id="notif-digest" defaultChecked />
+                </div>
+              </div>
+              <Separator />
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="cb-marketing" />
+                  <Label htmlFor="cb-marketing">Marketing emails</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox id="cb-product" defaultChecked />
+                  <Label htmlFor="cb-product">Product updates</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox id="cb-security" defaultChecked />
+                  <Label htmlFor="cb-security">Security alerts</Label>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="appearance" className="pt-4 space-y-4">
+              <RadioGroup defaultValue="system">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="light" id="theme-light" />
+                  <Label htmlFor="theme-light">Light</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="dark" id="theme-dark" />
+                  <Label htmlFor="theme-dark">Dark</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="system" id="theme-system" />
+                  <Label htmlFor="theme-system">System</Label>
+                </div>
+              </RadioGroup>
+              <Separator />
+              <div className="space-y-2 max-w-sm">
+                <div className="flex items-center justify-between">
+                  <Label>Font Size</Label>
+                  <span className="text-sm text-muted-foreground">{fontSize}px</span>
+                </div>
+                <Slider value={[fontSize]} onValueChange={(v) => setFontSize(v[0])} min={12} max={24} step={1} />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </Showcase>
+  )
+}
+
+function TeamMembersShowcase() {
+  const members = [
+    { name: "Alex Chen", email: "alex@flow.industries", role: "Admin", status: "Active", initials: "AC" },
+    { name: "Sam Wilson", email: "sam@flow.industries", role: "Developer", status: "Active", initials: "SW" },
+    { name: "Jordan Lee", email: "jordan@flow.industries", role: "Designer", status: "Away", initials: "JL" },
+  ]
+
+  return (
+    <Showcase className="space-y-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="relative max-w-xs flex-1">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Input placeholder="Search members..." className="pl-8" />
+        </div>
+        <Dialog>
+          <DialogTrigger render={<Button />}>
+            <Plus className="size-4" /> Add Member
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Member</DialogTitle>
+              <DialogDescription>Add a new team member to your project.</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="add-name">Name</Label>
+                <Input id="add-name" placeholder="Full name" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-email">Email</Label>
+                <Input id="add-email" type="email" placeholder="email@example.com" />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+              <Button onClick={() => toast.success("Member added")}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <ContextMenu>
+        <ContextMenuTrigger className="w-full">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Member</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {members.map((m) => (
+                <TableRow key={m.email}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="size-8">
+                        <AvatarFallback className="text-xs">{m.initials}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">{m.name}</p>
+                        <p className="text-xs text-muted-foreground">{m.email}</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell><Badge variant="secondary">{m.role}</Badge></TableCell>
+                  <TableCell>
+                    <Badge variant={m.status === "Active" ? "default" : "outline"}>{m.status}</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <Tooltip>
+                        <TooltipTrigger render={
+                          <DropdownMenuTrigger render={<Button variant="ghost" size="icon" />}>
+                            <MoreHorizontal className="size-4" />
+                          </DropdownMenuTrigger>
+                        } />
+                        <TooltipContent>Actions</TooltipContent>
+                      </Tooltip>
+                      <DropdownMenuContent align="end">
+                        <Dialog>
+                          <DialogTrigger render={<DropdownMenuItem onSelect={(e) => e.preventDefault()} />}>
+                            <PenLine className="size-4" /> Edit
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Edit Member</DialogTitle>
+                              <DialogDescription>Update member information.</DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                              <div className="space-y-2">
+                                <Label>Name</Label>
+                                <Input defaultValue={m.name} />
+                              </div>
+                              <div className="space-y-2">
+                                <Label>Email</Label>
+                                <Input defaultValue={m.email} />
+                              </div>
+                            </div>
+                            <DialogFooter>
+                              <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+                              <Button onClick={() => toast.success("Member updated")}>Save</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                        <AlertDialog>
+                          <AlertDialogTrigger render={<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()} />}>
+                            <Trash2 className="size-4" /> Remove
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Remove Member</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to remove {m.name} from the team? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => toast.success("Member removed")}>Remove</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="size-8 rounded-full" />
+                    <div className="space-y-1.5">
+                      <Skeleton className="h-3.5 w-24" />
+                      <Skeleton className="h-3 w-32" />
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell><Skeleton className="h-5 w-16" /></TableCell>
+                <TableCell><Skeleton className="h-5 w-14" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-48">
+          <ContextMenuItem><RefreshCw className="size-4" /> Refresh</ContextMenuItem>
+          <ContextMenuItem><Download className="size-4" /> Export</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem>Select All</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">2</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">3</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+
+      <div className="max-w-xs">
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>No members match your search</EmptyTitle>
+            <EmptyDesc>Try adjusting your search to find what you're looking for.</EmptyDesc>
+          </EmptyHeader>
+        </Empty>
+      </div>
+    </Showcase>
+  )
+}
+
+function VerificationFlowShowcase() {
+  const [step, setStep] = useState(1)
+
+  return (
+    <Showcase className="max-w-sm mx-auto">
+      <div className="space-y-6">
+        <Progress value={(step / 3) * 100} />
+
+        {step === 1 && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-center">Sign In</h3>
+            <InputGroup>
+              <InputGroupAddon><Mail className="size-4" /></InputGroupAddon>
+              <InputGroupInput placeholder="you@example.com" type="email" />
+            </InputGroup>
+            <Button className="w-full" onClick={() => setStep(2)}>Continue</Button>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-center">Verify</h3>
+            <Label className="text-center block text-sm text-muted-foreground">Enter the code we sent you</Label>
+            <div className="flex justify-center">
+              <InputOTP maxLength={6}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+            <Button className="w-full" onClick={() => setStep(3)}>Verify</Button>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-4 text-center">
+            <div className="flex justify-center">
+              <div className="rounded-full bg-success/20 p-3">
+                <Check className="size-6 text-success" />
+              </div>
+            </div>
+            <h3 className="text-lg font-medium">Verified</h3>
+            <Button className="w-full" onClick={() => setStep(1)}>Continue to Dashboard</Button>
+          </div>
+        )}
+      </div>
+    </Showcase>
+  )
+}
+
+function MediaGalleryShowcase() {
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false)
+  const galleryItems = [
+    { title: "Abstract Waves", creator: null },
+    { title: "Mountain Vista", creator: { name: "Alex Chen", initials: "AC", desc: "Landscape photographer based in Portland." } },
+    { title: "Urban Grid", creator: null },
+    { title: "Neon Lights", creator: null },
+    { title: "Ocean Calm", creator: null },
+  ]
+
+  return (
+    <Showcase className="space-y-4">
+      <div className="max-w-xs mx-auto">
+        <Carousel>
+          <CarouselContent>
+            {galleryItems.map((item, i) => (
+              <CarouselItem key={i}>
+                <Card>
+                  <CardContent className="p-0">
+                    <AspectRatio ratio={16 / 9} className="bg-muted rounded-t-lg flex items-center justify-center">
+                      <ImageIcon className="size-8 text-muted-foreground" />
+                    </AspectRatio>
+                    <div className="p-3">
+                      <p className="text-sm font-medium">{item.title}</p>
+                      {item.creator && (
+                        <HoverCard>
+                          <HoverCardTrigger className="text-xs text-muted-foreground cursor-pointer hover:underline">
+                            by {item.creator.name}
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-64">
+                            <div className="flex gap-3">
+                              <Avatar>
+                                <AvatarFallback>{item.creator.initials}</AvatarFallback>
+                              </Avatar>
+                              <div className="space-y-1">
+                                <h4 className="text-sm font-medium">{item.creator.name}</h4>
+                                <p className="text-xs text-muted-foreground">{item.creator.desc}</p>
+                              </div>
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
+
+      <Separator />
+
+      <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">Project Details</span>
+          <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
+            <ChevronsUpDown className="size-4" />
+          </CollapsibleTrigger>
+        </div>
+        <CollapsibleContent className="space-y-2">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="description">
+              <AccordionTrigger>Description</AccordionTrigger>
+              <AccordionContent>
+                <p className="text-sm text-muted-foreground">
+                  A curated gallery of visual works exploring the intersection of nature and technology.
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="tech">
+              <AccordionTrigger>Tech Stack</AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="secondary">React</Badge>
+                  <Badge variant="secondary">TypeScript</Badge>
+                  <Badge variant="secondary">Tailwind</Badge>
+                  <Badge variant="secondary">Vite</Badge>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="license">
+              <AccordionTrigger>License</AccordionTrigger>
+              <AccordionContent>
+                <p className="text-sm text-muted-foreground">MIT License. Free for commercial and personal use.</p>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Button variant="outline" className="w-full"><Eye className="size-4" /> View Project</Button>
+        </CollapsibleContent>
+      </Collapsible>
+    </Showcase>
+  )
+}
+
+function InboxShowcase() {
+  const messages = [
+    { sender: "Alex Chen", initials: "AC", subject: "Sprint Planning", preview: "Hey team, let's sync on the...", time: "2m ago", unread: true },
+    { sender: "Sam Wilson", initials: "SW", subject: "Design Review", preview: "The new components look great...", time: "1h ago", unread: true },
+    { sender: "Jordan Lee", initials: "JL", subject: "Bug Report", preview: "Found an issue with the...", time: "3h ago", unread: true },
+    { sender: "Morgan Park", initials: "MP", subject: "Weekly Update", preview: "Here's what we shipped this...", time: "1d ago", unread: false },
+    { sender: "Riley Kim", initials: "RK", subject: "Feature Request", preview: "Would it be possible to add...", time: "2d ago", unread: false },
+  ]
+
+  const unreadCount = messages.filter((m) => m.unread).length
+
+  return (
+    <Showcase className="space-y-4">
+      <div className="flex items-center gap-3">
+        <h3 className="text-lg font-medium">Inbox</h3>
+        <Badge>{unreadCount}</Badge>
+        <div className="flex-1" />
+        <Drawer>
+          <DrawerTrigger render={<Button variant="outline" size="sm" />}>
+            <PenLine /> Compose
+          </DrawerTrigger>
+          <DrawerContent>
+            <div className="mx-auto w-full max-w-sm">
+              <DrawerHeader>
+                <DrawerTitle>New Message</DrawerTitle>
+                <DrawerDescription>Compose a new message to send.</DrawerDescription>
+              </DrawerHeader>
+              <div className="p-4 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="compose-to">To</Label>
+                  <Input id="compose-to" placeholder="recipient@example.com" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="compose-msg">Message</Label>
+                  <Textarea id="compose-msg" placeholder="Write your message..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Priority</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="normal">Normal</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="urgent">Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button className="w-full" onClick={() => toast.success("Message sent")}>
+                  <Send className="size-4" /> Send
+                </Button>
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+        <Popover>
+          <PopoverTrigger render={<Button variant="outline" size="icon" />}>
+            <Filter className="size-4" />
+          </PopoverTrigger>
+          <PopoverContent className="w-48">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Checkbox id="filter-unread" defaultChecked />
+                <Label htmlFor="filter-unread">Unread</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox id="filter-starred" />
+                <Label htmlFor="filter-starred">Starred</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox id="filter-archived" />
+                <Label htmlFor="filter-archived">Archived</Label>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <Separator />
+
+      <ScrollArea className="h-[300px]">
+        <div className="space-y-0">
+          {messages.map((msg, i) => (
+            <div key={msg.sender}>
+              <Sheet>
+                <SheetTrigger className="w-full text-left">
+                  <div className={cn("flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer", msg.unread && "bg-muted/30")}>
+                    <Avatar className="size-8 mt-0.5">
+                      <AvatarFallback className="text-xs">{msg.initials}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className={cn("text-sm", msg.unread && "font-semibold")}>{msg.sender}</span>
+                        <span className="text-xs text-muted-foreground">{msg.time}</span>
+                      </div>
+                      <p className={cn("text-sm", msg.unread ? "font-medium" : "text-muted-foreground")}>{msg.subject}</p>
+                      <p className="text-xs text-muted-foreground truncate">{msg.preview}</p>
+                    </div>
+                    {msg.unread && <div className="size-2 rounded-full bg-primary mt-2 shrink-0" />}
+                  </div>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>{msg.sender}</SheetTitle>
+                    <SheetDescription>{msg.time}</SheetDescription>
+                  </SheetHeader>
+                  <div className="py-6 space-y-4">
+                    <h4 className="font-medium">{msg.subject}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {msg.preview} Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm"><Reply className="size-4" /> Reply</Button>
+                      <Button variant="outline" size="sm"><Archive className="size-4" /> Archive</Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+              {i < messages.length - 1 && <Separator />}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </Showcase>
+  )
+}
+
+function ComponentsShowcase() {
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false)
+  const [sliderValue, setSliderValue] = useState(40)
+
+  return (
+    <div className="flex flex-wrap gap-12">
+      {/* Button */}
+      <Section title="Button" wide>
+        <Preview label="Variants">
+          <Button variant="default" onClick={() => toast("Default clicked")}>Default</Button>
+          <Button variant="secondary" onClick={() => toast("Secondary clicked")}>Secondary</Button>
+          <Button variant="outline" onClick={() => toast("Outline clicked")}>Outline</Button>
+          <Button variant="ghost" onClick={() => toast("Ghost clicked")}>Ghost</Button>
+          <Button variant="link" onClick={() => toast("Link clicked")}>Link</Button>
+          <Button variant="destructive" onClick={() => toast("Destructive clicked")}>Destructive</Button>
+              <Button variant="success" onClick={() => toast("Success clicked")}>Success</Button>
+        </Preview>
+        <Preview label="Sizes">
+          <Button size="sm">Small</Button>
+          <Button size="default">Default</Button>
+          <Button size="lg">Large</Button>
+          <Button size="icon"><Star /></Button>
+        </Preview>
+      </Section>
+
+      {/* Button Group */}
+      <Section title="Button Group">
+        <Preview>
+          <ButtonGroup>
+            <Button variant="outline" onClick={() => toast("Left")}>Left</Button>
+            <Button variant="outline" onClick={() => toast("Center")}>Center</Button>
+            <Button variant="outline" onClick={() => toast("Right")}>Right</Button>
+          </ButtonGroup>
+        </Preview>
+      </Section>
+
+      {/* Badge */}
+      <Section title="Badge">
+        <Preview>
+          <Badge>Default</Badge>
+          <Badge variant="secondary">Secondary</Badge>
+          <Badge variant="outline">Outline</Badge>
+          <Badge variant="destructive">Destructive</Badge>
+              <Badge variant="success">Success</Badge>
+        </Preview>
+      </Section>
+
+      {/* Input */}
+      <Section title="Input" wide>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+          <div className="space-y-2">
+            <Label htmlFor="demo-email">Email</Label>
+            <Input id="demo-email" type="email" placeholder="you@example.com" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="demo-disabled">Disabled</Label>
+            <Input id="demo-disabled" disabled placeholder="Disabled input" />
+          </div>
+        </div>
+      </Section>
+
+      {/* Input Group */}
+      <Section title="Input Group">
+        <div className="max-w-sm">
+          <InputGroup>
+            <InputGroupAddon>https://</InputGroupAddon>
+            <InputGroupInput placeholder="flow.industries" />
+          </InputGroup>
+        </div>
+      </Section>
+
+      {/* Input OTP */}
+      <Section title="Input OTP">
+        <InputOTP maxLength={6}>
+          <InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+          </InputOTPGroup>
+          <InputOTPSeparator />
+          <InputOTPGroup>
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
+      </Section>
+
+      {/* Textarea */}
+      <Section title="Textarea">
+        <div className="max-w-md space-y-2">
+          <Label htmlFor="demo-textarea">Message</Label>
+          <Textarea id="demo-textarea" placeholder="Type your message here..." />
+        </div>
+      </Section>
+
+      {/* Checkbox */}
+      <Section title="Checkbox">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Checkbox id="check-1" defaultChecked />
+            <Label htmlFor="check-1">Accepted terms</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <Checkbox id="check-2" />
+            <Label htmlFor="check-2">Subscribe to newsletter</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <Checkbox id="check-3" disabled />
+            <Label htmlFor="check-3" className="text-muted-foreground">Disabled</Label>
+          </div>
+        </div>
+      </Section>
+
+      {/* Radio Group */}
+      <Section title="Radio Group">
+        <RadioGroup defaultValue="react">
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="react" id="r1" />
+            <Label htmlFor="r1">React</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="vue" id="r2" />
+            <Label htmlFor="r2">Vue</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="svelte" id="r3" />
+            <Label htmlFor="r3">Svelte</Label>
+          </div>
+        </RadioGroup>
+      </Section>
+
+      {/* Switch */}
+      <Section title="Switch">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <Switch id="switch-1" defaultChecked />
+            <Label htmlFor="switch-1">Notifications</Label>
+          </div>
+          <div className="flex items-center gap-3">
+            <Switch id="switch-2" />
+            <Label htmlFor="switch-2">Dark mode</Label>
+          </div>
+        </div>
+      </Section>
+
+      {/* Toggle */}
+      <Section title="Toggle" wide>
+        <Preview label="Variants">
+          <Toggle aria-label="Bold"><Bold /></Toggle>
+          <Toggle variant="outline" aria-label="Italic"><Italic /></Toggle>
+        </Preview>
+        <Preview label="Toggle Group">
+          <ToggleGroup type="multiple">
+            <ToggleGroupItem value="bold" aria-label="Bold"><Bold /></ToggleGroupItem>
+            <ToggleGroupItem value="italic" aria-label="Italic"><Italic /></ToggleGroupItem>
+            <ToggleGroupItem value="underline" aria-label="Underline"><Underline /></ToggleGroupItem>
+          </ToggleGroup>
+        </Preview>
+      </Section>
+
+      {/* Slider */}
+      <Section title="Slider">
+        <div className="max-w-sm space-y-2">
+          <Slider value={sliderValue} onValueChange={setSliderValue} max={100} step={1} />
+          <p className="text-xs text-muted-foreground">Value: {sliderValue}</p>
+        </div>
+      </Section>
+
+      {/* Progress */}
+      <Section title="Progress">
+        <div className="max-w-sm space-y-2">
+          <Progress value={65} />
+          <p className="text-xs text-muted-foreground">65%</p>
+        </div>
+      </Section>
+
+      {/* Select */}
+      <Section title="Select">
+        <div className="max-w-xs">
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose a framework" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="react">React</SelectItem>
+              <SelectItem value="vue">Vue</SelectItem>
+              <SelectItem value="svelte">Svelte</SelectItem>
+              <SelectItem value="solid">Solid</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </Section>
+
+
+      {/* Avatar */}
+      <Section title="Avatar">
+        <Preview>
+          <Avatar><AvatarFallback>FL</AvatarFallback></Avatar>
+          <Avatar><AvatarFallback>UI</AvatarFallback></Avatar>
+          <Avatar><AvatarFallback>KU</AvatarFallback></Avatar>
+        </Preview>
+      </Section>
+
+      {/* Card */}
+      <Section title="Card" wide>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+          <Card>
+            <CardHeader>
+              <CardTitle>Flow Game</CardTitle>
+              <CardDescription>Multiplayer movement game</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">A Quake-style 3D multiplayer game built with Godot.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Flow ID</CardTitle>
+              <CardDescription>Passkey authentication</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">One identity, truly yours. Secured by passkeys.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </Section>
+
+      {/* Tabs */}
+      <Section title="Tabs">
+        <Tabs defaultValue="overview" className="max-w-md">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="text-sm text-muted-foreground pt-2">
+            Overview content goes here.
+          </TabsContent>
+          <TabsContent value="analytics" className="text-sm text-muted-foreground pt-2">
+            Analytics content goes here.
+          </TabsContent>
+          <TabsContent value="settings" className="text-sm text-muted-foreground pt-2">
+            Settings content goes here.
+          </TabsContent>
+        </Tabs>
+      </Section>
+
+      {/* Accordion */}
+      <Section title="Accordion" wide>
+        <Accordion type="single" collapsible className="max-w-md">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>What is Flow UI?</AccordionTrigger>
+            <AccordionContent>
+              A shared design system and component library for Flow applications, published as @flow-industries/ui.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>How do I install it?</AccordionTrigger>
+            <AccordionContent>
+              Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">bun add @flow-industries/ui</code> in your project.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Does it ship pre-built?</AccordionTrigger>
+            <AccordionContent>
+              No, it ships raw TypeScript source. Your Vite + Tailwind pipeline compiles it at build time.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Section>
+
+      {/* Collapsible */}
+      <Section title="Collapsible">
+        <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="max-w-sm space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">3 items</span>
+            <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
+              <ChevronsUpDown className="size-4" />
+            </CollapsibleTrigger>
+          </div>
+          <div className="rounded-md border px-4 py-2 text-sm">First item</div>
+          <CollapsibleContent className="space-y-2">
+            <div className="rounded-md border px-4 py-2 text-sm">Second item</div>
+            <div className="rounded-md border px-4 py-2 text-sm">Third item</div>
+          </CollapsibleContent>
+        </Collapsible>
+      </Section>
+
+      {/* Table */}
+      <Section title="Table" wide>
+        <div className="max-w-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Package</TableHead>
+                <TableHead>Stack</TableHead>
+                <TableHead className="text-right">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">game</TableCell>
+                <TableCell>GDScript, Godot</TableCell>
+                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">auth</TableCell>
+                <TableCell>TypeScript, Hono</TableCell>
+                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">site</TableCell>
+                <TableCell>TypeScript, React</TableCell>
+                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </Section>
+
+      {/* Dialog */}
+      <Section title="Dialog">
+        <Preview>
+          <Dialog>
+            <DialogTrigger render={<Button variant="outline" />}>Open Dialog</DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogDescription>Make changes to your profile here.</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="dialog-name">Name</Label>
+                  <Input id="dialog-name" placeholder="Your name" />
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+                <Button>Save</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </Preview>
+      </Section>
+
+      {/* Alert Dialog */}
+      <Section title="Alert Dialog">
+        <Preview>
+          <AlertDialog>
+            <AlertDialogTrigger render={<Button variant="destructive" />}><Trash2 /> Delete Account</AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>This action cannot be undone. This will permanently delete your account.</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Delete</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </Preview>
+      </Section>
+
+      {/* Sheet */}
+      <Section title="Sheet">
+        <Preview>
+          <Sheet>
+            <SheetTrigger render={<Button variant="outline" />}>Open Sheet</SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Settings</SheetTitle>
+                <SheetDescription>Manage your preferences here.</SheetDescription>
+              </SheetHeader>
+              <div className="py-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Notifications</Label>
+                  <Switch />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <Label>Dark mode</Label>
+                  <Switch />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </Preview>
+      </Section>
+
+      {/* Drawer */}
+      <Section title="Drawer">
+        <Preview>
+          <Drawer>
+            <DrawerTrigger render={<Button variant="outline" />}>Open Drawer</DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>Move Goal</DrawerTitle>
+                  <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                </DrawerHeader>
+                <div className="p-4">
+                  <div className="flex items-center justify-center text-4xl font-bold py-8">350</div>
+                </div>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </Preview>
+      </Section>
+
+      {/* Popover */}
+      <Section title="Popover">
+        <Preview>
+          <Popover>
+            <PopoverTrigger render={<Button variant="outline" />}>Open Popover</PopoverTrigger>
+            <PopoverContent className="w-64">
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Dimensions</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1">
+                    <Label className="text-xs">Width</Label>
+                    <Input placeholder="100%" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">Height</Label>
+                    <Input placeholder="auto" />
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </Preview>
+      </Section>
+
+      {/* Hover Card */}
+      <Section title="Hover Card">
+        <Preview>
+          <HoverCard>
+            <HoverCardTrigger render={<Button variant="link" />}>@flow-industries</HoverCardTrigger>
+            <HoverCardContent className="w-64">
+              <div className="flex gap-3">
+                <Avatar><AvatarFallback>FL</AvatarFallback></Avatar>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-medium">Flow Industries</h4>
+                  <p className="text-xs text-muted-foreground">Building the future of decentralized identity and gaming.</p>
+                </div>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </Preview>
+      </Section>
+
+      {/* Tooltip */}
+      <Section title="Tooltip">
+        <Preview>
+          <Tooltip>
+            <TooltipTrigger render={<Button variant="outline" />}>Hover me</TooltipTrigger>
+            <TooltipContent><p>This is a tooltip</p></TooltipContent>
+          </Tooltip>
+        </Preview>
+      </Section>
+
+      {/* Dropdown Menu */}
+      <Section title="Dropdown Menu">
+        <Preview>
+          <DropdownMenu>
+            <DropdownMenuTrigger render={<Button variant="outline" />}>Options</DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </Preview>
+      </Section>
+
+      {/* Context Menu */}
+      <Section title="Context Menu" wide>
+        <ContextMenu>
+          <ContextMenuTrigger className="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground">
+            Right-click here
+          </ContextMenuTrigger>
+          <ContextMenuContent className="w-48">
+            <ContextMenuItem>Back</ContextMenuItem>
+            <ContextMenuItem>Forward</ContextMenuItem>
+            <ContextMenuItem>Reload</ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuItem>View Source</ContextMenuItem>
+            <ContextMenuItem>Inspect</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </Section>
+
+      {/* Menubar */}
+      <Section title="Menubar">
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger>File</MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem>New <MenubarShortcut>&#8984;N</MenubarShortcut></MenubarItem>
+              <MenubarItem>Open <MenubarShortcut>&#8984;O</MenubarShortcut></MenubarItem>
+              <MenubarSep />
+              <MenubarItem>Save <MenubarShortcut>&#8984;S</MenubarShortcut></MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+          <MenubarMenu>
+            <MenubarTrigger>Edit</MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem>Undo <MenubarShortcut>&#8984;Z</MenubarShortcut></MenubarItem>
+              <MenubarItem>Redo <MenubarShortcut>&#8679;&#8984;Z</MenubarShortcut></MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+          <MenubarMenu>
+            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem>Zoom In</MenubarItem>
+              <MenubarItem>Zoom Out</MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+      </Section>
+
+      {/* Navigation Menu */}
+      <Section title="Navigation Menu">
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">Home</NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">About</NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">Contact</NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </Section>
+
+      {/* Breadcrumb */}
+      <Section title="Breadcrumb">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbLink href="#">Products</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbPage>Current Page</BreadcrumbPage></BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </Section>
+
+      {/* Pagination */}
+      <Section title="Pagination">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+            <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationEllipsis /></PaginationItem>
+            <PaginationItem><PaginationNext href="#" /></PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </Section>
+
+
+      {/* Sonner / Toast */}
+      <Section title="Sonner / Toast">
+        <Preview>
+          <Button variant="outline" onClick={() => toast("Event has been created", { description: "Monday, January 1st at 9:00 AM" })}>Show Toast</Button>
+          <Button variant="outline" onClick={() => toast.success("Successfully saved!")}>Success</Button>
+          <Button variant="outline" onClick={() => toast.error("Something went wrong")}>Error</Button>
+        </Preview>
+      </Section>
+
+      {/* Empty */}
+      <Section title="Empty">
+        <div className="max-w-sm">
+          <Empty>
+            <EmptyHeader>
+              <EmptyTitle>No results</EmptyTitle>
+              <EmptyDesc>Try adjusting your search to find what you're looking for.</EmptyDesc>
+            </EmptyHeader>
+          </Empty>
+        </div>
+      </Section>
+
+      {/* Scroll Area */}
+      <Section title="Scroll Area">
+        <ScrollArea className="h-48 w-64 rounded-md border p-4">
+          <div className="space-y-4">
+            {Array.from({ length: 20 }, (_, i) => (
+              <div key={i} className="text-sm">Item {i + 1}</div>
+            ))}
+          </div>
+        </ScrollArea>
+      </Section>
+
+      {/* Resizable */}
+      <Section title="Resizable" wide>
+        <ResizablePanelGroup direction="horizontal" className="max-w-md rounded-lg border">
+          <ResizablePanel defaultSize={50}>
+            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Left</div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={50}>
+            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Right</div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </Section>
+
+      {/* Aspect Ratio */}
+      <Section title="Aspect Ratio">
+        <div className="max-w-xs">
+          <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+            <ImageIcon className="size-8 text-muted-foreground" />
+          </AspectRatio>
+        </div>
+      </Section>
+
+      {/* Carousel */}
+      <Section title="Carousel" wide>
+        <div className="max-w-xs mx-0">
+          <Carousel>
+            <CarouselContent>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <CarouselItem key={i}>
+                  <div className="flex aspect-square items-center justify-center rounded-lg border bg-card text-2xl font-medium">{i}</div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+      </Section>
+
+      {/* Skeleton */}
+      <Section title="Skeleton">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[200px]" />
+            <Skeleton className="h-4 w-[150px]" />
+          </div>
+        </div>
+      </Section>
+
+      {/* Spinner */}
+      <Section title="Spinner">
+        <Preview>
+          <Spinner className="size-4" />
+          <Spinner className="size-6" />
+          <Spinner className="size-8" />
+        </Preview>
+      </Section>
+
+      {/* Separator */}
+      <Section title="Separator">
+        <div className="max-w-sm space-y-1">
+          <p className="text-sm font-medium">Flow Industries</p>
+          <Separator />
+          <p className="text-sm text-muted-foreground">Design system and component library.</p>
+        </div>
+      </Section>
+
+      {/* Kbd */}
+      <Section title="Kbd">
+        <Preview>
+          <Kbd>&#8984; K</Kbd>
+          <Kbd>Ctrl</Kbd>
+          <Kbd>Shift</Kbd>
+          <Kbd>Enter</Kbd>
+        </Preview>
+      </Section>
+    </div>
+  )
+}
+
+function ThemeToggle() {
+  const [dark, setDark] = useState(document.documentElement.classList.contains("dark"))
+
+  const toggle = () => {
+    document.documentElement.classList.toggle("dark")
+    setDark((d) => !d)
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<Button variant="ghost" size="icon" className="rounded-full" onClick={toggle} />}>
+        {dark ? <Sun /> : <Moon />}
+      </TooltipTrigger>
+      <TooltipContent side="left">{dark ? "Light mode" : "Dark mode"}</TooltipContent>
+    </Tooltip>
+  )
+}
+
+export function App() {
+  return (
+    <ToastProvider>
     <TooltipProvider>
       <div className="min-h-screen">
-        <Toaster />
         <header className="flex items-center justify-between px-6 md:px-12 py-8">
           <div className="flex items-center gap-2.5 text-lg tracking-widest">
             <Logo size={20} />
@@ -149,7 +1591,7 @@ export function App() {
           </a>
         </header>
 
-        <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-wrap gap-12">
+        <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
           {/* Hero */}
           <div className="space-y-3 w-full">
             <h1 className="text-4xl md:text-5xl font-medium tracking-tight">
@@ -208,788 +1650,39 @@ export function App() {
             />
           </div>
 
-          {/* Button */}
-          <Section title="Button" wide>
-            <Preview label="Variants">
-              <Button variant="default" onClick={() => toast("Default clicked")}>Default</Button>
-              <Button variant="secondary" onClick={() => toast("Secondary clicked")}>Secondary</Button>
-              <Button variant="outline" onClick={() => toast("Outline clicked")}>Outline</Button>
-              <Button variant="ghost" onClick={() => toast("Ghost clicked")}>Ghost</Button>
-              <Button variant="link" onClick={() => toast("Link clicked")}>Link</Button>
-              <Button variant="destructive" onClick={() => toast("Destructive clicked")}>Destructive</Button>
-            </Preview>
-            <Preview label="Sizes">
-              <Button size="sm" onClick={() => toast("Small")}>Small</Button>
-              <Button size="default" onClick={() => toast("Default")}>Default</Button>
-              <Button size="lg" onClick={() => toast("Large")}>Large</Button>
-            </Preview>
-            <Preview label="With icons">
-              <Button onClick={() => toast("Email sent")}><Mail /> Send Email</Button>
-              <Button variant="outline" onClick={() => toast("Created")}><Plus /> Create</Button>
-              <Button variant="destructive" onClick={() => toast("Deleted")}><Trash2 /> Delete</Button>
-            </Preview>
-            <Preview label="Icon buttons">
-              <Button size="icon" onClick={() => toast("Settings")}><Settings /></Button>
-              <Button size="icon-lg" onClick={() => toast("Star")}><Star /></Button>
-            </Preview>
-          </Section>
-
-          {/* Button Group */}
-          <Section title="Button Group">
-            <Preview>
-              <ButtonGroup>
-                <Button variant="outline" onClick={() => toast("Left")}>Left</Button>
-                <Button variant="outline" onClick={() => toast("Center")}>Center</Button>
-                <Button variant="outline" onClick={() => toast("Right")}>Right</Button>
-              </ButtonGroup>
-            </Preview>
-          </Section>
-
-          {/* Badge */}
-          <Section title="Badge">
-            <Preview>
-              <Badge>Default</Badge>
-              <Badge variant="secondary">Secondary</Badge>
-              <Badge variant="outline">Outline</Badge>
-              <Badge variant="destructive">Destructive</Badge>
-            </Preview>
-          </Section>
-
-          {/* Input */}
-          <Section title="Input" wide>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
-              <div className="space-y-2">
-                <Label htmlFor="demo-email">Email</Label>
-                <Input id="demo-email" type="email" placeholder="you@example.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="demo-disabled">Disabled</Label>
-                <Input id="demo-disabled" disabled placeholder="Disabled input" />
-              </div>
-            </div>
-          </Section>
-
-          {/* Input Group */}
-          <Section title="Input Group">
-            <div className="max-w-sm">
-              <InputGroup>
-                <InputGroupAddon>https://</InputGroupAddon>
-                <InputGroupInput placeholder="flow.industries" />
-              </InputGroup>
-            </div>
-          </Section>
-
-          {/* Input OTP */}
-          <Section title="Input OTP">
-            <InputOTP maxLength={6}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </Section>
-
-          {/* Textarea */}
-          <Section title="Textarea">
-            <div className="max-w-md space-y-2">
-              <Label htmlFor="demo-textarea">Message</Label>
-              <Textarea id="demo-textarea" placeholder="Type your message here..." />
-            </div>
-          </Section>
-
-          {/* Checkbox */}
-          <Section title="Checkbox">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Checkbox id="check-1" defaultChecked />
-                <Label htmlFor="check-1">Accepted terms</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox id="check-2" />
-                <Label htmlFor="check-2">Subscribe to newsletter</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox id="check-3" disabled />
-                <Label htmlFor="check-3" className="text-muted-foreground">Disabled</Label>
-              </div>
-            </div>
-          </Section>
-
-          {/* Radio Group */}
-          <Section title="Radio Group">
-            <RadioGroup defaultValue="react">
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="react" id="r1" />
-                <Label htmlFor="r1">React</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="vue" id="r2" />
-                <Label htmlFor="r2">Vue</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="svelte" id="r3" />
-                <Label htmlFor="r3">Svelte</Label>
-              </div>
-            </RadioGroup>
-          </Section>
-
-          {/* Switch */}
-          <Section title="Switch">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Switch id="switch-1" defaultChecked />
-                <Label htmlFor="switch-1">Notifications</Label>
-              </div>
-              <div className="flex items-center gap-3">
-                <Switch id="switch-2" />
-                <Label htmlFor="switch-2">Dark mode</Label>
-              </div>
-            </div>
-          </Section>
-
-          {/* Toggle */}
-          <Section title="Toggle" wide>
-            <Preview label="Variants">
-              <Toggle aria-label="Bold"><Bold /></Toggle>
-              <Toggle variant="outline" aria-label="Italic"><Italic /></Toggle>
-            </Preview>
-            <Preview label="Toggle Group">
-              <ToggleGroup type="multiple">
-                <ToggleGroupItem value="bold" aria-label="Bold"><Bold /></ToggleGroupItem>
-                <ToggleGroupItem value="italic" aria-label="Italic"><Italic /></ToggleGroupItem>
-                <ToggleGroupItem value="underline" aria-label="Underline"><Underline /></ToggleGroupItem>
-              </ToggleGroup>
-            </Preview>
-          </Section>
-
-          {/* Slider */}
-          <Section title="Slider">
-            <SliderDemo />
-          </Section>
-
-          {/* Progress */}
-          <Section title="Progress">
-            <div className="max-w-sm space-y-2">
-              <Progress value={progress} />
-              <p className="text-xs text-muted-foreground">{progress}%</p>
-            </div>
-          </Section>
-
-          {/* Select */}
-          <Section title="Select">
-            <div className="max-w-xs">
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a framework" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="react">React</SelectItem>
-                  <SelectItem value="vue">Vue</SelectItem>
-                  <SelectItem value="svelte">Svelte</SelectItem>
-                  <SelectItem value="solid">Solid</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </Section>
-
-          {/* Calendar */}
-          <Section title="Calendar">
-            <Calendar mode="single" selected={calendarDate} onSelect={setCalendarDate} className="rounded-md border w-fit" />
-          </Section>
-
-          {/* Avatar */}
-          <Section title="Avatar">
-            <Preview>
-              <Avatar>
-                <AvatarFallback>FL</AvatarFallback>
-              </Avatar>
-              <Avatar>
-                <AvatarFallback>UI</AvatarFallback>
-              </Avatar>
-              <Avatar>
-                <AvatarFallback>KU</AvatarFallback>
-              </Avatar>
-            </Preview>
-          </Section>
-
-          {/* Alert */}
-          <Section title="Alert">
-            <div className="space-y-3 max-w-lg">
-              <Alert>
-                <AlertTitle>Heads up!</AlertTitle>
-                <AlertDescription>This is a default alert with useful information.</AlertDescription>
-              </Alert>
-              <Alert variant="destructive">
-                <AlertCircle className="size-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>Something went wrong. Please try again.</AlertDescription>
-              </Alert>
-            </div>
-          </Section>
-
-          {/* Card */}
-          <Section title="Card" wide>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Flow Game</CardTitle>
-                  <CardDescription>Multiplayer movement game</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">A Quake-style 3D multiplayer game built with Godot.</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Flow ID</CardTitle>
-                  <CardDescription>Passkey authentication</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">One identity, truly yours. Secured by passkeys.</p>
-                </CardContent>
-              </Card>
-            </div>
-          </Section>
-
-          {/* Tabs */}
-          <Section title="Tabs">
-            <Tabs defaultValue="overview" className="max-w-md">
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="settings">Settings</TabsTrigger>
+          <Tabs defaultValue="showcases" onValueChange={() => {
+            window.scrollTo({ top: 0, behavior: "instant" })
+          }}>
+            <div className="fixed top-1/2 right-4 z-50 -translate-y-1/2 flex flex-col items-center gap-1.5">
+              <TabsList className="flex-col h-auto bg-transparent p-0 gap-1.5">
+                <Tooltip>
+                  <TooltipTrigger render={<TabsTrigger value="showcases" className="rounded-full!" />}>
+                    <LayoutGrid />
+                  </TooltipTrigger>
+                  <TooltipContent side="left">Showcases</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger render={<TabsTrigger value="components" className="rounded-full!" />}>
+                    <Component />
+                  </TooltipTrigger>
+                  <TooltipContent side="left">Components</TooltipContent>
+                </Tooltip>
               </TabsList>
-              <TabsContent value="overview" className="text-sm text-muted-foreground pt-2">
-                Overview content goes here.
-              </TabsContent>
-              <TabsContent value="analytics" className="text-sm text-muted-foreground pt-2">
-                Analytics content goes here.
-              </TabsContent>
-              <TabsContent value="settings" className="text-sm text-muted-foreground pt-2">
-                Settings content goes here.
-              </TabsContent>
-            </Tabs>
-          </Section>
-
-          {/* Accordion */}
-          <Section title="Accordion">
-            <Accordion type="single" collapsible className="max-w-md">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>What is Flow UI?</AccordionTrigger>
-                <AccordionContent>
-                  A shared design system and component library for Flow applications, published as @flow-industries/ui.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>How do I install it?</AccordionTrigger>
-                <AccordionContent>
-                  Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">bun add @flow-industries/ui</code> in your project.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>Does it ship pre-built?</AccordionTrigger>
-                <AccordionContent>
-                  No, it ships raw TypeScript source. Your Vite + Tailwind pipeline compiles it at build time.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </Section>
-
-          {/* Collapsible */}
-          <Section title="Collapsible">
-            <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="max-w-sm space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">3 items</span>
-                <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
-                  <ChevronsUpDown className="size-4" />
-                </CollapsibleTrigger>
-              </div>
-              <div className="rounded-md border px-4 py-2 text-sm">First item</div>
-              <CollapsibleContent className="space-y-2">
-                <div className="rounded-md border px-4 py-2 text-sm">Second item</div>
-                <div className="rounded-md border px-4 py-2 text-sm">Third item</div>
-              </CollapsibleContent>
-            </Collapsible>
-          </Section>
-
-          {/* Table */}
-          <Section title="Table" wide>
-            <div className="max-w-lg">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Package</TableHead>
-                    <TableHead>Stack</TableHead>
-                    <TableHead className="text-right">Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">game</TableCell>
-                    <TableCell>GDScript, Godot</TableCell>
-                    <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">auth</TableCell>
-                    <TableCell>TypeScript, Hono</TableCell>
-                    <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">site</TableCell>
-                    <TableCell>TypeScript, React</TableCell>
-                    <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <Separator className="my-0.5" />
+              <ThemeToggle />
             </div>
-          </Section>
-
-          {/* Dialog */}
-          <Section title="Dialog">
-            <Preview>
-              <Dialog>
-                <DialogTrigger render={<Button variant="outline" />}>
-                  Open Dialog
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                    <DialogDescription>Make changes to your profile here.</DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="dialog-name">Name</Label>
-                      <Input id="dialog-name" placeholder="Your name" />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <DialogClose render={<Button variant="outline" />}>
-                      Cancel
-                    </DialogClose>
-                    <Button>Save</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </Preview>
-          </Section>
-
-          {/* Alert Dialog */}
-          <Section title="Alert Dialog">
-            <Preview>
-              <AlertDialog>
-                <AlertDialogTrigger render={<Button variant="destructive" />}>
-                  <Trash2 /> Delete Account
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your account.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Delete</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </Preview>
-          </Section>
-
-          {/* Sheet */}
-          <Section title="Sheet">
-            <Preview>
-              <Sheet>
-                <SheetTrigger render={<Button variant="outline" />}>
-                  Open Sheet
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Settings</SheetTitle>
-                    <SheetDescription>Manage your preferences here.</SheetDescription>
-                  </SheetHeader>
-                  <div className="py-6 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label>Notifications</Label>
-                      <Switch />
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      <Label>Dark mode</Label>
-                      <Switch />
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </Preview>
-          </Section>
-
-          {/* Drawer */}
-          <Section title="Drawer">
-            <Preview>
-              <Drawer>
-                <DrawerTrigger render={<Button variant="outline" />}>
-                  Open Drawer
-                </DrawerTrigger>
-                <DrawerContent>
-                  <div className="mx-auto w-full max-w-sm">
-                    <DrawerHeader>
-                      <DrawerTitle>Move Goal</DrawerTitle>
-                      <DrawerDescription>Set your daily activity goal.</DrawerDescription>
-                    </DrawerHeader>
-                    <div className="p-4">
-                      <div className="flex items-center justify-center text-4xl font-bold py-8">350</div>
-                    </div>
-                  </div>
-                </DrawerContent>
-              </Drawer>
-            </Preview>
-          </Section>
-
-          {/* Popover */}
-          <Section title="Popover">
-            <Preview>
-              <Popover>
-                <PopoverTrigger render={<Button variant="outline" />}>
-                  Open Popover
-                </PopoverTrigger>
-                <PopoverContent className="w-64">
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-medium">Dimensions</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-1">
-                        <Label className="text-xs">Width</Label>
-                        <Input placeholder="100%" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">Height</Label>
-                        <Input placeholder="auto" />
-                      </div>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </Preview>
-          </Section>
-
-          {/* Hover Card */}
-          <Section title="Hover Card">
-            <Preview>
-              <HoverCard>
-                <HoverCardTrigger render={<Button variant="link" />}>
-                  @flow-industries
-                </HoverCardTrigger>
-                <HoverCardContent className="w-64">
-                  <div className="flex gap-3">
-                    <Avatar>
-                      <AvatarFallback>FL</AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-medium">Flow Industries</h4>
-                      <p className="text-xs text-muted-foreground">Building the future of decentralized identity and gaming.</p>
-                    </div>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-            </Preview>
-          </Section>
-
-          {/* Tooltip */}
-          <Section title="Tooltip">
-            <Preview>
-              <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" />}>
-                  Hover me
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>This is a tooltip</p>
-                </TooltipContent>
-              </Tooltip>
-            </Preview>
-          </Section>
-
-          {/* Dropdown Menu */}
-          <Section title="Dropdown Menu">
-            <Preview>
-              <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" />}>
-                  Options
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48">
-                  <DropdownMenuGroup>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
-                    <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
-                    <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </Preview>
-          </Section>
-
-          {/* Context Menu */}
-          <Section title="Context Menu" wide>
-            <ContextMenu>
-              <ContextMenuTrigger className="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground">
-                Right-click here
-              </ContextMenuTrigger>
-              <ContextMenuContent className="w-48">
-                <ContextMenuItem>Back</ContextMenuItem>
-                <ContextMenuItem>Forward</ContextMenuItem>
-                <ContextMenuItem>Reload</ContextMenuItem>
-                <ContextMenuSeparator />
-                <ContextMenuItem>View Source</ContextMenuItem>
-                <ContextMenuItem>Inspect</ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-          </Section>
-
-          {/* Menubar */}
-          <Section title="Menubar">
-            <Menubar>
-              <MenubarMenu>
-                <MenubarTrigger>File</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>New <MenubarShortcut>&#8984;N</MenubarShortcut></MenubarItem>
-                  <MenubarItem>Open <MenubarShortcut>&#8984;O</MenubarShortcut></MenubarItem>
-                  <MenubarSep />
-                  <MenubarItem>Save <MenubarShortcut>&#8984;S</MenubarShortcut></MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger>Edit</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>Undo <MenubarShortcut>&#8984;Z</MenubarShortcut></MenubarItem>
-                  <MenubarItem>Redo <MenubarShortcut>&#8679;&#8984;Z</MenubarShortcut></MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger>View</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>Zoom In</MenubarItem>
-                  <MenubarItem>Zoom Out</MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
-          </Section>
-
-          {/* Navigation Menu */}
-          <Section title="Navigation Menu">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
-                    Home
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
-                    About
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
-                    Contact
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </Section>
-
-          {/* Breadcrumb */}
-          <Section title="Breadcrumb">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Products</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Current Page</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </Section>
-
-          {/* Pagination */}
-          <Section title="Pagination">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">2</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">3</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </Section>
-
-          {/* Command */}
-          <Section title="Command" wide>
-            <Command className="max-w-sm rounded-lg border">
-              <CommandInput placeholder="Search..." />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                  <CommandItem><Search /> Search</CommandItem>
-                  <CommandItem><User /> Profile</CommandItem>
-                  <CommandItem><Settings /> Settings</CommandItem>
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </Section>
-
-          {/* Sonner / Toast */}
-          <Section title="Sonner / Toast">
-            <Preview>
-              <Button variant="outline" onClick={() => toast("Event has been created", { description: "Monday, January 1st at 9:00 AM" })}>
-                Show Toast
-              </Button>
-              <Button variant="outline" onClick={() => toast.success("Successfully saved!")}>
-                Success
-              </Button>
-              <Button variant="outline" onClick={() => toast.error("Something went wrong")}>
-                Error
-              </Button>
-            </Preview>
-          </Section>
-
-          {/* Empty */}
-          <Section title="Empty">
-            <div className="max-w-sm">
-              <Empty>
-                <EmptyHeader>
-                  <EmptyTitle>No results</EmptyTitle>
-                  <EmptyDesc>Try adjusting your search to find what you're looking for.</EmptyDesc>
-                </EmptyHeader>
-              </Empty>
-            </div>
-          </Section>
-
-          {/* Scroll Area */}
-          <Section title="Scroll Area">
-            <ScrollArea className="h-48 w-64 rounded-md border p-4">
-              <div className="space-y-4">
-                {Array.from({ length: 20 }, (_, i) => (
-                  <div key={i} className="text-sm">Item {i + 1}</div>
-                ))}
-              </div>
-            </ScrollArea>
-          </Section>
-
-          {/* Resizable */}
-          <Section title="Resizable" wide>
-            <ResizablePanelGroup direction="horizontal" className="max-w-md rounded-lg border">
-              <ResizablePanel defaultSize={50}>
-                <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Left</div>
-              </ResizablePanel>
-              <ResizableHandle withHandle />
-              <ResizablePanel defaultSize={50}>
-                <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Right</div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </Section>
-
-          {/* Aspect Ratio */}
-          <Section title="Aspect Ratio">
-            <div className="max-w-xs">
-              <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
-                <ImageIcon className="size-8 text-muted-foreground" />
-              </AspectRatio>
-            </div>
-          </Section>
-
-          {/* Carousel */}
-          <Section title="Carousel" wide>
-            <div className="max-w-xs mx-0">
-              <Carousel>
-                <CarouselContent>
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <CarouselItem key={i}>
-                      <div className="flex aspect-square items-center justify-center rounded-lg border bg-card text-2xl font-medium">
-                        {i}
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </div>
-          </Section>
-
-          {/* Hover Border Gradient */}
-          <Section title="Hover Border Gradient">
-            <Preview>
-              <HoverBorderGradient as="button" className="px-6 py-2 text-sm">
-                Hover for gradient
-              </HoverBorderGradient>
-            </Preview>
-          </Section>
-
-          {/* Skeleton */}
-          <Section title="Skeleton">
-            <div className="flex items-center gap-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[200px]" />
-                <Skeleton className="h-4 w-[150px]" />
-              </div>
-            </div>
-          </Section>
-
-          {/* Spinner */}
-          <Section title="Spinner">
-            <Preview>
-              <Spinner className="size-4" />
-              <Spinner className="size-6" />
-              <Spinner className="size-8" />
-            </Preview>
-          </Section>
-
-          {/* Separator */}
-          <Section title="Separator">
-            <div className="max-w-sm space-y-1">
-              <p className="text-sm font-medium">Flow Industries</p>
-              <Separator />
-              <p className="text-sm text-muted-foreground">Design system and component library.</p>
-            </div>
-          </Section>
-
-          {/* Kbd */}
-          <Section title="Kbd">
-            <Preview>
-              <Kbd>&#8984; K</Kbd>
-              <Kbd>Ctrl</Kbd>
-              <Kbd>Shift</Kbd>
-              <Kbd>Enter</Kbd>
-            </Preview>
-          </Section>
+            <TabsContent value="showcases" className="flex flex-col gap-12">
+              <AppShellShowcase />
+              <AccountSettingsShowcase />
+              <TeamMembersShowcase />
+              <VerificationFlowShowcase />
+              <MediaGalleryShowcase />
+              <InboxShowcase />
+            </TabsContent>
+            <TabsContent value="components">
+              <ComponentsShowcase />
+            </TabsContent>
+          </Tabs>
 
         </main>
 
@@ -1019,6 +1712,7 @@ export function App() {
         </footer>
       </div>
     </TooltipProvider>
+    </ToastProvider>
   )
 }
 
@@ -1244,16 +1938,6 @@ function ColorRow({ label, colors }: { label: string; colors: PaletteColor[] }) 
           <ColorSwatch key={c.token} c={c} />
         ))}
       </div>
-    </div>
-  )
-}
-
-function SliderDemo() {
-  const [value, setValue] = useState([40])
-  return (
-    <div className="max-w-sm space-y-2">
-      <Slider value={value} onValueChange={setValue} max={100} step={1} />
-      <p className="text-xs text-muted-foreground">Value: {value[0]}</p>
     </div>
   )
 }

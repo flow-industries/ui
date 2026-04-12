@@ -2,7 +2,6 @@ import * as React from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
 
 import { cn } from "../../utils/cn"
-import { MinusIcon } from "lucide-react"
 
 function InputOTP({
   className,
@@ -30,7 +29,7 @@ function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="input-otp-group"
       className={cn(
-        "flex items-center rounded-lg has-aria-invalid:border-destructive",
+        "flex items-center gap-1.5",
         className
       )}
       {...props}
@@ -53,7 +52,7 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "relative flex size-8 items-center justify-center border-y-[length:var(--border-width)] border-r-[length:var(--border-width)] border-transparent bg-input text-sm transition-all outline-none first:rounded-l-lg first:border-l-[length:var(--border-width)] last:rounded-r-lg aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:aria-invalid:border-destructive",
+        "relative flex h-9 w-8 items-center justify-center rounded-lg border-[length:var(--border-width)] border-transparent bg-input text-sm font-medium transition-all outline-none aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-[length:var(--border-width-focus)] data-[active=true]:border-ring data-[active=true]:aria-invalid:border-destructive",
         className
       )}
       {...props}
@@ -72,12 +71,11 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-otp-separator"
-      className="flex items-center [&_svg:not([class*='size-'])]:size-4"
+      className="flex items-center px-1.5 text-muted-foreground/50"
       role="separator"
       {...props}
     >
-      <MinusIcon
-      />
+      <span className="text-sm">-</span>
     </div>
   )
 }
