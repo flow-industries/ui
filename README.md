@@ -43,7 +43,14 @@ Key tokens:
 - `--border-width` / `--border-width-focus` for consistent borders
 - `--radius` with superellipse corner shapes
 - Typography scale (Geist Sans / Geist Mono)
+- `--focus` for focus border color (pink)
+- `--ease-out` / `--ease-out-expo` / `--ease-spring` animation easing curves
 - Success and destructive variants on buttons and badges
+
+## Accessibility
+
+- `prefers-reduced-motion` is respected globally — all CSS and JS animations are disabled
+- Hover styles are gated behind `@media (hover: hover) and (pointer: fine)` to prevent false hover states on touch devices
 
 ## Development
 

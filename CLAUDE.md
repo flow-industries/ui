@@ -33,8 +33,12 @@ bun publish --access public # publish to npm
 - Components use Base UI (`@base-ui/react`) primitives — not Radix UI.
 - Use `render` prop (not `asChild`) for element composition.
 - Borders use `--border-width` / `--border-width-focus` tokens.
-- Inputs use `border-transparent bg-input` default, `focus-visible:border-ring` on focus.
-- No focus rings — only border color changes for focus indication.
+- Inputs use `border-transparent bg-input` default, `focus-visible:border-focus` on focus.
+- No focus rings — only border color changes for focus indication. Use `--focus` token (pink).
+- Never use `transition-all` — specify exact properties (e.g. `transition-[color,background-color,border-color]`).
+- Use animation tokens: `ease-(--ease-out)`, `ease-(--ease-out-expo)`, `ease-(--ease-spring)`.
 - Accordion uses motion for animations, not CSS keyframes.
 - Toast uses Base UI native Toast, not sonner.
 - Drawer uses Base UI native Drawer, not vaul.
+- Motion-based components (accordion, tabs, word-flash) respect `useReducedMotion()`.
+- No sidebar-specific color tokens — sidebar uses `secondary`, `tertiary`, `foreground` directly.
