@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "../../utils/cn"
 
@@ -51,6 +51,8 @@ function AccordionItem({
 }
 
 function AccordionIcon({ open }: { open: boolean }) {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -72,14 +74,14 @@ function AccordionIcon({ open }: { open: boolean }) {
           opacity: open ? 0 : 1,
         }}
         style={{ transformOrigin: "center" }}
-        transition={{ duration: 0.15, ease: "easeOut" }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.15, ease: "easeOut" }}
       />
       <motion.path
         d="M12 5v14"
         animate={{
           rotate: open ? 90 : 0,
         }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
         style={{ transformOrigin: "center" }}
       />
     </svg>
@@ -98,7 +100,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border-[length:var(--border-width)] border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50",
+          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border-[length:var(--border-width)] border-transparent py-2.5 text-left text-sm font-medium tracking-tighter transition-[color,background-color,border-color] outline-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-primary aria-disabled:pointer-events-none aria-disabled:opacity-50",
           className
         )}
         {...props}
@@ -118,6 +120,7 @@ function AccordionContent({
   children?: React.ReactNode
 }) {
   const open = React.useContext(AccordionItemContext)
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.div
@@ -128,7 +131,7 @@ function AccordionContent({
         height: open ? "auto" : 0,
         opacity: open ? 1 : 0,
       }}
-      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.25, ease: [0.25, 0.1, 0.25, 1] }}
       className="overflow-hidden text-sm"
     >
       <div

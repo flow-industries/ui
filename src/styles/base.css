@@ -1,18 +1,37 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@custom-variant hover (@media (hover: hover) and (pointer: fine) { &:hover });
+
 @layer base {
   * {
-    @apply border-border;
+    @apply border-secondary;
     corner-shape: superellipse(1.6);
   }
   button, a, [role="button"], [type="button"], [type="submit"], [type="reset"], label[for], select, summary {
     cursor: pointer;
   }
+  input, textarea, select, [contenteditable] {
+    @apply font-medium;
+  }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased font-normal tracking-tight leading-[1.5rem];
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tighter;
   }
   ::selection {
     @apply bg-light-pink/50 text-dark-pink;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

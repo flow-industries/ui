@@ -79,20 +79,15 @@ const palette = {
   ],
   semantic: [
     { name: "Background", token: "background", cls: "bg-background", border: true, fg: { token: "foreground", cls: "bg-foreground" } },
-    { name: "Card", token: "card", cls: "bg-card", border: true, fg: { token: "card-foreground", cls: "bg-card-foreground" } },
-    { name: "Popover", token: "popover", cls: "bg-popover", border: true, fg: { token: "popover-foreground", cls: "bg-popover-foreground" } },
     { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
+    { name: "Tertiary", token: "tertiary", cls: "bg-tertiary", border: true, fg: { token: "tertiary-foreground", cls: "bg-tertiary-foreground" } },
     { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
-    { name: "Accent", token: "accent", cls: "bg-accent", border: true, fg: { token: "accent-foreground", cls: "bg-accent-foreground" } },
     { name: "Success", token: "success", cls: "bg-success" },
     { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
   ],
   surface: [
     { name: "Input", token: "input", cls: "bg-input", border: true },
-    { name: "Border", token: "border", cls: "bg-border", border: true },
-    { name: "Placeholder", token: "placeholder", cls: "bg-placeholder" },
-    { name: "Ring", token: "ring", cls: "bg-ring" },
     { name: "Overlay", token: "overlay", cls: "bg-overlay" },
   ],
 }
@@ -170,17 +165,17 @@ function AppShellShowcase() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
                 Home
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
                 Projects
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
                 Settings
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -872,13 +867,13 @@ function ComponentsShowcase() {
       {/* Button */}
       <Section title="Button" wide>
         <Preview label="Variants">
-          <Button variant="default" onClick={() => toast("Default clicked")}>Default</Button>
-          <Button variant="secondary" onClick={() => toast("Secondary clicked")}>Secondary</Button>
-          <Button variant="outline" onClick={() => toast("Outline clicked")}>Outline</Button>
-          <Button variant="ghost" onClick={() => toast("Ghost clicked")}>Ghost</Button>
-          <Button variant="link" onClick={() => toast("Link clicked")}>Link</Button>
-          <Button variant="destructive" onClick={() => toast("Destructive clicked")}>Destructive</Button>
-              <Button variant="success" onClick={() => toast("Success clicked")}>Success</Button>
+          <Button variant="default">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button variant="success">Success</Button>
         </Preview>
         <Preview label="Sizes">
           <Button size="sm">Small</Button>
@@ -886,27 +881,52 @@ function ComponentsShowcase() {
           <Button size="lg">Large</Button>
           <Button size="icon"><Star /></Button>
         </Preview>
+        <Preview label="Combos">
+          <div className="flex items-center gap-3 rounded-xl bg-secondary p-4">
+            <Button variant="default">Confirm</Button>
+            <Button variant="ghost">Cancel</Button>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl bg-tertiary p-4">
+            <Button variant="default">Save</Button>
+            <Button variant="outline">Discard</Button>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl bg-primary p-4">
+            <Button variant="secondary">Get Started</Button>
+            <Button variant="ghost" className="text-primary-foreground hover:text-primary-foreground hover:bg-primary-foreground/10">Learn More</Button>
+          </div>
+        </Preview>
       </Section>
 
       {/* Button Group */}
       <Section title="Button Group">
         <Preview>
           <ButtonGroup>
-            <Button variant="outline" onClick={() => toast("Left")}>Left</Button>
-            <Button variant="outline" onClick={() => toast("Center")}>Center</Button>
-            <Button variant="outline" onClick={() => toast("Right")}>Right</Button>
+            <Button variant="outline">Left</Button>
+            <Button variant="outline">Center</Button>
+            <Button variant="outline">Right</Button>
           </ButtonGroup>
         </Preview>
       </Section>
 
       {/* Badge */}
-      <Section title="Badge">
-        <Preview>
+      <Section title="Badge" wide>
+        <Preview label="Variants">
           <Badge>Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
           <Badge variant="outline">Outline</Badge>
           <Badge variant="destructive">Destructive</Badge>
-              <Badge variant="success">Success</Badge>
+          <Badge variant="success">Success</Badge>
+        </Preview>
+        <Preview label="On surfaces">
+          <div className="flex items-center gap-2 rounded-xl bg-secondary p-4">
+            <Badge>Pro</Badge>
+            <Badge variant="secondary">Free</Badge>
+            <Badge variant="outline">Beta</Badge>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl bg-tertiary p-4">
+            <Badge variant="success">Active</Badge>
+            <Badge variant="destructive">Expired</Badge>
+          </div>
         </Preview>
       </Section>
 
@@ -1069,23 +1089,32 @@ function ComponentsShowcase() {
 
       {/* Card */}
       <Section title="Card" wide>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl">
           <Card>
             <CardHeader>
-              <CardTitle>Flow Game</CardTitle>
-              <CardDescription>Multiplayer movement game</CardDescription>
+              <CardTitle>Default</CardTitle>
+              <CardDescription>bg-background</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">A Quake-style 3D multiplayer game built with Godot.</p>
+              <p className="text-sm text-muted-foreground">Primary surface. Used for main content areas.</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card variant="secondary">
             <CardHeader>
-              <CardTitle>Flow ID</CardTitle>
-              <CardDescription>Passkey authentication</CardDescription>
+              <CardTitle>Secondary</CardTitle>
+              <CardDescription>bg-secondary</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">One identity, truly yours. Secured by passkeys.</p>
+              <p className="text-sm text-muted-foreground">Elevated surface. Used for cards and panels.</p>
+            </CardContent>
+          </Card>
+          <Card variant="muted">
+            <CardHeader>
+              <CardTitle>Muted</CardTitle>
+              <CardDescription>bg-muted</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">Subtle surface. Used for background sections.</p>
             </CardContent>
           </Card>
         </div>
@@ -1397,13 +1426,13 @@ function ComponentsShowcase() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">Home</NavigationMenuLink>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">Home</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">About</NavigationMenuLink>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">About</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">Contact</NavigationMenuLink>
+              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">Contact</NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -1498,7 +1527,7 @@ function ComponentsShowcase() {
             <CarouselContent>
               {[1, 2, 3, 4, 5].map((i) => (
                 <CarouselItem key={i}>
-                  <div className="flex aspect-square items-center justify-center rounded-lg border bg-card text-2xl font-medium">{i}</div>
+                  <div className="flex aspect-square items-center justify-center rounded-lg border bg-secondary text-2xl font-medium">{i}</div>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -1634,7 +1663,7 @@ export function App() {
           </Section>
 
           {/* Usage */}
-          <div className="w-full bg-card rounded-xl p-6 space-y-4">
+          <div className="w-full bg-secondary rounded-xl p-6 space-y-4">
             <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">Usage</h2>
             <CodeBlock
               label="Import a component"
@@ -1687,7 +1716,7 @@ export function App() {
         </main>
 
         <footer className="px-6 md:px-12 py-8 mt-12 mb-8 max-w-5xl mx-auto">
-          <div className="bg-card rounded-xl p-6 flex items-center justify-between">
+          <div className="bg-secondary rounded-xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Logo size={16} />
               <span className="text-sm tracking-widest font-extralight text-muted-foreground">
@@ -1901,7 +1930,7 @@ function ColorSwatch({ c }: { c: PaletteColor }) {
           >
             <div
               ref={swatchRef}
-              className={`w-10 h-10 rounded-lg transition-transform ${fgHovered ? "" : "group-hover/bg:scale-110"} ${c.cls} ${c.border ? "border border-border" : ""}`}
+              className={`w-10 h-10 rounded-lg transition-transform ${fgHovered ? "" : "group-hover/bg:scale-110"} ${c.cls} ${c.border ? "border border-secondary" : ""}`}
             />
           </PopoverTrigger>
         </ColorPopover>

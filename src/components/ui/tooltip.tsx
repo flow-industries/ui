@@ -4,12 +4,14 @@ import { cn } from "../../utils/cn"
 
 function TooltipProvider({
   delay = 0,
+  closeDelay = 150,
   ...props
 }: TooltipPrimitive.Provider.Props) {
   return (
     <TooltipPrimitive.Provider
       data-slot="tooltip-provider"
       delay={delay}
+      closeDelay={closeDelay}
       {...props}
     />
   )

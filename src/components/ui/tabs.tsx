@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "../../utils/cn"
 
@@ -65,6 +65,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   const tabsId = React.useContext(TabsIdContext)
   const ref = React.useRef<HTMLButtonElement>(null)
   const [active, setActive] = React.useState(false)
+  const shouldReduceMotion = useReducedMotion()
 
   React.useEffect(() => {
     const el = ref.current
@@ -82,7 +83,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
       ref={ref}
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border-[length:var(--border-width)] border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-colors group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border-[length:var(--border-width)] border-transparent px-2 py-1 text-sm font-medium tracking-tighter whitespace-nowrap text-foreground/60 transition-colors group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-primary disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
         "data-active:text-foreground dark:data-active:text-foreground",
         "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
@@ -95,7 +96,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
           layoutId={`tab-pill-${tabsId}`}
           className="absolute inset-0 rounded-md bg-background shadow-sm dark:border-input dark:bg-input/30"
           style={{ zIndex: 0 }}
-          transition={{ type: "spring", bounce: 0.15, duration: 0.35 }}
+          transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", bounce: 0.15, duration: 0.35 }}
         />
       )}
       <span className="relative z-10">{props.children}</span>

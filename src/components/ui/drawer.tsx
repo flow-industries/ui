@@ -5,8 +5,21 @@ import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
 import { cn } from "../../utils/cn"
 
-function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+type DrawerSide = "top" | "bottom" | "left" | "right"
+const DrawerContext = React.createContext<DrawerSide>("bottom")
+const sideToSwipe = { bottom: "down", top: "up", left: "left", right: "right" } as const
+
+function Drawer({
+  side = "bottom",
+  ...props
+}: Omit<DrawerPrimitive.Root.Props, "swipeDirection"> & {
+  side?: DrawerSide
+}) {
+  return (
+    <DrawerContext.Provider value={side}>
+      <DrawerPrimitive.Root data-slot="drawer" swipeDirection={sideToSwipe[side]} {...props} />
+    </DrawerContext.Provider>
+  )
 }
 
 function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
@@ -25,9 +38,10 @@ function DrawerOverlay({
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs",
+        "fixed inset-0 z-50 bg-overlay transition-opacity duration-300 ease-(--ease-out-expo) supports-backdrop-filter:backdrop-blur-xs data-ending-style:opacity-0 data-starting-style:opacity-0 data-swiping:transition-none",
         className
       )}
+      style={{ opacity: `calc(1 * (1 - var(--drawer-swipe-progress, 0)))` }}
       {...props}
     />
   )
@@ -36,26 +50,36 @@ function DrawerOverlay({
 function DrawerContent({
   className,
   children,
-  side = "bottom",
   ...props
-}: DrawerPrimitive.Popup.Props & {
-  side?: "top" | "right" | "bottom" | "left"
-}) {
+}: DrawerPrimitive.Popup.Props) {
+  const side = React.useContext(DrawerContext)
+
+  const positionClasses = {
+    bottom: "inset-x-0 bottom-0 max-h-[80vh] rounded-t-xl border-t-[length:var(--border-width)] [transform:translateY(var(--drawer-swipe-movement-y,0px))] data-ending-style:[transform:translateY(100%)] data-starting-style:[transform:translateY(100%)]",
+    top: "inset-x-0 top-0 max-h-[80vh] rounded-b-xl border-b-[length:var(--border-width)] [transform:translateY(var(--drawer-swipe-movement-y,0px))] data-ending-style:[transform:translateY(-100%)] data-starting-style:[transform:translateY(-100%)]",
+    left: "inset-y-0 left-0 w-3/4 sm:max-w-sm rounded-r-xl border-r-[length:var(--border-width)] [transform:translateX(var(--drawer-swipe-movement-x,0px))] data-ending-style:[transform:translateX(-100%)] data-starting-style:[transform:translateX(-100%)]",
+    right: "inset-y-0 right-0 w-3/4 sm:max-w-sm rounded-l-xl border-l-[length:var(--border-width)] [transform:translateX(var(--drawer-swipe-movement-x,0px))] data-ending-style:[transform:translateX(100%)] data-starting-style:[transform:translateX(100%)]",
+  }
+
   return (
     <DrawerPrimitive.Portal>
       <DrawerOverlay />
-      <DrawerPrimitive.Popup
-        data-slot="drawer-content"
-        data-side={side}
-        className={cn(
-          "group/drawer-content fixed z-50 flex flex-col bg-popover text-sm text-popover-foreground shadow-lg outline-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:mt-24 data-[side=bottom]:max-h-[80vh] data-[side=bottom]:rounded-t-xl data-[side=bottom]:border-t-[length:var(--border-width)] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:w-3/4 data-[side=left]:rounded-r-xl data-[side=left]:border-r-[length:var(--border-width)] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:w-3/4 data-[side=right]:rounded-l-xl data-[side=right]:border-l-[length:var(--border-width)] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:mb-24 data-[side=top]:max-h-[80vh] data-[side=top]:rounded-b-xl data-[side=top]:border-b-[length:var(--border-width)] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm",
-          className
-        )}
-        {...props}
-      >
-        <div className="mx-auto mt-4 hidden h-1 w-[100px] shrink-0 rounded-full bg-muted data-[side=bottom]:block" />
-        {children}
-      </DrawerPrimitive.Popup>
+      <DrawerPrimitive.Viewport className="fixed inset-0 z-50">
+        <DrawerPrimitive.Popup
+          data-slot="drawer-content"
+          className={cn(
+            "group/drawer-content fixed z-50 flex flex-col bg-background text-sm text-foreground shadow-lg outline-none transition-transform duration-300 ease-(--ease-out-expo) data-swiping:transition-none data-ending-style:duration-[calc(var(--drawer-swipe-strength,0.5)*400ms)]",
+            positionClasses[side],
+            className
+          )}
+          {...props}
+        >
+          {side === "bottom" && (
+            <div className="mx-auto mt-4 h-1 w-[100px] shrink-0 rounded-full bg-muted" />
+          )}
+          {children}
+        </DrawerPrimitive.Popup>
+      </DrawerPrimitive.Viewport>
     </DrawerPrimitive.Portal>
   )
 }
@@ -84,7 +108,7 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
-      className={cn("text-base font-medium text-foreground", className)}
+      className={cn("text-base font-medium tracking-tighter text-foreground", className)}
       {...props}
     />
   )

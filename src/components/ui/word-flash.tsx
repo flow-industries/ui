@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 
 interface WordFlashProps {
   text: string
@@ -18,6 +18,7 @@ export function WordFlash({
   wordDuration = 100,
   isHovered
 }: WordFlashProps) {
+  const shouldReduceMotion = useReducedMotion()
   const words = text.split(" ")
   const [currentWordIndex, setCurrentWordIndex] = useState(-1)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -62,10 +63,10 @@ export function WordFlash({
         {showWords ? (
           <motion.span
             key={currentWordIndex}
-            initial={{ opacity: 0, filter: "blur(8px)" }}
+            initial={{ opacity: 0, filter: shouldReduceMotion ? "blur(0px)" : "blur(8px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, filter: "blur(8px)" }}
-            transition={{ duration: 0.08, ease: "easeOut" }}
+            exit={{ opacity: 0, filter: shouldReduceMotion ? "blur(0px)" : "blur(8px)" }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.08, ease: "easeOut" }}
             onAnimationComplete={() => setWordMounted(true)}
             className="text-6xl tracking-wide leading-none uppercase scale-y-90 font-base block"
           >
@@ -74,11 +75,11 @@ export function WordFlash({
         ) : (
           <motion.div
             key={hasCompleted ? "content-full" : "content-title"}
-            initial={{ opacity: 0, filter: "blur(12px)" }}
+            initial={{ opacity: 0, filter: shouldReduceMotion ? "blur(0px)" : "blur(12px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, filter: "blur(8px)" }}
+            exit={{ opacity: 0, filter: shouldReduceMotion ? "blur(0px)" : "blur(8px)" }}
             transition={{
-              duration: 0.3,
+              duration: shouldReduceMotion ? 0 : 0.3,
               ease: [0.25, 0.1, 0.25, 1]
             }}
           >
