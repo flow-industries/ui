@@ -100,7 +100,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border-[length:var(--border-width)] border-transparent py-2.5 text-left text-sm font-medium tracking-tighter transition-[color,background-color,border-color] outline-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-primary aria-disabled:pointer-events-none aria-disabled:opacity-50",
+          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border-[length:var(--border-width)] border-transparent py-2.5 text-left text-sm font-medium tracking-tighter transition-[color,background-color,border-color] outline-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus aria-disabled:pointer-events-none aria-disabled:opacity-50",
           className
         )}
         {...props}

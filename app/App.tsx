@@ -47,6 +47,7 @@ import { AspectRatio } from "../src/components/ui/aspect-ratio"
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../src/components/ui/carousel"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../src/components/ui/resizable"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../src/components/ui/navigation-menu"
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "../src/components/ui/sidebar"
 import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
 import { cn } from "../src/utils/cn"
 import {
@@ -861,6 +862,7 @@ function InboxShowcase() {
 function ComponentsShowcase() {
   const [collapsibleOpen, setCollapsibleOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(40)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="flex flex-wrap gap-12">
@@ -1563,6 +1565,84 @@ function ComponentsShowcase() {
           <p className="text-sm font-medium">Flow Industries</p>
           <Separator />
           <p className="text-sm text-muted-foreground">Design system and component library.</p>
+        </div>
+      </Section>
+
+      {/* Sidebar */}
+      <Section title="Sidebar" wide>
+        <Preview>
+          <Button variant="outline" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? "Collapse" : "Expand"} Sidebar
+          </Button>
+        </Preview>
+        <div className="h-[400px] w-full overflow-hidden rounded-xl border-[length:var(--border-width)] border-secondary [&_[data-slot=sidebar-container]]:!static [&_[data-slot=sidebar-container]]:!flex [&_[data-slot=sidebar]]:!block">
+          <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen}>
+            <Sidebar collapsible="icon">
+              <SidebarHeader>
+                <div className="flex items-center gap-2 px-2 py-1">
+                  <div className="size-6 rounded-md bg-primary" />
+                  <span className="text-sm font-medium tracking-tighter">Acme Inc</span>
+                </div>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarGroup>
+                  <SidebarGroupLabel>Platform</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {[
+                        { icon: Home, label: "Home" },
+                        { icon: Inbox, label: "Inbox" },
+                        { icon: FileText, label: "Documents" },
+                        { icon: Settings, label: "Settings" },
+                      ].map((item) => (
+                        <SidebarMenuItem key={item.label}>
+                          <SidebarMenuButton isActive={item.label === "Home"}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup>
+                  <SidebarGroupLabel>Projects</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {["Design System", "Marketing Site", "Mobile App"].map((project) => (
+                        <SidebarMenuItem key={project}>
+                          <SidebarMenuButton>
+                            <FileText />
+                            <span>{project}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </SidebarContent>
+              <SidebarFooter>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton>
+                      <User />
+                      <span>John Doe</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarFooter>
+            </Sidebar>
+            <SidebarInset>
+              <div className="flex items-center gap-2 p-4">
+                <SidebarTrigger />
+                <Separator orientation="vertical" className="h-4" />
+                <span className="text-sm text-muted-foreground">Dashboard</span>
+              </div>
+              <div className="flex-1 p-4">
+                <p className="text-sm text-muted-foreground">Main content area</p>
+              </div>
+            </SidebarInset>
+          </SidebarProvider>
         </div>
       </Section>
 
