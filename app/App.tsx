@@ -46,12 +46,14 @@ import { ScrollArea } from "../src/components/ui/scroll-area"
 import { AspectRatio } from "../src/components/ui/aspect-ratio"
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../src/components/ui/carousel"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../src/components/ui/resizable"
+import { NavList, NavListGroup, NavListHeader, NavListItem } from "../src/components/ui/nav-list"
+import { Footer, FooterContent, FooterBottom, FooterBrand, FooterSocials, FooterLink, FooterCopyright } from "../src/components/ui/footer"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../src/components/ui/navigation-menu"
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "../src/components/ui/sidebar"
 import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
 import { CopyCheckIcon, CopyButton } from "../src/components/ui/animated-icons"
 import { ColorSwatch as ColorSwatchUI, HueGroup as HueGroupUI } from "../src/components/ui/color-swatch"
-import { Title, Subtitle, Overline, Mono } from "../src/components/ui/typography"
+import { Title, Subtitle, Overline, Caption, Mono } from "../src/components/ui/typography"
 import { cn } from "../src/utils/cn"
 import {
   Bold, Italic, Underline,
@@ -759,7 +761,7 @@ function MediaGalleryShowcase() {
           </CollapsibleTrigger>
         </div>
         <CollapsibleContent className="space-y-2">
-          <Accordion type="single" collapsible>
+          <Accordion >
             <AccordionItem value="description">
               <AccordionTrigger>Description</AccordionTrigger>
               <AccordionContent>
@@ -1207,7 +1209,7 @@ function ComponentsShowcase() {
 
       {/* Accordion */}
       <Section title="Accordion" wide>
-        <Accordion type="single" collapsible className="max-w-md">
+        <Accordion  className="max-w-md">
           <AccordionItem value="item-1">
             <AccordionTrigger>What is Flow UI?</AccordionTrigger>
             <AccordionContent>
@@ -1631,6 +1633,28 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Nav List */}
+      <Section title="Nav List" wide>
+        <NavList>
+          <NavListGroup>
+            <NavListHeader>Products</NavListHeader>
+            <NavListItem href="#"><Logo size={14} /> Flow Game</NavListItem>
+            <NavListItem href="#"><Logo size={14} /> Flow ID</NavListItem>
+            <NavListItem href="#"><Logo size={14} /> Flow Talk</NavListItem>
+          </NavListGroup>
+          <NavListGroup>
+            <NavListHeader>Resources</NavListHeader>
+            <NavListItem href="#">Docs</NavListItem>
+            <NavListItem href="#">GitHub</NavListItem>
+          </NavListGroup>
+          <NavListGroup>
+            <NavListHeader>Legal</NavListHeader>
+            <NavListItem href="#">Privacy</NavListItem>
+            <NavListItem href="#">Terms</NavListItem>
+          </NavListGroup>
+        </NavList>
+      </Section>
+
       {/* Sidebar */}
       <Section title="Sidebar" wide>
         <Preview>
@@ -1991,6 +2015,14 @@ export function App() {
                   <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Overline</span>
                   <Overline>Getting Started</Overline>
                 </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Overline Brand</span>
+                  <Overline variant="brand">Products</Overline>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Caption</span>
+                  <Caption>Flow Game</Caption>
+                </div>
               </div>
             </div>
           </Section>
@@ -2050,6 +2082,35 @@ export function App() {
               <VerificationFlowShowcase />
               <MediaGalleryShowcase />
               <InboxShowcase />
+
+              <Showcase>
+                <NavList>
+                  <NavListGroup>
+                    <NavListHeader>Products</NavListHeader>
+                    <NavListItem href="#"><Logo size={14} /> Flow Game</NavListItem>
+                    <NavListItem href="#"><Logo size={14} /> Flow ID</NavListItem>
+                    <NavListItem href="#"><Logo size={14} /> Flow Talk</NavListItem>
+                  </NavListGroup>
+                  <NavListGroup>
+                    <NavListHeader>Resources</NavListHeader>
+                    <NavListItem href="#">Documentation</NavListItem>
+                    <NavListItem href="#">GitHub</NavListItem>
+                    <NavListItem href="#">Discord</NavListItem>
+                  </NavListGroup>
+                  <NavListGroup>
+                    <NavListHeader>Company</NavListHeader>
+                    <NavListItem href="#">About</NavListItem>
+                    <NavListItem href="#">Blog</NavListItem>
+                    <NavListItem href="#">Careers</NavListItem>
+                  </NavListGroup>
+                  <NavListGroup>
+                    <NavListHeader>Legal</NavListHeader>
+                    <NavListItem href="#">Privacy Policy</NavListItem>
+                    <NavListItem href="#">Terms of Service</NavListItem>
+                    <NavListItem href="#">Cookie Policy</NavListItem>
+                  </NavListGroup>
+                </NavList>
+              </Showcase>
             </div>
           )}
 
@@ -2059,30 +2120,57 @@ export function App() {
 
         </main>
 
-        <footer className="px-6 md:px-12 py-8 mt-12 mb-8 max-w-5xl mx-auto">
-          <div className="bg-secondary rounded-xl p-6 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Logo size={16} />
-              <span className="text-sm tracking-widest font-extralight text-muted-foreground">
-                FLOW
-              </span>
+        <Footer className="px-6 md:px-12 py-12 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl p-8">
+          <FooterContent>
+            <NavList className="w-full justify-between">
+              <NavListGroup>
+                <NavListHeader>Products</NavListHeader>
+                <NavListItem href="#">Flow Game</NavListItem>
+                <NavListItem href="#">Flow ID</NavListItem>
+                <NavListItem href="#">Flow Talk</NavListItem>
+              </NavListGroup>
+              <NavListGroup>
+                <NavListHeader>Resources</NavListHeader>
+                <NavListItem href="#">Documentation</NavListItem>
+                <NavListItem href="#">GitHub</NavListItem>
+                <NavListItem href="#">Discord</NavListItem>
+              </NavListGroup>
+              <NavListGroup>
+                <NavListHeader>Company</NavListHeader>
+                <NavListItem href="#">About</NavListItem>
+                <NavListItem href="#">Blog</NavListItem>
+                <NavListItem href="#">Careers</NavListItem>
+              </NavListGroup>
+              <NavListGroup>
+                <NavListHeader>Legal</NavListHeader>
+                <NavListItem href="#">Privacy Policy</NavListItem>
+                <NavListItem href="#">Terms of Service</NavListItem>
+              </NavListGroup>
+            </NavList>
+          </FooterContent>
+          <FooterBottom className="flex-col items-start gap-4">
+            <div className="flex w-full items-center justify-between">
+              <FooterBrand>
+                <Logomark size="lg" start="Flow" end="UI" />
+              </FooterBrand>
+              <FooterSocials>
+                <FooterLink href="https://x.com/flowdotgame" target="_blank" rel="noopener noreferrer">
+                  <XIcon className="w-4 h-4" />
+                </FooterLink>
+                <FooterLink href="https://discord.gg/g2JXf8t4Vg" target="_blank" rel="noopener noreferrer">
+                  <DiscordIcon className="w-5 h-5" />
+                </FooterLink>
+                <FooterLink href="https://github.com/flow-industries/ui" target="_blank" rel="noopener noreferrer">
+                  <GitHubIcon className="w-4 h-4" />
+                </FooterLink>
+                <FooterLink href="https://bsky.app/profile/flow.industries" target="_blank" rel="noopener noreferrer">
+                  <BlueskyIcon className="w-4 h-4" />
+                </FooterLink>
+              </FooterSocials>
             </div>
-            <div className="flex gap-4 items-center text-muted-foreground">
-              <a href="https://x.com/flowdotgame" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                <XIcon className="w-4 h-4" />
-              </a>
-              <a href="https://discord.gg/g2JXf8t4Vg" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                <DiscordIcon className="w-5 h-5" />
-              </a>
-              <a href="https://github.com/flow-industries/ui" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                <GitHubIcon className="w-4 h-4" />
-              </a>
-              <a href="https://bsky.app/profile/flow.industries" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                <BlueskyIcon className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </footer>
+            <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
+          </FooterBottom>
+        </Footer>
       </div>
     </TooltipProvider>
     </ToastProvider>

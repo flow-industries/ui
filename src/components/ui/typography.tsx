@@ -35,11 +35,25 @@ function Subtitle({ className, size = "default", ...props }: React.ComponentProp
   )
 }
 
-function Overline({ className, ...props }: React.ComponentProps<"span">) {
+function Overline({ className, variant = "default", ...props }: React.ComponentProps<"span"> & { variant?: "default" | "brand" }) {
   return (
     <span
       data-slot="overline"
-      className={cn("text-xs font-medium tracking-widest uppercase text-muted-foreground", className)}
+      className={cn(
+        "text-sm font-[550] tracking-wide",
+        variant === "brand" ? "text-brand" : "text-muted-foreground",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function Caption({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="caption"
+      className={cn("text-xs font-[450] tracking-wide text-foreground", className)}
       {...props}
     />
   )
@@ -55,4 +69,4 @@ function Mono({ className, ...props }: React.ComponentProps<"code">) {
   )
 }
 
-export { Title, Subtitle, Overline, Mono }
+export { Title, Subtitle, Overline, Caption, Mono }
