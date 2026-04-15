@@ -12,7 +12,7 @@ bun add @flow-industries/ui
 
 ## Setup
 
-Import the design tokens and base styles in your app's CSS:
+Import the design tokens and base styles in your app's CSS. Fonts (Geist Sans, Geist Mono, Geist Pixel) are included automatically via base.css.
 
 ```css
 @import "@flow-industries/ui/styles/tokens.css";
@@ -26,31 +26,42 @@ Import the design tokens and base styles in your app's CSS:
 ```tsx
 import { Button } from "@flow-industries/ui/components/button"
 import { Input } from "@flow-industries/ui/components/input"
+import { Card, CardContent } from "@flow-industries/ui/components/card"
+import { toast } from "@flow-industries/ui/components/toast"
 import { cn } from "@flow-industries/ui"
 ```
 
 ## Components
 
-50+ components built on [Base UI](https://base-ui.com) primitives with Tailwind CSS.
+57 components built on [Base UI](https://base-ui.com) primitives with Tailwind CSS.
 
-Accordion, Alert Dialog, Aspect Ratio, Avatar, Badge, Breadcrumb, Button, Button Group, Card, Carousel, Chart, Checkbox, Collapsible, Combobox, Context Menu, Dialog, Drawer, Dropdown Menu, Empty, Field, Form, Hover Card, Input, Input Group, Input OTP, Item, Kbd, Label, Menubar, Native Select, Navigation Menu, Pagination, Popover, Progress, Radio Group, Resizable, Scroll Area, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toggle, Toggle Group, Tooltip, Word Flash
+Accordion, Alert Dialog, Animated Icons, Aspect Ratio, Avatar, Badge, Breadcrumb, Button, Button Group, Card, Carousel, Chart, Checkbox, Collapsible, Color Swatch, Combobox, Context Menu, Dialog, Drawer, Dropdown Menu, Empty, Field, Form, Hover Card, Input, Input Group, Input OTP, Item, Kbd, Label, Menubar, Native Select, Navigation Menu, Pagination, Popover, Progress, Radio Group, Resizable, Scroll Area, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toggle, Toggle Group, Tooltip, Typography, Word Flash
 
 ## Design tokens
 
-All colors use oklch. The system ships a custom palette (Flow Pink, Mint, Blueberry, Grape, Strawberry, Orange, Banana) with light variants, plus semantic tokens for backgrounds, surfaces, and states.
+All colors use oklch. Simplified semantic color system:
 
-Key tokens:
-- `--border-width` / `--border-width-focus` for consistent borders
+- **background** / **foreground** — page surface and primary text
+- **primary** / **primary-foreground** — buttons, active states
+- **secondary** / **secondary-foreground** — cards, elevated surfaces
+- **muted** / **muted-foreground** — hover highlights, subdued text
+- **brand** / **brand-foreground** — Flow brand CTA (dark pink)
+- **destructive** / **success** — status colors
+- **input** — input/textarea/select backgrounds
+- **focus** — focus border color (dark pink)
+
+Custom palette: Flow Pink, Mint, Blueberry, Grape, Strawberry, Orange, Banana — with light and dark variants.
+
+Other tokens:
+- `--border-width` / `--border-width-focus` (2px) for consistent borders
 - `--radius` with superellipse corner shapes
-- Typography scale (Geist Sans / Geist Mono)
-- `--focus` for focus border color (pink)
 - `--ease-out` / `--ease-out-expo` / `--ease-spring` animation easing curves
-- Success and destructive variants on buttons and badges
+- Typography scale (Geist Sans / Geist Mono / Geist Pixel) — fonts bundled
+- Typography components: `Title`, `Subtitle`, `Overline`, `Mono`
 
 ## Accessibility
 
 - `prefers-reduced-motion` is respected globally — all CSS and JS animations are disabled
-- Hover styles are gated behind `@media (hover: hover) and (pointer: fine)` to prevent false hover states on touch devices
 
 ## Development
 

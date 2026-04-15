@@ -64,7 +64,7 @@ function AccordionIcon({ open }: { open: boolean }) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="shrink-0 text-muted-foreground"
+      className="shrink-0 text-dark-pink"
       data-slot="accordion-trigger-icon"
     >
       <motion.path
@@ -81,7 +81,7 @@ function AccordionIcon({ open }: { open: boolean }) {
         animate={{
           rotate: open ? 90 : 0,
         }}
-        transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.225, ease: "easeOut" }}
         style={{ transformOrigin: "center" }}
       />
     </svg>

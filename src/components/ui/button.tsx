@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "../../utils/cn"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border-[length:var(--border-width)] border-transparent bg-clip-padding text-sm font-medium tracking-tighter whitespace-nowrap transition-[color,background-color,border-color,box-shadow,translate,scale] duration-100 ease-(--ease-out) outline-none select-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border-[length:var(--border-width)] border-transparent bg-clip-padding text-sm font-medium tracking-tighter whitespace-nowrap [transition:background-color_.15s_ease,color_.4s_ease,border-color_.15s_ease,translate_100ms_ease,scale_100ms_ease] outline-none select-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -22,6 +22,7 @@ const buttonVariants = cva(
         brand:
           "bg-brand text-brand-foreground hover:bg-brand/90",
         link: "text-primary underline-offset-4 hover:underline",
+        "brand-link": "text-foreground hover:text-brand [transition:color_80ms_ease]",
       },
       size: {
         default:

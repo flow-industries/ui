@@ -1,6 +1,6 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import { Logo } from "../src/components/logo"
+import { Logo, Logomark, Wordmark } from "../src/components/logo"
 import { XIcon, DiscordIcon, GitHubIcon, BlueskyIcon } from "../src/components/icons"
 import { Button } from "../src/components/ui/button"
 import { Badge } from "../src/components/ui/badge"
@@ -49,6 +49,9 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../src/com
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../src/components/ui/navigation-menu"
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "../src/components/ui/sidebar"
 import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
+import { CopyCheckIcon, CopyButton } from "../src/components/ui/animated-icons"
+import { ColorSwatch as ColorSwatchUI, HueGroup as HueGroupUI } from "../src/components/ui/color-swatch"
+import { Title, Subtitle, Overline, Mono } from "../src/components/ui/typography"
 import { cn } from "../src/utils/cn"
 import {
   Bold, Italic, Underline,
@@ -59,37 +62,65 @@ import {
   Clock, MoreHorizontal, Reply, Archive, RefreshCw, Download, PenLine, Eye,
 } from "lucide-react"
 
+const hues = [
+  { name: "Pink", fancy: "Flow Pink",
+    dark:  { token: "dark-pink", cls: "bg-dark-pink" },
+    std:   { token: "pink", cls: "bg-pink" },
+    light: { token: "light-pink", cls: "bg-light-pink" },
+  },
+  { name: "Green", fancy: "Mint",
+    dark:  { token: "dark-green", cls: "bg-dark-green" },
+    std:   { token: "green", cls: "bg-green" },
+    light: { token: "light-green", cls: "bg-light-green" },
+  },
+  { name: "Blue", fancy: "Blueberry",
+    dark:  { token: "dark-blue", cls: "bg-dark-blue" },
+    std:   { token: "blue", cls: "bg-blue" },
+    light: { token: "light-blue", cls: "bg-light-blue" },
+  },
+  { name: "Purple", fancy: "Grape",
+    dark:  { token: "dark-purple", cls: "bg-dark-purple" },
+    std:   { token: "purple", cls: "bg-purple" },
+    light: { token: "light-purple", cls: "bg-light-purple" },
+  },
+  { name: "Red", fancy: "Strawberry",
+    dark:  { token: "dark-red", cls: "bg-dark-red" },
+    std:   { token: "red", cls: "bg-red" },
+    light: { token: "light-red", cls: "bg-light-red" },
+  },
+  { name: "Orange", fancy: "Orange",
+    dark:  { token: "dark-orange", cls: "bg-dark-orange" },
+    std:   { token: "orange", cls: "bg-orange" },
+    light: { token: "light-orange", cls: "bg-light-orange" },
+  },
+  { name: "Yellow", fancy: "Banana",
+    dark:  { token: "dark-yellow", cls: "bg-dark-yellow" },
+    std:   { token: "yellow", cls: "bg-yellow" },
+    light: { token: "light-yellow", cls: "bg-light-yellow" },
+  },
+]
+
 const palette = {
-  standard: [
-    { name: "Pink", fancy: "Flow Pink", token: "pink", cls: "bg-pink" },
-    { name: "Green", fancy: "Mint", token: "green", cls: "bg-green" },
-    { name: "Blue", fancy: "Blueberry", token: "blue", cls: "bg-blue" },
-    { name: "Purple", fancy: "Grape", token: "purple", cls: "bg-purple" },
-    { name: "Red", fancy: "Strawberry", token: "red", cls: "bg-red" },
-    { name: "Orange", fancy: "Orange", token: "orange", cls: "bg-orange" },
-    { name: "Yellow", fancy: "Banana", token: "yellow", cls: "bg-yellow" },
-  ],
-  light: [
-    { name: "Pink", fancy: "Flow Pink Light", token: "light-pink", cls: "bg-light-pink" },
-    { name: "Green", fancy: "Mint Light", token: "light-green", cls: "bg-light-green" },
-    { name: "Blue", fancy: "Blueberry Light", token: "light-blue", cls: "bg-light-blue" },
-    { name: "Purple", fancy: "Grape Light", token: "light-purple", cls: "bg-light-purple" },
-    { name: "Red", fancy: "Strawberry Light", token: "light-red", cls: "bg-light-red" },
-    { name: "Orange", fancy: "Orange Light", token: "light-orange", cls: "bg-light-orange" },
-    { name: "Yellow", fancy: "Banana Light", token: "light-yellow", cls: "bg-light-yellow" },
-  ],
   semantic: [
     { name: "Background", token: "background", cls: "bg-background", border: true, fg: { token: "foreground", cls: "bg-foreground" } },
-    { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
-    { name: "Tertiary", token: "tertiary", cls: "bg-tertiary", border: true, fg: { token: "tertiary-foreground", cls: "bg-tertiary-foreground" } },
-    { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
-    { name: "Success", token: "success", cls: "bg-success" },
-    { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
+    { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
+    { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
+    { name: "Brand", token: "brand", cls: "bg-brand", fg: { token: "brand-foreground", cls: "bg-brand-foreground" } },
+    { name: "Destructive", token: "destructive", cls: "bg-destructive" },
+    { name: "Success", token: "success", cls: "bg-success" },
+    { name: "Focus", token: "focus", cls: "bg-focus" },
   ],
   surface: [
     { name: "Input", token: "input", cls: "bg-input", border: true },
     { name: "Overlay", token: "overlay", cls: "bg-overlay" },
+  ],
+  chart: [
+    { name: "Chart 1", token: "chart-1", cls: "bg-chart-1" },
+    { name: "Chart 2", token: "chart-2", cls: "bg-chart-2" },
+    { name: "Chart 3", token: "chart-3", cls: "bg-chart-3" },
+    { name: "Chart 4", token: "chart-4", cls: "bg-chart-4" },
+    { name: "Chart 5", token: "chart-5", cls: "bg-chart-5" },
   ],
 }
 
@@ -106,6 +137,51 @@ function Section({ title, children, wide }: { title: string; children: React.Rea
   )
 }
 
+const pixelVariants = ["Square", "Grid", "Circle", "Triangle", "Line"] as const
+
+function PixelFontCard() {
+  const [variant, setVariant] = useState<typeof pixelVariants[number]>("Square")
+  const fontFamily = `"Geist Pixel ${variant}", monospace`
+
+  return (
+    <div className="space-y-3 rounded-xl bg-secondary p-5">
+      <div>
+        <p className="text-2xl font-normal" style={{ fontFamily }}>Geist Pixel</p>
+        <p className="text-xs text-muted-foreground font-mono mt-1">font-pixel</p>
+      </div>
+      <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl" style={{ fontFamily }}>
+        {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
+          <span key={pair}>{pair}</span>
+        ))}
+      </div>
+      <div className="flex gap-1.5 flex-wrap">
+        {pixelVariants.map((v) => (
+          <button
+            key={v}
+            onClick={() => setVariant(v)}
+            className={cn(
+              "text-sm px-2.5 py-1 rounded-lg transition-colors",
+              v === variant ? "bg-primary text-primary-foreground" : "bg-secondary hover:bg-muted"
+            )}
+            style={{ fontFamily: `"Geist Pixel ${v}", monospace` }}
+          >
+            {v}
+          </button>
+        ))}
+      </div>
+      <table className="w-full text-xs text-muted-foreground">
+        <tbody>
+          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
+          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
+          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Pixel / bitmap display</td></tr>
+          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Variants</td><td>Square, Grid, Circle, Triangle, Line</td></tr>
+          <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function Preview({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
@@ -119,8 +195,10 @@ function Preview({ label, children }: { label?: string; children: React.ReactNod
 
 function Showcase({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <Card className={cn("overflow-hidden p-6", className)}>
-      {children}
+    <Card className={cn("overflow-hidden", className)}>
+      <CardContent>
+        {children}
+      </CardContent>
     </Card>
   )
 }
@@ -166,19 +244,13 @@ function AppShellShowcase() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
-                Home
-              </NavigationMenuLink>
+              <NavigationMenuLink>Home</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
-                Projects
-              </NavigationMenuLink>
+              <NavigationMenuLink>Projects</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">
-                Settings
-              </NavigationMenuLink>
+              <NavigationMenuLink>Settings</NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -196,9 +268,9 @@ function AppShellShowcase() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48" align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
                 <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
                 <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
@@ -562,14 +634,6 @@ function TeamMembersShowcase() {
         </PaginationContent>
       </Pagination>
 
-      <div className="max-w-xs">
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>No members match your search</EmptyTitle>
-            <EmptyDesc>Try adjusting your search to find what you're looking for.</EmptyDesc>
-          </EmptyHeader>
-        </Empty>
-      </div>
     </Showcase>
   )
 }
@@ -578,8 +642,8 @@ function VerificationFlowShowcase() {
   const [step, setStep] = useState(1)
 
   return (
-    <Showcase className="max-w-sm mx-auto">
-      <div className="space-y-6">
+    <Showcase className="w-md mx-auto">
+      <div className="space-y-6 min-h-64 flex flex-col justify-center">
         <Progress value={(step / 3) * 100} />
 
         {step === 1 && (
@@ -870,10 +934,12 @@ function ComponentsShowcase() {
       <Section title="Button" wide>
         <Preview label="Variants">
           <Button variant="default">Primary</Button>
+          <Button variant="brand">Brand</Button>
           <Button variant="secondary">Secondary</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="link">Link</Button>
+          <Button variant="brand-link">Brand Link</Button>
           <Button variant="destructive">Destructive</Button>
           <Button variant="success">Success</Button>
         </Preview>
@@ -884,18 +950,14 @@ function ComponentsShowcase() {
           <Button size="icon"><Star /></Button>
         </Preview>
         <Preview label="Combos">
-          <div className="flex items-center gap-3 rounded-xl bg-secondary p-4">
+          <Card variant="secondary" className="flex-row items-center gap-3 p-4">
             <Button variant="default">Confirm</Button>
             <Button variant="ghost">Cancel</Button>
-          </div>
-          <div className="flex items-center gap-3 rounded-xl bg-tertiary p-4">
+          </Card>
+          <Card variant="muted" className="flex-row items-center gap-3 p-4">
             <Button variant="default">Save</Button>
             <Button variant="outline">Discard</Button>
-          </div>
-          <div className="flex items-center gap-3 rounded-xl bg-primary p-4">
-            <Button variant="secondary">Get Started</Button>
-            <Button variant="ghost" className="text-primary-foreground hover:text-primary-foreground hover:bg-primary-foreground/10">Learn More</Button>
-          </div>
+          </Card>
         </Preview>
       </Section>
 
@@ -914,21 +976,22 @@ function ComponentsShowcase() {
       <Section title="Badge" wide>
         <Preview label="Variants">
           <Badge>Default</Badge>
+          <Badge variant="brand">Brand</Badge>
           <Badge variant="secondary">Secondary</Badge>
           <Badge variant="outline">Outline</Badge>
           <Badge variant="destructive">Destructive</Badge>
           <Badge variant="success">Success</Badge>
         </Preview>
         <Preview label="On surfaces">
-          <div className="flex items-center gap-2 rounded-xl bg-secondary p-4">
+          <Card variant="secondary" className="flex-row items-center gap-2 p-4">
             <Badge>Pro</Badge>
             <Badge variant="secondary">Free</Badge>
             <Badge variant="outline">Beta</Badge>
-          </div>
-          <div className="flex items-center gap-2 rounded-xl bg-tertiary p-4">
+          </Card>
+          <Card variant="muted" className="flex-row items-center gap-2 p-4">
             <Badge variant="success">Active</Badge>
             <Badge variant="destructive">Expired</Badge>
-          </div>
+          </Card>
         </Preview>
       </Section>
 
@@ -1428,13 +1491,13 @@ function ComponentsShowcase() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">Home</NavigationMenuLink>
+              <NavigationMenuLink>Home</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">About</NavigationMenuLink>
+              <NavigationMenuLink>About</NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink className="group inline-flex h-11 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-tertiary hover:text-tertiary-foreground">Contact</NavigationMenuLink>
+              <NavigationMenuLink>Contact</NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -1580,8 +1643,8 @@ function ComponentsShowcase() {
             <Sidebar collapsible="icon">
               <SidebarHeader>
                 <div className="flex items-center gap-2 px-2 py-1">
-                  <div className="size-6 rounded-md bg-primary" />
-                  <span className="text-sm font-medium tracking-tighter">Acme Inc</span>
+                  <div className="size-6 shrink-0 rounded-md bg-primary" />
+                  <span className="text-sm font-medium tracking-tighter group-data-[collapsible=icon]:hidden">Acme Inc</span>
                 </div>
               </SidebarHeader>
               <SidebarContent>
@@ -1677,19 +1740,30 @@ function ThemeToggle() {
   )
 }
 
+function useHashRoute() {
+  const [page, setPage] = useState(() => window.location.hash.slice(1) || "design")
+
+  useEffect(() => {
+    const onHashChange = () => {
+      setPage(window.location.hash.slice(1) || "design")
+      window.scrollTo({ top: 0, behavior: "instant" })
+    }
+    window.addEventListener("hashchange", onHashChange)
+    return () => window.removeEventListener("hashchange", onHashChange)
+  }, [])
+
+  return page
+}
+
 export function App() {
+  const page = useHashRoute()
+
   return (
     <ToastProvider>
     <TooltipProvider>
       <div className="min-h-screen">
         <header className="flex items-center justify-between px-6 md:px-12 py-8">
-          <div className="flex items-center gap-2.5 text-lg tracking-widest">
-            <Logo size={20} />
-            <span>
-              <span className="font-extralight">FLOW</span>
-              <span className="font-medium ml-0.5">UI</span>
-            </span>
-          </div>
+          <Logomark start="Flow" end="UI" />
           <a
             href="https://github.com/flow-industries/ui"
             target="_blank"
@@ -1700,44 +1774,57 @@ export function App() {
           </a>
         </header>
 
+        <nav className="fixed top-1/2 right-4 z-50 -translate-y-1/2 flex flex-col items-center gap-2">
+          {([
+            { hash: "design", icon: Type, label: "Design System" },
+            { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
+            { hash: "components", icon: Component, label: "Components" },
+          ] as const).map(({ hash, icon: Icon, label }) => (
+            <Tooltip key={hash}>
+              <TooltipTrigger render={
+                <a
+                  href={`#${hash}`}
+                  className={cn(
+                    "inline-flex size-8 items-center justify-center rounded-full transition-colors",
+                    page === hash ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                  )}
+                />
+              }>
+                <Icon className="size-4" />
+              </TooltipTrigger>
+              <TooltipContent side="left">{label}</TooltipContent>
+            </Tooltip>
+          ))}
+          <Separator className="my-0.5" />
+          <ThemeToggle />
+        </nav>
+
         <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
           {/* Hero */}
           <div className="space-y-3 w-full">
-            <h1 className="text-4xl md:text-5xl font-medium tracking-tight">
-              @flow-industries/ui
-            </h1>
-            <p className="text-xl text-muted-foreground tracking-tight">
-              Shared design system and component library for Flow applications.
-            </p>
-            <p className="text-sm text-muted-foreground font-mono tracking-normal">
-              bun add @flow-industries/ui
-            </p>
+            <Title size="lg">@flow-industries/ui</Title>
+            <Subtitle size="lg">Shared design system and component library for Flow applications.</Subtitle>
+            <Mono>bun add @flow-industries/ui</Mono>
           </div>
+
+          {page === "design" && (
+            <div className="flex flex-col gap-12">
 
           {/* Palette */}
           <Section title="Palette" wide>
-            <div className="flex flex-wrap gap-12">
-              <ColorRow label="Standard" colors={palette.standard} />
-              <ColorRow label="Light" colors={palette.light} />
-              <ColorRow label="Semantic" colors={palette.semantic} />
-              <ColorRow label="Surface" colors={palette.surface} />
-            </div>
-          </Section>
-
-          {/* Brand */}
-          <Section title="Brand">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-3">
-                <Logo size={40} />
-                <span className="text-sm text-muted-foreground">Logo</span>
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-xs text-muted-foreground">Hues</p>
+                <div className="flex flex-wrap gap-3">
+                  {hues.map((hue) => (
+                    <HueGroup key={hue.name} hue={hue} />
+                  ))}
+                </div>
               </div>
-              <Separator orientation="vertical" className="h-8" />
-              <div className="flex items-center gap-4">
-                <XIcon className="w-5 h-5" />
-                <DiscordIcon className="w-5 h-5" />
-                <GitHubIcon className="w-5 h-5" />
-                <BlueskyIcon className="w-5 h-5" />
-                <span className="text-sm text-muted-foreground ml-1">Icons</span>
+              <div className="flex flex-wrap gap-12">
+                <ColorRow label="Semantic" colors={palette.semantic} />
+                <ColorRow label="Surface" colors={palette.surface} />
+                <ColorRow label="Chart" colors={palette.chart} />
               </div>
             </div>
           </Section>
@@ -1747,7 +1834,7 @@ export function App() {
             <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">Usage</h2>
             <CodeBlock
               label="Import a component"
-              code={`import { Button } from "@flow-industries/ui/components/button"`}
+              code={`import { Button } from "@flow-industries/ui/components/button"\nimport { Card, CardContent } from "@flow-industries/ui/components/card"\nimport { toast } from "@flow-industries/ui/components/toast"`}
             />
             <CodeBlock
               label="Import utilities"
@@ -1759,39 +1846,216 @@ export function App() {
             />
           </div>
 
-          <Tabs defaultValue="showcases" onValueChange={() => {
-            window.scrollTo({ top: 0, behavior: "instant" })
-          }}>
-            <div className="fixed top-1/2 right-4 z-50 -translate-y-1/2 flex flex-col items-center gap-1.5">
-              <TabsList className="flex-col h-auto bg-transparent p-0 gap-1.5">
-                <Tooltip>
-                  <TooltipTrigger render={<TabsTrigger value="showcases" className="rounded-full!" />}>
-                    <LayoutGrid />
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Showcases</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger render={<TabsTrigger value="components" className="rounded-full!" />}>
-                    <Component />
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Components</TooltipContent>
-                </Tooltip>
-              </TabsList>
-              <Separator className="my-0.5" />
-              <ThemeToggle />
+          {/* Typography */}
+          <Section title="Typography" wide>
+            <div className="flex flex-wrap gap-12">
+              {/* Fonts */}
+              <div className="space-y-3 w-full">
+                <p className="text-xs text-muted-foreground">Fonts</p>
+                <div className="grid grid-cols-1 gap-6">
+                  <div className="space-y-3 rounded-xl bg-secondary p-5">
+                    <div>
+                      <p className="text-2xl font-normal">Geist Sans</p>
+                      <p className="text-xs text-muted-foreground font-mono mt-1">font-sans</p>
+                    </div>
+                    <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl">
+                      {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
+                        <span key={pair}>{pair}</span>
+                      ))}
+                    </div>
+                    <table className="w-full text-xs text-muted-foreground">
+                      <tbody>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Neo-grotesque sans-serif</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Weights</td><td>100–900 (variable)</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="space-y-3 rounded-xl bg-secondary p-5">
+                    <div>
+                      <p className="text-2xl font-normal font-mono">Geist Mono</p>
+                      <p className="text-xs text-muted-foreground font-mono mt-1">font-mono</p>
+                    </div>
+                    <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl font-mono">
+                      {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
+                        <span key={pair}>{pair}</span>
+                      ))}
+                    </div>
+                    <table className="w-full text-xs text-muted-foreground">
+                      <tbody>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Monospaced</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Weights</td><td>100–900 (variable)</td></tr>
+                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <PixelFontCard />
+                </div>
+              </div>
+
+              {/* Type Scale */}
+              <div className="space-y-3 min-w-80">
+                <p className="text-xs text-muted-foreground">Type Scale</p>
+                <div className="space-y-2">
+                  {([
+                    ["text-xs", "0.825rem"],
+                    ["text-sm", "0.9625rem"],
+                    ["text-base", "1.1rem"],
+                    ["text-lg", "1.2375rem"],
+                    ["text-xl", "1.375rem"],
+                    ["text-2xl", "1.65rem"],
+                    ["text-3xl", "2.0625rem"],
+                    ["text-4xl", "2.475rem"],
+                    ["text-5xl", "3.3rem"],
+                  ] as const).map(([cls, size]) => (
+                    <div key={cls} className="flex items-baseline gap-4">
+                      <span className="text-xs text-muted-foreground font-mono w-20 shrink-0">{cls}</span>
+                      <span className={cls}>The quick brown fox</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weights */}
+              <div className="space-y-3">
+                <p className="text-xs text-muted-foreground">Weights</p>
+                <div className="space-y-2">
+                  {([
+                    ["font-normal", "400"],
+                    ["font-medium", "500"],
+                    ["font-semibold", "600"],
+                    ["font-bold", "700"],
+                  ] as const).map(([cls, weight]) => (
+                    <div key={cls} className="flex items-baseline gap-4">
+                      <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">{cls}</span>
+                      <span className={`text-lg ${cls}`}>The quick brown fox</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tracking */}
+              <div className="space-y-3">
+                <p className="text-xs text-muted-foreground">Tracking</p>
+                <div className="space-y-2">
+                  {([
+                    "tracking-tighter",
+                    "tracking-tight",
+                    "tracking-normal",
+                    "tracking-wide",
+                    "tracking-wider",
+                    "tracking-widest",
+                  ] as const).map((cls) => (
+                    <div key={cls} className="flex items-baseline gap-4">
+                      <span className="text-xs text-muted-foreground font-mono w-36 shrink-0">{cls}</span>
+                      <span className={`text-base ${cls}`}>The quick brown fox</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <TabsContent value="showcases" className="flex flex-col gap-12">
+
+            {/* Patterns */}
+            <div className="space-y-3 mt-4">
+              <p className="text-xs text-muted-foreground">Patterns</p>
+              <div className="space-y-4 rounded-xl bg-secondary p-6">
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title lg</span>
+                  <Title size="lg">Welcome to Flow</Title>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle lg</span>
+                  <Subtitle size="lg">Sign in to start your journey.</Subtitle>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title</span>
+                  <Title>Account Settings</Title>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle</span>
+                  <Subtitle>Manage your account preferences.</Subtitle>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title sm</span>
+                  <Title size="sm">Email address</Title>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle sm</span>
+                  <Subtitle size="sm">Last updated 2 hours ago</Subtitle>
+                </div>
+                <div className="flex items-baseline gap-6">
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Overline</span>
+                  <Overline>Getting Started</Overline>
+                </div>
+              </div>
+            </div>
+          </Section>
+
+          {/* Brand */}
+          <Section title="Brand" wide>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Logo</p>
+                <div className="flex items-center gap-4">
+                  <Logo size={52} />
+                  <Logo size={40} />
+                  <Logo size={28} />
+                  <Logo size={20} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Logomark</p>
+                <div className="flex flex-col items-start gap-3">
+                  <Logomark start="Flow" end="Game" size="2xl" />
+                  <Logomark start="Flow" end="Talk" size="xl" />
+                  <Logomark start="Flow" end="Iron" size="lg" />
+                  <Logomark start="Flow" end="ID" />
+                  <Logomark start="Flow" end="UI" size="sm" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Wordmark</p>
+                <div className="flex flex-col items-start gap-3">
+                  <Wordmark start="Flow" end="Game" size="2xl" />
+                  <Wordmark start="Flow" end="Talk" size="xl" />
+                  <Wordmark start="Flow" end="Iron" size="lg" />
+                  <Wordmark start="Flow" end="ID" />
+                  <Wordmark start="Flow" end="UI" size="sm" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Icons</p>
+                <div className="flex items-center gap-4">
+                  <XIcon className="w-5 h-5" />
+                  <DiscordIcon className="w-5 h-5" />
+                  <GitHubIcon className="w-5 h-5" />
+                  <BlueskyIcon className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+          </Section>
+
+            </div>
+          )}
+
+          {page === "showcases" && (
+            <div className="flex flex-col gap-12">
               <AppShellShowcase />
               <AccountSettingsShowcase />
               <TeamMembersShowcase />
               <VerificationFlowShowcase />
               <MediaGalleryShowcase />
               <InboxShowcase />
-            </TabsContent>
-            <TabsContent value="components">
-              <ComponentsShowcase />
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
+
+          {page === "components" && (
+            <ComponentsShowcase />
+          )}
 
         </main>
 
@@ -1896,62 +2160,26 @@ function parseColor(computed: string) {
   return { hex, rgb, hsl, oklch }
 }
 
-function CopyIcon({ copied }: { copied: boolean }) {
-  return (
-    <div className="relative size-3.5 shrink-0">
-      <AnimatePresence mode="wait" initial={false}>
-        {copied ? (
-          <motion.div
-            key="check"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            <Check className="size-3.5 text-foreground" />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="copy"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            <Copy className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
 
 function ColorPopover({
   swatchRef,
   computedColor,
   label,
+  token,
   children,
 }: {
   swatchRef: React.RefObject<HTMLDivElement | null>
   computedColor: string | null
   label: string
+  token?: string
   children: React.ReactNode
 }) {
   const [color, setColor] = useState<string | null>(computedColor)
-  const [copied, setCopied] = useState<string | null>(null)
 
   const handleOpen = (open: boolean) => {
     if (open && swatchRef.current) {
       setColor(getComputedStyle(swatchRef.current).backgroundColor)
     }
-  }
-
-  const copy = (value: string, l: string) => {
-    navigator.clipboard.writeText(value)
-    setCopied(l)
-    setTimeout(() => setCopied(null), 1500)
   }
 
   const parsed = color ? parseColor(color) : null
@@ -1965,32 +2193,56 @@ function ColorPopover({
     : []
 
   return (
-    <Popover onOpenChange={handleOpen}>
+    <HoverCard onOpenChange={handleOpen}>
       {children}
-      <PopoverContent side="right" sideOffset={12} className="w-80 p-4">
+      <HoverCardContent side="top" sideOffset={8} className="w-80 p-4">
         {parsed && (
           <>
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-6 h-6 rounded-md" style={{ backgroundColor: color! }} />
-              <span className="text-sm font-medium">{label}</span>
+              <div className="w-10 h-10 rounded-lg shrink-0" style={{ backgroundColor: color! }} />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{label}</span>
+                {token && <span className="text-xs text-muted-foreground font-mono">{token}</span>}
+              </div>
             </div>
             <div className="space-y-1">
               {formats.map((f) => (
-                <button
-                  key={f.label}
-                  onClick={() => copy(f.value, f.label)}
-                  className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors group text-left"
-                >
+                <div key={f.label} className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground w-11 shrink-0">{f.label}</span>
-                  <span className="text-xs font-mono flex-1">{f.value}</span>
-                  <CopyIcon copied={copied === f.label} />
-                </button>
+                  <CopyButton value={f.value}>{f.value}</CopyButton>
+                </div>
               ))}
             </div>
           </>
         )}
-      </PopoverContent>
-    </Popover>
+      </HoverCardContent>
+    </HoverCard>
+  )
+}
+
+function HueGroup({ hue }: { hue: typeof hues[number] }) {
+  const darkRef = useRef<HTMLDivElement>(null)
+  const stdRef = useRef<HTMLDivElement>(null)
+  const lightRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <div className="flex gap-0.5">
+      <ColorPopover swatchRef={darkRef} computedColor={null} label={`${hue.fancy} Dark`} token={hue.dark.token}>
+        <HoverCardTrigger render={<button />} className="group cursor-pointer">
+          <div ref={darkRef} className={`w-16 h-16 rounded-l-xl rounded-r-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.dark.cls}`} />
+        </HoverCardTrigger>
+      </ColorPopover>
+      <ColorPopover swatchRef={stdRef} computedColor={null} label={hue.fancy} token={hue.std.token}>
+        <HoverCardTrigger render={<button />} className="group cursor-pointer">
+          <div ref={stdRef} className={`w-16 h-16 rounded-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.std.cls}`} />
+        </HoverCardTrigger>
+      </ColorPopover>
+      <ColorPopover swatchRef={lightRef} computedColor={null} label={`${hue.fancy} Light`} token={hue.light.token}>
+        <HoverCardTrigger render={<button />} className="group cursor-pointer">
+          <div ref={lightRef} className={`w-16 h-16 rounded-r-xl rounded-l-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.light.cls}`} />
+        </HoverCardTrigger>
+      </ColorPopover>
+    </div>
   )
 }
 
@@ -2000,40 +2252,34 @@ function ColorSwatch({ c }: { c: PaletteColor }) {
   const [fgHovered, setFgHovered] = useState(false)
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="relative shrink-0">
-        <ColorPopover swatchRef={swatchRef} computedColor={null} label={c.fancy ?? c.name}>
-          <PopoverTrigger
+    <div className="relative">
+      <ColorPopover swatchRef={swatchRef} computedColor={null} label={c.fancy ?? c.name} token={c.token}>
+        <HoverCardTrigger
+          render={<button />}
+          className="group/bg cursor-pointer"
+          onMouseEnter={() => setFgHovered(false)}
+        >
+          <div
+            ref={swatchRef}
+            className={`w-12 h-12 rounded-lg transition-transform ${fgHovered ? "" : "group-hover/bg:scale-110"} ${c.cls} ${c.border ? "border border-secondary" : ""}`}
+          />
+        </HoverCardTrigger>
+      </ColorPopover>
+      {c.fg && (
+        <ColorPopover swatchRef={fgRef} computedColor={null} label={`${c.name} Foreground`} token={c.fg.token}>
+          <HoverCardTrigger
             render={<button />}
-            className="group/bg cursor-pointer"
-            onMouseEnter={() => setFgHovered(false)}
+            className="group/fg absolute -bottom-1.5 -right-1.5 cursor-pointer z-10"
+            onMouseEnter={() => setFgHovered(true)}
+            onMouseLeave={() => setFgHovered(false)}
           >
             <div
-              ref={swatchRef}
-              className={`w-10 h-10 rounded-lg transition-transform ${fgHovered ? "" : "group-hover/bg:scale-110"} ${c.cls} ${c.border ? "border border-secondary" : ""}`}
+              ref={fgRef}
+              className={`w-6 h-6 rounded-full border-2 border-background transition-transform group-hover/fg:scale-125 ${c.fg.cls}`}
             />
-          </PopoverTrigger>
+          </HoverCardTrigger>
         </ColorPopover>
-        {c.fg && (
-          <ColorPopover swatchRef={fgRef} computedColor={null} label={`${c.name} Foreground`}>
-            <PopoverTrigger
-              render={<button />}
-              className="group/fg absolute -bottom-1.5 -right-1.5 cursor-pointer z-10"
-              onMouseEnter={() => setFgHovered(true)}
-              onMouseLeave={() => setFgHovered(false)}
-            >
-              <div
-                ref={fgRef}
-                className={`w-5 h-5 rounded-full border-2 border-background transition-transform group-hover/fg:scale-125 ${c.fg.cls}`}
-              />
-            </PopoverTrigger>
-          </ColorPopover>
-        )}
-      </div>
-      <div className="flex flex-col min-w-0">
-        <span className="text-sm font-medium">{c.fancy ?? c.name}</span>
-        <span className="text-xs text-muted-foreground font-mono">{c.token}</span>
-      </div>
+      )}
     </div>
   )
 }
@@ -2042,7 +2288,7 @@ function ColorRow({ label, colors }: { label: string; colors: PaletteColor[] }) 
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {colors.map((c) => (
           <ColorSwatch key={c.token} c={c} />
         ))}

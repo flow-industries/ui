@@ -11,13 +11,14 @@ src/
   index.ts              <- cn utility, useIsMobile hook
   styles/
     tokens.css          <- Design tokens (@theme, :root, .dark)
-    base.css            <- Tailwind imports + base layer
+    base.css            <- Tailwind imports + base layer + font import
+    fonts.css           <- @font-face declarations (Geist Sans, Mono, Pixel)
   utils/cn.ts           <- clsx + tailwind-merge
   hooks/use-mobile.ts   <- Mobile detection hook
   components/
-    logo.tsx            <- Flow logo (pink square)
+    logo.tsx            <- Flow logo + LogoSpinner
     icons.tsx           <- Social icons (X, Discord, GitHub, Bluesky)
-    ui/                 <- 50+ components
+    ui/                 <- 50+ components (including typography)
 ```
 
 ## Commands

@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant hover (@media (hover: hover) and (pointer: fine) { &:hover });
+@import "./fonts.css";
 
 @layer base {
   * {

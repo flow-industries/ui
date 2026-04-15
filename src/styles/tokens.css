@@ -3,6 +3,7 @@
 @theme inline {
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-pixel: "Geist Pixel Square", monospace;
 
   /* Typography scale (default + 10%) */
   --text-xs: 0.825rem;
@@ -54,6 +55,12 @@
 
   /* Custom palette - dark */
   --color-dark-pink: oklch(0.778 0.185 337.6);
+  --color-dark-green: oklch(0.800 0.200 159.0);
+  --color-dark-blue: oklch(0.660 0.185 269.1);
+  --color-dark-purple: oklch(0.655 0.220 306.2);
+  --color-dark-red: oklch(0.670 0.200 5.0);
+  --color-dark-orange: oklch(0.91 0.14 92);
+  --color-dark-yellow: oklch(0.97 0.17 109);
 
   --border-width: 2px;
   --border-width-focus: 2px;
@@ -76,8 +83,6 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-tertiary: var(--tertiary);
-  --color-tertiary-foreground: var(--tertiary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-destructive: var(--destructive);
@@ -106,20 +111,17 @@
   --secondary: oklch(0.98 0 0);
   --secondary-foreground: oklch(0.25 0 0);
 
-  --tertiary: oklch(0.96 0 0);
-  --tertiary-foreground: oklch(0.2 0 0 / 0.5);
-
-  --muted: oklch(0.98 0 0);
-  --muted-foreground: oklch(0.2 0 0 / 0.5);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.55 0 0);
 
   --destructive: oklch(0.770 0.143 5.0);
-  --brand: oklch(0.870 0.101 335.7);
-  --brand-foreground: oklch(1 0 0);
+  --brand: oklch(0.778 0.185 337.6);
+  --brand-foreground: var(--primary-foreground);
 
   --input: oklch(0.98 0 0);
 
-  --success: oklch(0.8 0.2 157);
-  --focus: var(--color-pink);
+  --success: var(--color-dark-green);
+  --focus: var(--color-dark-pink);
   --overlay: oklch(0 0 0 / 0.75);
 
   /* Chart colors */
@@ -135,26 +137,23 @@
   --background: oklch(0.10 0 0);
   --foreground: oklch(0.95 0 0);
 
-  --primary: oklch(0.2 0 0 / 1);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.95 0 0);
+  --primary-foreground: oklch(0.10 0 0);
 
-  --secondary: oklch(0.18 0 0);
+  --secondary: oklch(0.20 0 0);
   --secondary-foreground: oklch(0.95 0 0);
 
-  --tertiary: oklch(0.16 0 0);
-  --tertiary-foreground: oklch(0.95 0 0 / 0.5);
-
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.95 0 0 / 0.5);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.55 0 0);
 
   --destructive: oklch(0.770 0.143 5.0);
-  --brand: oklch(0.870 0.101 335.7);
-  --brand-foreground: oklch(1 0 0);
+  --brand: oklch(0.778 0.185 337.6);
+  --brand-foreground: var(--primary-foreground);
 
-  --input: oklch(0.10 0 0);
+  --input: oklch(0.20 0 0);
 
-  --success: oklch(0.8 0.2 157);
-  --focus: var(--color-pink);
+  --success: var(--color-dark-green);
+  --focus: var(--color-dark-pink);
   --overlay: oklch(0 0 0 / 0.5);
 
   /* Dark chart colors */
