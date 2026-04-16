@@ -8,11 +8,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        default: "bg-primary text-primary-foreground hover:bg-primary/85 [a]:hover:bg-primary/85",
         outline:
           "border-secondary bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/60 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success:
           "bg-success/10 text-success hover:bg-success/20 focus-visible:border-success/40 dark:bg-success/20 dark:hover:bg-success/30",
         brand:
-          "bg-brand text-brand-foreground hover:bg-brand/90",
+          "bg-brand text-brand-foreground hover:bg-brand/70",
         link: "text-primary underline-offset-4 hover:underline",
         "brand-link": "text-foreground hover:text-brand [transition:color_80ms_ease]",
       },
