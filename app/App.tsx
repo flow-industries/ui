@@ -2069,34 +2069,6 @@ export function App() {
               <MediaGalleryShowcase />
               <InboxShowcase />
 
-              <Showcase>
-                <NavList>
-                  <NavListGroup>
-                    <NavListHeader>Products</NavListHeader>
-                    <NavListItem href="#"><Logo size={14} /> Flow Game</NavListItem>
-                    <NavListItem href="#"><Logo size={14} /> Flow ID</NavListItem>
-                    <NavListItem href="#"><Logo size={14} /> Flow Talk</NavListItem>
-                  </NavListGroup>
-                  <NavListGroup>
-                    <NavListHeader>Resources</NavListHeader>
-                    <NavListItem href="#">Documentation</NavListItem>
-                    <NavListItem href="#">GitHub</NavListItem>
-                    <NavListItem href="#">Discord</NavListItem>
-                  </NavListGroup>
-                  <NavListGroup>
-                    <NavListHeader>Company</NavListHeader>
-                    <NavListItem href="#">About</NavListItem>
-                    <NavListItem href="#">Blog</NavListItem>
-                    <NavListItem href="#">Careers</NavListItem>
-                  </NavListGroup>
-                  <NavListGroup>
-                    <NavListHeader>Legal</NavListHeader>
-                    <NavListItem href="#">Privacy Policy</NavListItem>
-                    <NavListItem href="#">Terms of Service</NavListItem>
-                    <NavListItem href="#">Cookie Policy</NavListItem>
-                  </NavListGroup>
-                </NavList>
-              </Showcase>
             </div>
           )}
 
@@ -2106,31 +2078,20 @@ export function App() {
 
         </main>
 
-        <Footer className="px-6 md:px-12 py-12 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl p-8">
+        <Footer className="px-6 md:px-12 p-8 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl">
           <FooterContent>
             <NavList className="w-full justify-between">
               <NavListGroup>
                 <NavListHeader>Products</NavListHeader>
-                <NavListItem href="#">Flow Game</NavListItem>
-                <NavListItem href="#">Flow ID</NavListItem>
-                <NavListItem href="#">Flow Talk</NavListItem>
+                <NavListItem href="https://flow.game"><Logomark size="default" start="Flow" end="Game" /></NavListItem>
+                <NavListItem href="https://flow.talk"><Logomark size="default" start="Flow" end="Talk" /></NavListItem>
+                <NavListItem href="https://id.flow.industries"><Logomark size="default" start="Flow" end="ID" /></NavListItem>
+                <NavListItem href="https://ui.flow.industries"><Logomark size="default" start="Flow" end="UI" /></NavListItem>
               </NavListGroup>
               <NavListGroup>
                 <NavListHeader>Resources</NavListHeader>
-                <NavListItem href="#">Documentation</NavListItem>
-                <NavListItem href="#">GitHub</NavListItem>
-                <NavListItem href="#">Discord</NavListItem>
-              </NavListGroup>
-              <NavListGroup>
-                <NavListHeader>Company</NavListHeader>
-                <NavListItem href="#">About</NavListItem>
-                <NavListItem href="#">Blog</NavListItem>
-                <NavListItem href="#">Careers</NavListItem>
-              </NavListGroup>
-              <NavListGroup>
-                <NavListHeader>Legal</NavListHeader>
-                <NavListItem href="#">Privacy Policy</NavListItem>
-                <NavListItem href="#">Terms of Service</NavListItem>
+                <NavListItem href="https://github.com/flow-industries" target="_blank">GitHub</NavListItem>
+                <NavListItem href="https://discord.gg/g2JXf8t4Vg" target="_blank">Discord</NavListItem>
               </NavListGroup>
             </NavList>
           </FooterContent>
