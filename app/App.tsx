@@ -111,18 +111,6 @@ const palette = {
     { name: "Brand", token: "brand", cls: "bg-brand", fg: { token: "brand-foreground", cls: "bg-brand-foreground" } },
     { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Success", token: "success", cls: "bg-success" },
-    { name: "Focus", token: "focus", cls: "bg-focus" },
-  ],
-  surface: [
-    { name: "Input", token: "input", cls: "bg-input", border: true },
-    { name: "Overlay", token: "overlay", cls: "bg-overlay" },
-  ],
-  chart: [
-    { name: "Chart 1", token: "chart-1", cls: "bg-chart-1" },
-    { name: "Chart 2", token: "chart-2", cls: "bg-chart-2" },
-    { name: "Chart 3", token: "chart-3", cls: "bg-chart-3" },
-    { name: "Chart 4", token: "chart-4", cls: "bg-chart-4" },
-    { name: "Chart 5", token: "chart-5", cls: "bg-chart-5" },
   ],
 }
 
@@ -1847,8 +1835,6 @@ export function App() {
               </div>
               <div className="flex flex-wrap gap-12">
                 <ColorRow label="Semantic" colors={palette.semantic} />
-                <ColorRow label="Surface" colors={palette.surface} />
-                <ColorRow label="Chart" colors={palette.chart} />
               </div>
             </div>
           </Section>

@@ -89,11 +89,6 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-input: var(--input);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
   --color-success: var(--success);
   --color-focus: var(--focus);
   --color-overlay: var(--overlay);
@@ -108,28 +103,21 @@
   --primary: oklch(0.2 0 0 / 1);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.98 0 0);
+  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.25 0 0);
 
-  --muted: oklch(0.96 0 0);
+  --muted: oklch(0.95 0 0);
   --muted-foreground: oklch(0.55 0 0);
 
   --destructive: oklch(0.770 0.143 5.0);
   --brand: oklch(0.778 0.185 337.6);
   --brand-foreground: var(--primary-foreground);
 
-  --input: oklch(0.98 0 0);
+  --input: oklch(0.97 0 0);
 
   --success: var(--color-dark-green);
   --focus: var(--color-dark-pink);
   --overlay: oklch(0 0 0 / 0.75);
-
-  /* Chart colors */
-  --chart-1: oklch(0.20 0 0);
-  --chart-2: oklch(0.35 0 0);
-  --chart-3: oklch(0.50 0 0);
-  --chart-4: oklch(0.65 0 0);
-  --chart-5: oklch(0.80 0 0);
 
 }
 
@@ -155,13 +143,6 @@
   --success: var(--color-dark-green);
   --focus: var(--color-dark-pink);
   --overlay: oklch(0 0 0 / 0.5);
-
-  /* Dark chart colors */
-  --chart-1: oklch(0.90 0 0);
-  --chart-2: oklch(0.75 0 0);
-  --chart-3: oklch(0.55 0 0);
-  --chart-4: oklch(0.40 0 0);
-  --chart-5: oklch(0.25 0 0);
 
 }
 
