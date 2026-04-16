@@ -49,11 +49,18 @@ function Overline({ className, variant = "default", ...props }: React.ComponentP
   )
 }
 
-function Caption({ className, ...props }: React.ComponentProps<"span">) {
+const paragraphVariants = {
+  xs: "text-xs",
+  sm: "text-sm",
+  default: "text-base",
+  lg: "text-lg",
+} as const
+
+function Paragraph({ className, size = "sm", ...props }: React.ComponentProps<"p"> & { size?: "xs" | "sm" | "default" | "lg" }) {
   return (
-    <span
-      data-slot="caption"
-      className={cn("text-xs font-[450] tracking-wide text-foreground", className)}
+    <p
+      data-slot="paragraph"
+      className={cn("font-[450] leading-[150%] tracking-wide text-foreground/80", paragraphVariants[size], className)}
       {...props}
     />
   )
@@ -69,4 +76,4 @@ function Mono({ className, ...props }: React.ComponentProps<"code">) {
   )
 }
 
-export { Title, Subtitle, Overline, Caption, Mono }
+export { Title, Subtitle, Overline, Paragraph, Mono }

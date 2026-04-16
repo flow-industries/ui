@@ -53,7 +53,7 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, 
 import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
 import { CopyCheckIcon, CopyButton } from "../src/components/ui/animated-icons"
 import { ColorSwatch as ColorSwatchUI, HueGroup as HueGroupUI } from "../src/components/ui/color-swatch"
-import { Title, Subtitle, Overline, Caption, Mono } from "../src/components/ui/typography"
+import { Title, Subtitle, Overline, Paragraph, Mono } from "../src/components/ui/typography"
 import { cn } from "../src/utils/cn"
 import {
   Bold, Italic, Underline,
@@ -2020,8 +2020,8 @@ export function App() {
                   <Overline variant="brand">Products</Overline>
                 </div>
                 <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Caption</span>
-                  <Caption>Flow Game</Caption>
+                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Paragraph</span>
+                  <Paragraph>Flow Game</Paragraph>
                 </div>
               </div>
             </div>
