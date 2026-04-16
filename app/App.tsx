@@ -2098,7 +2098,7 @@ export function App() {
           <FooterBottom className="flex-col items-start gap-4">
             <div className="flex w-full items-center justify-between">
               <FooterBrand>
-                <Logomark size="lg" start="Flow" end="UI" />
+                <a href="https://flow.industries"><Logomark size="lg" start="Flow" end="Industries" /></a>
               </FooterBrand>
               <FooterSocials>
                 <FooterLink href="https://x.com/flowdotgame" target="_blank" rel="noopener noreferrer">
