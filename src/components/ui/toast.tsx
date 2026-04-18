@@ -31,10 +31,18 @@ function ToastList() {
   return toasts.map((t) => {
     const variant = t.data?.variant ?? "default"
     const icon = {
-      success: <CircleCheckIcon className="size-4" />,
-      error: <OctagonXIcon className="size-4" />,
+      success: <CircleCheckIcon className="size-4 text-success" />,
+      error: <OctagonXIcon className="size-4 text-destructive" />,
       warning: <TriangleAlertIcon className="size-4 text-orange" />,
       info: <InfoIcon className="size-4 text-blue" />,
+      default: null,
+    }[variant]
+
+    const accent = {
+      success: "var(--success)",
+      error: "var(--destructive)",
+      warning: "var(--color-orange)",
+      info: "var(--color-blue)",
       default: null,
     }[variant]
 
@@ -42,12 +50,20 @@ function ToastList() {
       <Toast.Root
         key={t.id}
         toast={t}
-        className="group pointer-events-auto absolute bottom-0 right-0 w-full select-none rounded-lg bg-background p-4 shadow-lg ring-1 ring-primary/10 [--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y,0px))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))] z-[calc(1000-var(--toast-index))] h-[var(--height)] origin-bottom transition-[transform,opacity,height] duration-500 ease-(--ease-out-expo) [transform:translateX(var(--toast-swipe-movement-x,0px))_translateY(calc(var(--toast-swipe-movement-y,0px)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] data-expanded:h-[var(--toast-height)] data-expanded:[transform:translateX(var(--toast-swipe-movement-x,0px))_translateY(var(--offset-y))] data-starting-style:[transform:translateY(150%)] data-ending-style:opacity-0 data-ending-style:scale-95"
+        className="group pointer-events-auto absolute bottom-0 right-0 w-full select-none rounded-lg bg-background p-4 shadow-lg ring-1 ring-primary/10 [--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y,0px))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))] z-[calc(1000-var(--toast-index))] h-[var(--height)] origin-bottom transition-[transform,opacity,height] duration-500 ease-(--ease-out-expo) [transform:translateX(var(--toast-swipe-movement-x,0px))_translateY(calc(var(--toast-swipe-movement-y,0px)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] data-expanded:h-[var(--toast-height)] data-expanded:[transform:translateX(var(--toast-swipe-movement-x,0px))_translateY(var(--offset-y))] data-starting-style:[transform:translateY(150%)] data-ending-style:opacity-0 data-ending-style:scale-95 before:pointer-events-none data-expanded:before:pointer-events-auto before:absolute before:inset-x-0 before:-top-[var(--gap)] before:h-[var(--gap)] before:content-['']"
+        style={
+          accent
+            ? {
+                backgroundImage: `radial-gradient(circle at top left, color-mix(in oklch, ${accent} 10%, transparent) 0%, transparent 50%)`,
+                boxShadow: `0 0 0 1px color-mix(in oklch, ${accent} 25%, transparent), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)`,
+              }
+            : undefined
+        }
       >
-        <Toast.Content className="flex items-start gap-3 overflow-hidden transition-opacity duration-200 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:pointer-events-auto data-expanded:opacity-100">
-          {icon && <div className="mt-0.5 shrink-0">{icon}</div>}
+        <Toast.Content className="relative flex items-center gap-3 overflow-hidden transition-opacity duration-200 data-behind:pointer-events-none data-behind:opacity-0 data-expanded:pointer-events-auto data-expanded:opacity-100">
+          {icon && <div className="shrink-0">{icon}</div>}
           <div className="flex-1 space-y-1">
-            {t.data?.title && <Toast.Title className="text-sm font-medium tracking-tighter">{t.data.title}</Toast.Title>}
+            {t.data?.title && <Toast.Title className="text-sm font-medium tracking-tighter text-muted-foreground">{t.data.title}</Toast.Title>}
             {t.data?.description && <Toast.Description className="text-sm text-muted-foreground">{t.data.description}</Toast.Description>}
           </div>
           <Toast.Close className="shrink-0 rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100">
