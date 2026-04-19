@@ -1736,16 +1736,22 @@ function ComponentsShowcase() {
 
       {/* Dock */}
       <Section title="Dock" wide>
-        <div className="flex items-center justify-center py-12">
-          <Dock
-            items={[
-              { icon: Home, label: "Home", isActive: true },
-              { icon: Inbox, label: "Inbox" },
-              { icon: Bell, label: "Notifications", variant: "secondary" },
-              { icon: Search, label: "Search" },
-              { icon: Settings, label: "Settings", variant: "primary" },
-            ]}
-          />
+        <div className="flex flex-wrap items-end gap-12">
+          {(["sm", "md", "lg"] as const).map((size) => (
+            <div key={size} className="space-y-2">
+              <p className="text-xs text-muted-foreground">{size}</p>
+              <Dock
+                size={size}
+                items={[
+                  { icon: Home, label: "Home", isActive: true },
+                  { icon: Inbox, label: "Inbox" },
+                  { icon: Bell, label: "Notifications", variant: "secondary" },
+                  { icon: Search, label: "Search" },
+                  { icon: Settings, label: "Settings", variant: "primary" },
+                ]}
+              />
+            </div>
+          ))}
         </div>
       </Section>
 
@@ -1836,6 +1842,7 @@ export function App() {
         </header>
 
         <Dock
+          size="md"
           className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
           items={[
             ...([
@@ -1851,12 +1858,8 @@ export function App() {
               },
             })),
             {
-              label: "separator",
-              customComponent: <div className="my-1 h-px w-8 bg-muted" aria-hidden />,
-            },
-            {
               label: dark ? "Light mode" : "Dark mode",
-              customIcon: dark ? <Sun className="size-5 md:size-6" /> : <Moon className="size-5 md:size-6" />,
+              customIcon: dark ? <Sun className="size-5" /> : <Moon className="size-5" />,
               onClick: toggleTheme,
             },
           ]}

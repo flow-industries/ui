@@ -6,6 +6,7 @@ import type { LucideIcon } from "lucide-react"
 import { cn } from "../../utils/cn"
 
 type DockVariant = "default" | "secondary" | "primary"
+type DockSize = "sm" | "md" | "lg"
 
 interface DockItem {
   icon?: LucideIcon
@@ -20,9 +21,11 @@ interface DockItem {
 
 interface DockProps extends Omit<React.ComponentProps<"div">, "children"> {
   items: DockItem[]
+  size?: DockSize
 }
 
 interface DockIconButtonProps extends DockItem {
+  size: DockSize
   className?: string
   onHover?: () => void
   onLeave?: () => void
@@ -35,6 +38,24 @@ const variantClasses: Record<DockVariant, string> = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90",
 }
 
+const containerSizeClasses: Record<DockSize, string> = {
+  sm: "gap-1 rounded-xl p-1.5",
+  md: "gap-1.5 rounded-xl p-2",
+  lg: "gap-2 rounded-2xl p-2 md:gap-3",
+}
+
+const buttonSizeClasses: Record<DockSize, string> = {
+  sm: "h-8 w-8 rounded-lg p-1.5",
+  md: "h-10 w-10 rounded-xl p-2",
+  lg: "h-12 w-12 rounded-2xl p-3 md:h-14 md:w-14",
+}
+
+const iconSizeClasses: Record<DockSize, string> = {
+  sm: "h-4 w-4",
+  md: "h-5 w-5",
+  lg: "h-5 w-5 md:h-6 md:w-6",
+}
+
 function DockIconButton({
   icon: Icon,
   customIcon,
@@ -42,6 +63,7 @@ function DockIconButton({
   className,
   customComponent,
   variant = "default",
+  size,
   isActive,
   onHover,
   onLeave,
@@ -63,23 +85,24 @@ function DockIconButton({
       data-slot="dock-item"
       data-active={isActive ? "" : undefined}
       className={cn(
-        "relative group flex h-12 w-12 items-center justify-center rounded-2xl p-3 md:h-14 md:w-14",
+        "relative group flex items-center justify-center",
         "transition-[background-color,color]",
+        buttonSizeClasses[size],
         isActive ? "text-primary" : "text-muted-foreground/60",
         variantClasses[variant],
         className,
       )}
     >
       {customIcon ? (
-        <div className="flex h-5 w-5 items-center justify-center md:h-6 md:w-6">{customIcon}</div>
+        <div className={cn("flex items-center justify-center", iconSizeClasses[size])}>{customIcon}</div>
       ) : Icon ? (
-        <Icon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2.25} />
+        <Icon className={iconSizeClasses[size]} strokeWidth={2.25} />
       ) : null}
     </motion.button>
   )
 }
 
-function Dock({ items, className, ref, ...props }: DockProps) {
+function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
   const shouldReduceMotion = useReducedMotion()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [showExtra, setShowExtra] = useState(false)
@@ -138,13 +161,17 @@ function Dock({ items, className, ref, ...props }: DockProps) {
     <div
       ref={ref}
       data-slot="dock"
+      data-size={size}
       className={cn("flex items-center justify-center", className)}
       {...props}
     >
       <motion.div
         layout
         data-slot="dock-list"
-        className="relative flex w-full flex-row items-center justify-around gap-2 rounded-2xl p-2 sm:w-auto sm:flex-col sm:justify-center md:gap-3"
+        className={cn(
+          "relative flex w-full flex-row items-center justify-around sm:w-auto sm:flex-col sm:justify-center",
+          containerSizeClasses[size],
+        )}
       >
         <AnimatePresence mode="popLayout">
           {showExtra && hoveredItem && hoveredButton && (
@@ -203,7 +230,7 @@ function Dock({ items, className, ref, ...props }: DockProps) {
                   }}
                 >
                   {hoveredItem.extra ?? (
-                    <div className="select-none whitespace-nowrap px-3 py-1.5 text-base font-medium text-muted-foreground">
+                    <div className="select-none whitespace-nowrap px-3 py-1.5 text-sm font-medium text-muted-foreground">
                       {hoveredItem.label}
                     </div>
                   )}
@@ -221,7 +248,12 @@ function Dock({ items, className, ref, ...props }: DockProps) {
             }}
             className="relative"
           >
-            <DockIconButton {...item} onHover={() => handleMouseEnter(index)} onLeave={clearAll} />
+            <DockIconButton
+              {...item}
+              size={size}
+              onHover={() => handleMouseEnter(index)}
+              onLeave={clearAll}
+            />
           </div>
         ))}
       </motion.div>
@@ -229,4 +261,4 @@ function Dock({ items, className, ref, ...props }: DockProps) {
   )
 }
 
-export { Dock, type DockItem, type DockProps }
+export { Dock, type DockItem, type DockProps, type DockSize }
