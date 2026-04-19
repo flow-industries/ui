@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import type { LucideIcon } from "lucide-react"
 
@@ -77,8 +77,7 @@ function DockIconButton({
     <motion.button
       ref={ref}
       type="button"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
@@ -86,7 +85,7 @@ function DockIconButton({
       data-active={isActive ? "" : undefined}
       className={cn(
         "relative group flex items-center justify-center",
-        "transition-[background-color,color]",
+        "transition-[background-color,color] duration-150 ease-(--ease-out)",
         buttonSizeClasses[size],
         isActive ? "text-primary" : "text-muted-foreground/60",
         variantClasses[variant],
@@ -103,10 +102,10 @@ function DockIconButton({
 }
 
 function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
+  const popoverLayoutId = useId()
   const shouldReduceMotion = useReducedMotion()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [showExtra, setShowExtra] = useState(false)
-  const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const buttonRefs = useRef<Array<HTMLDivElement | null>>([])
   const [isDesktop, setIsDesktop] = useState(true)
@@ -119,21 +118,16 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
     return () => mql.removeEventListener("change", onChange)
   }, [])
 
-  const handleMouseEnter = useCallback(
-    (index: number) => {
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
-      setPreviousIndex(hoveredIndex)
-      setHoveredIndex(index)
-      setShowExtra(true)
-    },
-    [hoveredIndex],
-  )
+  const handleMouseEnter = useCallback((index: number) => {
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
+    setHoveredIndex(index)
+    setShowExtra(true)
+  }, [])
 
   const clearAll = useCallback(() => {
     hideTimeoutRef.current = setTimeout(() => {
       setShowExtra(false)
       setHoveredIndex(null)
-      setPreviousIndex(null)
     }, 200)
   }, [])
 
@@ -146,13 +140,6 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
       if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
     }
   }, [])
-
-  const contentAnimationY =
-    previousIndex === null || hoveredIndex === null
-      ? 0
-      : hoveredIndex > previousIndex
-        ? 5
-        : -5
 
   const hoveredItem = hoveredIndex !== null ? items[hoveredIndex] : null
   const hoveredButton = hoveredIndex !== null ? buttonRefs.current[hoveredIndex] : null
@@ -192,49 +179,38 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
               }
             >
               <motion.div
-                layoutId="dock-extra"
-                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.8 }}
+                layoutId={popoverLayoutId}
+                style={{ transformOrigin: isDesktop ? "100% 50%" : "50% 100%" }}
+                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.96 }}
                 animate={{
                   opacity: 1,
                   scale: 1,
                   transition: shouldReduceMotion
                     ? { duration: 0 }
                     : {
-                        opacity: { duration: 0.05 },
-                        scale: { type: "spring", stiffness: 300, damping: 25 },
-                        layout: { type: "spring", stiffness: 300, damping: 25 },
+                        opacity: { duration: 0.15, ease: "easeOut" },
+                        scale: { type: "spring", duration: 0.35, bounce: 0.2 },
+                        layout: { type: "spring", duration: 0.4, bounce: 0.18 },
                       },
                 }}
                 exit={{
                   opacity: 0,
-                  scale: shouldReduceMotion ? 1 : 0.8,
-                  transition: { duration: 0.05 },
+                  scale: shouldReduceMotion ? 1 : 0.96,
+                  transition: { duration: 0.12, ease: "easeOut" },
                 }}
                 onMouseEnter={cancelHide}
                 onMouseLeave={clearAll}
               >
-                <motion.div
-                  className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg"
+                <div
                   key={hoveredIndex}
-                  initial={{
-                    y: shouldReduceMotion ? 0 : contentAnimationY,
-                    opacity: 0,
-                    scale: shouldReduceMotion ? 1 : 0.95,
-                  }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.1,
-                    scale: shouldReduceMotion
-                      ? { duration: 0 }
-                      : { type: "spring", damping: 25, stiffness: 400 },
-                  }}
+                  className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg"
                 >
                   {hoveredItem.extra ?? (
                     <div className="select-none whitespace-nowrap px-3 py-1.5 text-sm font-medium text-muted-foreground">
                       {hoveredItem.label}
                     </div>
                   )}
-                </motion.div>
+                </div>
               </motion.div>
             </div>
           )}
