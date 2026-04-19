@@ -52,6 +52,9 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuL
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "../src/components/ui/sidebar"
 import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
 import { CopyCheckIcon, CopyButton } from "../src/components/ui/animated-icons"
+import { Dock } from "../src/components/ui/dock"
+import { DissolveFilter } from "../src/components/ui/dissolve-filter"
+import { TimeElapsed, TimeSince } from "../src/components/ui/time"
 import { ColorSwatch as ColorSwatchUI, HueGroup as HueGroupUI } from "../src/components/ui/color-swatch"
 import { Title, Subtitle, Overline, Paragraph, Mono } from "../src/components/ui/typography"
 import { cn } from "../src/utils/cn"
@@ -1730,25 +1733,71 @@ function ComponentsShowcase() {
           <Kbd>Enter</Kbd>
         </Preview>
       </Section>
+
+      {/* Dock */}
+      <Section title="Dock" wide>
+        <div className="flex flex-wrap items-end gap-12">
+          {(["lg", "md", "sm"] as const).map((size) => (
+            <div key={size} className="space-y-2">
+              <p className="text-xs text-muted-foreground">{size}</p>
+              <Dock
+                size={size}
+                items={[
+                  { icon: Home, label: "Home", isActive: true },
+                  { icon: Inbox, label: "Inbox" },
+                  { icon: Bell, label: "Notifications", variant: "secondary" },
+                  { icon: Search, label: "Search" },
+                  { icon: Settings, label: "Settings", variant: "primary" },
+                ]}
+              />
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Dissolve Filter */}
+      <Section title="Dissolve Filter">
+        <Preview label="Hover the card to dissolve it">
+          <DissolveDemo />
+        </Preview>
+      </Section>
+
+      {/* Time */}
+      <Section title="Time">
+        <Preview label="TimeElapsed — relative until 3 weeks, then formatted date">
+          <span className="text-sm">5m ago: <TimeElapsed date={new Date(Date.now() - 5 * 60_000)} /></span>
+          <span className="text-sm">2h ago: <TimeElapsed date={new Date(Date.now() - 2 * 60 * 60_000)} /></span>
+          <span className="text-sm">3d ago: <TimeElapsed date={new Date(Date.now() - 3 * 24 * 60 * 60_000)} /></span>
+          <span className="text-sm">2mo ago: <TimeElapsed date={new Date(Date.now() - 60 * 24 * 60 * 60_000)} /></span>
+        </Preview>
+        <Preview label="TimeSince — fixed month + year">
+          <span className="text-sm"><TimeSince date={new Date(2024, 5, 12)} /></span>
+          <span className="text-sm"><TimeSince date={new Date(2025, 11, 1)} /></span>
+        </Preview>
+      </Section>
     </div>
   )
 }
 
-function ThemeToggle() {
-  const [dark, setDark] = useState(document.documentElement.classList.contains("dark"))
-
-  const toggle = () => {
-    document.documentElement.classList.toggle("dark")
-    setDark((d) => !d)
-  }
-
+function DissolveDemo() {
+  const [hovered, setHovered] = useState(false)
+  const filterId = "dissolve-demo"
   return (
-    <Tooltip>
-      <TooltipTrigger render={<Button variant="ghost" size="icon" className="rounded-full" onClick={toggle} />}>
-        {dark ? <Sun /> : <Moon />}
-      </TooltipTrigger>
-      <TooltipContent side="left">{dark ? "Light mode" : "Dark mode"}</TooltipContent>
-    </Tooltip>
+    <>
+      <DissolveFilter filterId={filterId} />
+      <button
+        type="button"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="rounded-xl bg-secondary px-6 py-4 text-sm transition-opacity duration-1000"
+        style={{
+          filter: hovered ? `url(#${filterId})` : undefined,
+          opacity: hovered ? 0 : 1,
+        }}
+      >
+        Hover to dissolve
+      </button>
+    </>
   )
 }
 
@@ -1769,6 +1818,12 @@ function useHashRoute() {
 
 export function App() {
   const page = useHashRoute()
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"))
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle("dark")
+    setDark((d) => !d)
+  }
 
   return (
     <ToastProvider>
@@ -1786,30 +1841,29 @@ export function App() {
           </a>
         </header>
 
-        <nav className="fixed top-1/2 right-4 z-50 -translate-y-1/2 flex flex-col items-center gap-2">
-          {([
-            { hash: "design", icon: Type, label: "Design System" },
-            { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
-            { hash: "components", icon: Component, label: "Components" },
-          ] as const).map(({ hash, icon: Icon, label }) => (
-            <Tooltip key={hash}>
-              <TooltipTrigger render={
-                <a
-                  href={`#${hash}`}
-                  className={cn(
-                    "inline-flex size-8 items-center justify-center rounded-full transition-colors",
-                    page === hash ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-                  )}
-                />
-              }>
-                <Icon className="size-4" />
-              </TooltipTrigger>
-              <TooltipContent side="left">{label}</TooltipContent>
-            </Tooltip>
-          ))}
-          <Separator className="my-0.5" />
-          <ThemeToggle />
-        </nav>
+        <Dock
+          size="md"
+          className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
+          items={[
+            ...([
+              { hash: "design", icon: Type, label: "Design System" },
+              { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
+              { hash: "components", icon: Component, label: "Components" },
+            ] as const).map(({ hash, icon, label }) => ({
+              icon,
+              label,
+              isActive: page === hash,
+              onClick: () => {
+                window.location.hash = hash
+              },
+            })),
+            {
+              label: dark ? "Light mode" : "Dark mode",
+              customIcon: dark ? <Sun className="size-5" /> : <Moon className="size-5" />,
+              onClick: toggleTheme,
+            },
+          ]}
+        />
 
         <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
           {/* Hero */}
