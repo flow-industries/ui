@@ -180,37 +180,41 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
             >
               <motion.div
                 layoutId={popoverLayoutId}
-                style={{ transformOrigin: isDesktop ? "100% 50%" : "50% 100%" }}
-                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.96 }}
+                initial={{ opacity: 0 }}
                 animate={{
                   opacity: 1,
-                  scale: 1,
                   transition: shouldReduceMotion
                     ? { duration: 0 }
                     : {
                         opacity: { duration: 0.15, ease: "easeOut" },
-                        scale: { type: "spring", duration: 0.35, bounce: 0.2 },
                         layout: { type: "spring", duration: 0.4, bounce: 0.18 },
                       },
                 }}
                 exit={{
                   opacity: 0,
-                  scale: shouldReduceMotion ? 1 : 0.96,
                   transition: { duration: 0.12, ease: "easeOut" },
                 }}
                 onMouseEnter={cancelHide}
                 onMouseLeave={clearAll}
+                className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg"
               >
-                <div
+                <motion.div
                   key={hoveredIndex}
-                  className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg transform-gpu will-change-[backdrop-filter]"
+                  style={{ transformOrigin: isDesktop ? "100% 50%" : "50% 100%" }}
+                  initial={{ scale: shouldReduceMotion ? 1 : 0.96 }}
+                  animate={{
+                    scale: 1,
+                    transition: shouldReduceMotion
+                      ? { duration: 0 }
+                      : { type: "spring", duration: 0.35, bounce: 0.2 },
+                  }}
                 >
                   {hoveredItem.extra ?? (
                     <div className="select-none whitespace-nowrap px-3 py-1.5 text-sm font-medium text-muted-foreground">
                       {hoveredItem.label}
                     </div>
                   )}
-                </div>
+                </motion.div>
               </motion.div>
             </div>
           )}
