@@ -203,7 +203,7 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
               >
                 <div
                   key={hoveredIndex}
-                  className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg"
+                  className="overflow-hidden rounded-xl bg-background/80 text-popover-foreground shadow-md ring-[length:var(--border-width)] ring-primary/10 backdrop-blur-lg transform-gpu will-change-[backdrop-filter]"
                 >
                   {hoveredItem.extra ?? (
                     <div className="select-none whitespace-nowrap px-3 py-1.5 text-sm font-medium text-muted-foreground">
