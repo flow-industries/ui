@@ -1737,7 +1737,7 @@ function ComponentsShowcase() {
       {/* Dock */}
       <Section title="Dock" wide>
         <div className="flex flex-wrap items-end gap-12">
-          {(["sm", "md", "lg"] as const).map((size) => (
+          {(["lg", "md", "sm"] as const).map((size) => (
             <div key={size} className="space-y-2">
               <p className="text-xs text-muted-foreground">{size}</p>
               <Dock
