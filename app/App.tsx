@@ -1795,24 +1795,6 @@ function DissolveDemo() {
   )
 }
 
-function ThemeToggle() {
-  const [dark, setDark] = useState(document.documentElement.classList.contains("dark"))
-
-  const toggle = () => {
-    document.documentElement.classList.toggle("dark")
-    setDark((d) => !d)
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger render={<Button variant="ghost" size="icon" className="rounded-full" onClick={toggle} />}>
-        {dark ? <Sun /> : <Moon />}
-      </TooltipTrigger>
-      <TooltipContent side="left">{dark ? "Light mode" : "Dark mode"}</TooltipContent>
-    </Tooltip>
-  )
-}
-
 function useHashRoute() {
   const [page, setPage] = useState(() => window.location.hash.slice(1) || "design")
 
@@ -1830,6 +1812,12 @@ function useHashRoute() {
 
 export function App() {
   const page = useHashRoute()
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"))
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle("dark")
+    setDark((d) => !d)
+  }
 
   return (
     <ToastProvider>
@@ -1847,30 +1835,32 @@ export function App() {
           </a>
         </header>
 
-        <nav className="fixed top-1/2 right-4 z-50 -translate-y-1/2 flex flex-col items-center gap-2">
-          {([
-            { hash: "design", icon: Type, label: "Design System" },
-            { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
-            { hash: "components", icon: Component, label: "Components" },
-          ] as const).map(({ hash, icon: Icon, label }) => (
-            <Tooltip key={hash}>
-              <TooltipTrigger render={
-                <a
-                  href={`#${hash}`}
-                  className={cn(
-                    "inline-flex size-8 items-center justify-center rounded-full transition-colors",
-                    page === hash ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-                  )}
-                />
-              }>
-                <Icon className="size-4" />
-              </TooltipTrigger>
-              <TooltipContent side="left">{label}</TooltipContent>
-            </Tooltip>
-          ))}
-          <Separator className="my-0.5" />
-          <ThemeToggle />
-        </nav>
+        <Dock
+          className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
+          items={[
+            ...([
+              { hash: "design", icon: Type, label: "Design System" },
+              { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
+              { hash: "components", icon: Component, label: "Components" },
+            ] as const).map(({ hash, icon, label }) => ({
+              icon,
+              label,
+              isActive: page === hash,
+              onClick: () => {
+                window.location.hash = hash
+              },
+            })),
+            {
+              label: "separator",
+              customComponent: <div className="my-1 h-px w-8 bg-muted" aria-hidden />,
+            },
+            {
+              label: dark ? "Light mode" : "Dark mode",
+              customIcon: dark ? <Sun className="size-5 md:size-6" /> : <Moon className="size-5 md:size-6" />,
+              onClick: toggleTheme,
+            },
+          ]}
+        />
 
         <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
           {/* Hero */}
