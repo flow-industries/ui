@@ -12,15 +12,15 @@ bun add @flow-industries/ui
 
 ## Documentation
 
-Full documentation at **[flow.industries/en/ui](https://flow.industries/en/ui)**.
+Full documentation at **[docs.flow.industries/en/ui](https://docs.flow.industries/en/ui)**.
 
-- [Installation & setup](https://flow.industries/en/ui/installation) — CSS imports, Tailwind config, source directive
-- [Tokens](https://flow.industries/en/ui/tokens) — every CSS custom property
-- [Theming](https://flow.industries/en/ui/theming) — light, dark, custom palettes
-- [Typography](https://flow.industries/en/ui/typography) — Geist families and scales
-- [Branding](https://flow.industries/en/ui/branding) — logo, logomark, social icons
-- [Utilities](https://flow.industries/en/ui/utilities) — `cn()`, `useIsMobile()`, shared patterns
-- Components: [Buttons](https://flow.industries/en/ui/components/buttons), [Forms](https://flow.industries/en/ui/components/forms), [Layout](https://flow.industries/en/ui/components/layout), [Navigation](https://flow.industries/en/ui/components/navigation), [Overlays](https://flow.industries/en/ui/components/overlays), [Feedback](https://flow.industries/en/ui/components/feedback), [Data](https://flow.industries/en/ui/components/data), [Effects](https://flow.industries/en/ui/components/effects)
+- [Installation & setup](https://docs.flow.industries/en/ui/installation) — CSS imports, Tailwind config, source directive
+- [Tokens](https://docs.flow.industries/en/ui/tokens) — every CSS custom property
+- [Theming](https://docs.flow.industries/en/ui/theming) — light, dark, custom palettes
+- [Typography](https://docs.flow.industries/en/ui/typography) — Geist families and scales
+- [Branding](https://docs.flow.industries/en/ui/branding) — logo, logomark, social icons
+- [Utilities](https://docs.flow.industries/en/ui/utilities) — `cn()`, `useIsMobile()`, shared patterns
+- Components: [Buttons](https://docs.flow.industries/en/ui/components/buttons), [Forms](https://docs.flow.industries/en/ui/components/forms), [Layout](https://docs.flow.industries/en/ui/components/layout), [Navigation](https://docs.flow.industries/en/ui/components/navigation), [Overlays](https://docs.flow.industries/en/ui/components/overlays), [Feedback](https://docs.flow.industries/en/ui/components/feedback), [Data](https://docs.flow.industries/en/ui/components/data), [Effects](https://docs.flow.industries/en/ui/components/effects)
 
 ## Development
 
