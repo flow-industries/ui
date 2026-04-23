@@ -1,39 +1,26 @@
-# FLOW UI
+# Flow UI
 
 Shared design system and component library for [Flow](https://flow.industries) applications.
 
-Ships raw TypeScript source. No build step. Your Vite + Tailwind pipeline compiles it.
+Ships raw TypeScript source — no build step. Your Vite + Tailwind pipeline compiles it.
 
-## Install
+## Installation
 
 ```bash
 bun add @flow-industries/ui
 ```
 
-## Setup
+## Documentation
 
-Import the design tokens and base styles in your app's CSS. Fonts (Geist Sans, Geist Mono, Geist Pixel) are included automatically via base.css.
+Full documentation at **[flow.industries/en/ui](https://flow.industries/en/ui)**.
 
-```css
-@import "@flow-industries/ui/styles/tokens.css";
-@import "@flow-industries/ui/styles/base.css";
-
-@source "../../node_modules/@flow-industries/ui/src";
-```
-
-## Usage
-
-```tsx
-import { Button } from "@flow-industries/ui/components/button"
-import { Input } from "@flow-industries/ui/components/input"
-import { Card, CardContent } from "@flow-industries/ui/components/card"
-import { toast } from "@flow-industries/ui/components/toast"
-import { cn } from "@flow-industries/ui"
-```
-
-## Accessibility
-
-- `prefers-reduced-motion` is respected globally — all CSS and JS animations are disabled
+- [Installation & setup](https://flow.industries/en/ui/installation) — CSS imports, Tailwind config, source directive
+- [Tokens](https://flow.industries/en/ui/tokens) — every CSS custom property
+- [Theming](https://flow.industries/en/ui/theming) — light, dark, custom palettes
+- [Typography](https://flow.industries/en/ui/typography) — Geist families and scales
+- [Branding](https://flow.industries/en/ui/branding) — logo, logomark, social icons
+- [Utilities](https://flow.industries/en/ui/utilities) — `cn()`, `useIsMobile()`, shared patterns
+- Components: [Buttons](https://flow.industries/en/ui/components/buttons), [Forms](https://flow.industries/en/ui/components/forms), [Layout](https://flow.industries/en/ui/components/layout), [Navigation](https://flow.industries/en/ui/components/navigation), [Overlays](https://flow.industries/en/ui/components/overlays), [Feedback](https://flow.industries/en/ui/components/feedback), [Data](https://flow.industries/en/ui/components/data), [Effects](https://flow.industries/en/ui/components/effects)
 
 ## Development
 
