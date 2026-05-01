@@ -3,12 +3,13 @@ import { cn } from "../../utils/cn"
 const titleStyles = {
   sm: "text-sm font-medium",
   default: "text-base font-medium tracking-tighter",
+  md: "text-2xl font-semibold tracking-tighter",
   lg: "text-3xl font-semibold tracking-tighter",
 } as const
 
-const titleTags = { sm: "h3", default: "h2", lg: "h1" } as const
+const titleTags = { sm: "h3", default: "h2", md: "h2", lg: "h1" } as const
 
-function Title({ className, size = "default", ...props }: React.ComponentProps<"h1"> & { size?: "sm" | "default" | "lg" }) {
+function Title({ className, size = "default", ...props }: React.ComponentProps<"h1"> & { size?: "sm" | "default" | "md" | "lg" }) {
   const Tag = titleTags[size]
   return (
     <Tag
@@ -22,10 +23,11 @@ function Title({ className, size = "default", ...props }: React.ComponentProps<"
 const subtitleStyles = {
   sm: "text-xs text-muted-foreground",
   default: "text-sm text-muted-foreground",
+  md: "text-base text-muted-foreground",
   lg: "text-lg text-muted-foreground",
 } as const
 
-function Subtitle({ className, size = "default", ...props }: React.ComponentProps<"p"> & { size?: "sm" | "default" | "lg" }) {
+function Subtitle({ className, size = "default", ...props }: React.ComponentProps<"p"> & { size?: "sm" | "default" | "md" | "lg" }) {
   return (
     <p
       data-slot="subtitle"
