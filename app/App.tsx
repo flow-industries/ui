@@ -38,6 +38,7 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "../src/components/ui/pagination"
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "../src/components/ui/input-otp"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../src/components/ui/input-group"
+import { ValidatedInput, type ValidationStatus } from "../src/components/ui/validated-input"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription as EmptyDesc } from "../src/components/ui/empty"
 import { ToastProvider, toast } from "../src/components/ui/toast"
 import { ButtonGroup } from "../src/components/ui/button-group"
@@ -1012,6 +1013,18 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Validated Input */}
+      <Section title="Validated Input">
+        <div className="max-w-sm space-y-3">
+          <ValidatedInputDemo />
+          <div className="space-y-2">
+            <ValidatedInput inputSize="lg" status="checking" defaultValue="checking" readOnly />
+            <ValidatedInput inputSize="lg" status="valid" defaultValue="available" readOnly />
+            <ValidatedInput inputSize="lg" status="invalid" defaultValue="taken" readOnly />
+          </div>
+        </div>
+      </Section>
+
       {/* Input OTP */}
       <Section title="Input OTP">
         <InputOTP maxLength={6}>
@@ -1776,6 +1789,33 @@ function ComponentsShowcase() {
         </Preview>
       </Section>
     </div>
+  )
+}
+
+function ValidatedInputDemo() {
+  const [value, setValue] = useState("")
+  const [status, setStatus] = useState<ValidationStatus>("idle")
+
+  useEffect(() => {
+    if (value.length === 0) {
+      setStatus("idle")
+      return
+    }
+    setStatus("checking")
+    const t = setTimeout(() => {
+      setStatus(value.toLowerCase() === "taken" ? "invalid" : "valid")
+    }, 700)
+    return () => clearTimeout(t)
+  }, [value])
+
+  return (
+    <ValidatedInput
+      inputSize="lg"
+      placeholder='type a name (try "taken")'
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      status={status}
+    />
   )
 }
 
