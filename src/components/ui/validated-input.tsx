@@ -21,14 +21,14 @@ function ValidatedInput({
   ...props
 }: React.ComponentProps<typeof Input> & { status?: ValidationStatus }) {
   return (
-    <div className="relative">
+    <div className="relative group/validated-input">
       <Input
         data-slot="validated-input"
         aria-invalid={ariaInvalid ?? status === "invalid"}
         className={cn("pr-12", className)}
         {...props}
       />
-      <div className="absolute right-5 top-1/2 -translate-y-1/2 size-4 pointer-events-none">
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 size-4 pointer-events-none">
         <AnimatePresence initial={false}>
           {status === "checking" && (
             <motion.div key="checking" className="absolute inset-0" {...statusIconAnimation}>
@@ -37,7 +37,7 @@ function ValidatedInput({
           )}
           {status === "valid" && (
             <motion.div key="valid" className="absolute inset-0" {...statusIconAnimation}>
-              <Check className="size-4 text-primary stroke-[3]" />
+              <Check className="size-4 text-primary group-focus-within/validated-input:text-brand stroke-[3] transition-colors" />
             </motion.div>
           )}
           {status === "invalid" && (
