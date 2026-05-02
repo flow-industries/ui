@@ -32,7 +32,7 @@ function CopyCheckIcon({
             }
             className="absolute inset-0 flex items-center justify-center"
           >
-            <Check style={{ width: size, height: size }} className="text-foreground" />
+            <Check style={{ width: size, height: size }} className="text-foreground stroke-[2.5]" />
           </motion.div>
         ) : (
           <motion.div
@@ -46,7 +46,7 @@ function CopyCheckIcon({
             }
             className="absolute inset-0 flex items-center justify-center"
           >
-            <Copy style={{ width: size, height: size }} className="text-muted-foreground" />
+            <Copy style={{ width: size, height: size }} className="text-muted-foreground stroke-[2.5]" />
           </motion.div>
         )}
       </AnimatePresence>
