@@ -6,6 +6,8 @@
       "dependencies": {
         "@base-ui/react": "^1.3.0",
         "@hookform/resolvers": "^5.2.2",
+        "@openobserve/browser-logs": "^0.3.1",
+        "@openobserve/browser-rum": "^0.3.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
@@ -225,6 +227,14 @@
     "@next/swc-win32-arm64-msvc": ["@next/swc-win32-arm64-msvc@16.2.3", "", { "os": "win32", "cpu": "arm64" }, "sha512-O2NZ9ie3Tq6xj5Z5CSwBT3+aWAMW2PIZ4egUi9MaWLkwaehgtB7YZjPm+UpcNpKOme0IQuqDcor7BsW6QBiQBw=="],
 
     "@next/swc-win32-x64-msvc": ["@next/swc-win32-x64-msvc@16.2.3", "", { "os": "win32", "cpu": "x64" }, "sha512-Ibm29/GgB/ab5n7XKqlStkm54qqZE8v2FnijUPBgrd67FWrac45o/RsNlaOWjme/B5UqeWt/8KM4aWBwA1D2Kw=="],
+
+    "@openobserve/browser-core": ["@openobserve/browser-core@0.3.1", "", {}, "sha512-Q5BazD4GsL/+fQGPVfSfKveGwYhor0KnMF1exSfce07ngVTf3ZBttKVHjZSVdrpiR/0Jm1DCbeyZt8xqgXA9Xw=="],
+
+    "@openobserve/browser-logs": ["@openobserve/browser-logs@0.3.1", "", { "dependencies": { "@openobserve/browser-core": "0.3.1" }, "peerDependencies": { "@openobserve/browser-rum": "0.3.1" }, "optionalPeers": ["@openobserve/browser-rum"] }, "sha512-TootKFGsfaXA1KLuheU6XC7Sv9CQWILY5zRAVdOLJKdfPGQ3d5wBPyZIqUe91WeE3lGLCI8YF/7X9iqRcfj90g=="],
+
+    "@openobserve/browser-rum": ["@openobserve/browser-rum@0.3.1", "", { "dependencies": { "@openobserve/browser-core": "0.3.1", "@openobserve/browser-rum-core": "0.3.1" }, "peerDependencies": { "@openobserve/browser-logs": "0.3.1" }, "optionalPeers": ["@openobserve/browser-logs"] }, "sha512-g6Np152uE7NoJsq4niQyzgg1LsFm6iuIQ45mcYxQaPBEacBNIoWRP4GU3IcF7WmJMnqCg3YSau4HtetCexu6fQ=="],
+
+    "@openobserve/browser-rum-core": ["@openobserve/browser-rum-core@0.3.1", "", { "dependencies": { "@openobserve/browser-core": "0.3.1" } }, "sha512-cv2WEtntLVabMFbzP4XvlpuYOx6ToFYheJyGUs4jagv/nlW6U+a4DnajSK0Mtgmizz4H3IDVI4LmxHNuRxAHbA=="],
 
     "@reduxjs/toolkit": ["@reduxjs/toolkit@2.11.2", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "@standard-schema/utils": "^0.3.0", "immer": "^11.0.0", "redux": "^5.0.1", "redux-thunk": "^3.1.0", "reselect": "^5.1.0" }, "peerDependencies": { "react": "^16.9.0 || ^17.0.0 || ^18 || ^19", "react-redux": "^7.2.1 || ^8.1.3 || ^9.0.0" }, "optionalPeers": ["react", "react-redux"] }, "sha512-Kd6kAHTA6/nUpp8mySPqj3en3dm0tdMIgbttnQ1xFMVpufoj+ADi8pXLBsd4xzTRHQa7t/Jv8W5UnCuW4kuWMQ=="],
 
