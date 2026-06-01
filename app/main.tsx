@@ -5,7 +5,7 @@ import { App } from "./App"
 import { initRum } from "./rum"
 
 initRum(
-  import.meta.env.VITE_OO_RUM_TOKEN ?? "rumGa8r1npbX6Hv1XDz",
+  import.meta.env.VITE_OO_RUM_TOKEN ?? "rumIPhQpKsQRwq4Piit",
   import.meta.env.VITE_APP_VERSION ?? "dev",
 )
 

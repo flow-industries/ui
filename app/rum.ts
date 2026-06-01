@@ -1,7 +1,7 @@
 import { openobserveRum } from "@openobserve/browser-rum"
 import { openobserveLogs } from "@openobserve/browser-logs"
 
-const SITE = "logs.flow.industries"
+const SITE = "observe.flow.industries"
 const ORG = "default"
 const SERVICE = "ui"
 const ENV = import.meta.env.PROD ? "production" : "development"
