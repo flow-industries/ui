@@ -1,17 +1,17 @@
-import { openobserveRum } from "@openobserve/browser-rum"
-import { openobserveLogs } from "@openobserve/browser-logs"
+import { openobserveLogs } from "@openobserve/browser-logs";
+import { openobserveRum } from "@openobserve/browser-rum";
 
-const SITE = "observe.flow.industries"
-const ORG = "default"
-const SERVICE = "ui"
-const ENV = import.meta.env.PROD ? "production" : "development"
+const SITE = "observe.flow.industries";
+const ORG = "default";
+const SERVICE = "ui";
+const ENV = import.meta.env.PROD ? "production" : "development";
 
-let initialized = false
+let initialized = false;
 
 export function initRum(clientToken: string, version = "dev") {
-  if (typeof window === "undefined") return
-  if (initialized) return
-  if (!clientToken) return
+  if (typeof window === "undefined") return;
+  if (initialized) return;
+  if (!clientToken) return;
 
   openobserveRum.init({
     applicationId: SERVICE,
@@ -29,7 +29,7 @@ export function initRum(clientToken: string, version = "dev") {
     sessionSampleRate: 100,
     sessionReplaySampleRate: 100,
     defaultPrivacyLevel: "mask-user-input",
-  })
+  });
 
   openobserveLogs.init({
     clientToken,
@@ -41,7 +41,7 @@ export function initRum(clientToken: string, version = "dev") {
     apiVersion: "v1",
     insecureHTTP: false,
     forwardErrorsToLogs: true,
-  })
+  });
 
-  initialized = true
+  initialized = true;
 }

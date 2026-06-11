@@ -1,7 +1,7 @@
-import { Radio as RadioPrimitive } from "@base-ui/react/radio"
-import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
+import { Radio as RadioPrimitive } from "@base-ui/react/radio";
+import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils/cn";
 
 function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
   return (
@@ -10,7 +10,7 @@ function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
       className={cn("grid w-full gap-2", className)}
       {...props}
     />
-  )
+  );
 }
 
 function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
@@ -19,7 +19,7 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
       data-slot="radio-group-item"
       className={cn(
         "group/radio-group-item peer relative flex aspect-square size-5 shrink-0 rounded-full border-[length:var(--border-width)] border-transparent bg-input outline-none transition-colors duration-150 ease-(--ease-out) after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 data-checked:bg-input data-checked:border-transparent",
-        className
+        className,
       )}
       {...props}
     >
@@ -30,7 +30,7 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         <span className="absolute top-1/2 left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary transition-transform duration-150 ease-(--ease-out) scale-100 starting:scale-0" />
       </RadioPrimitive.Indicator>
     </RadioPrimitive.Root>
-  )
+  );
 }
 
-export { RadioGroup, RadioGroupItem }
+export { RadioGroup, RadioGroupItem };
