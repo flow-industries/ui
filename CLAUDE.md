@@ -24,9 +24,15 @@ src/
 ## Commands
 
 ```bash
-bunx tsc --noEmit           # type-check
+bun run typecheck           # tsc --noEmit
+bun run lint                # biome check
+bun run check               # biome check --write (auto-fix lint + formatting)
 bun publish --access public # publish to npm
 ```
+
+### Before pushing: CI must pass
+
+CI runs the shared quality gate (`flow-industries/lint` ts-check workflow): `bun run lint` and `bun run typecheck`. Both must be clean before every push — run them locally and fix everything they surface (`bun run check` auto-fixes most lint/format issues). Never push with a failing gate.
 
 ## Conventions
 
