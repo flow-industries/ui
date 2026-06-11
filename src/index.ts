@@ -1,2 +1,2 @@
-export { cn } from "./utils/cn"
-export { useIsMobile } from "./hooks/use-mobile"
+export { useIsMobile } from "./hooks/use-mobile";
+export { cn } from "./utils/cn";

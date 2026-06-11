@@ -1,14 +1,15 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { cva, type VariantProps } from "class-variance-authority"
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils/cn";
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-lg border-[length:var(--border-width)] border-transparent bg-clip-padding text-sm font-medium tracking-tighter whitespace-nowrap [transition:background-color_.15s_ease,color_.4s_ease,border-color_.15s_ease,translate_100ms_ease,scale_100ms_ease] outline-none select-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/85 [a]:hover:bg-primary/85",
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/85 [a]:hover:bg-primary/85",
         outline:
           "border-secondary bg-background hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input dark:aria-expanded:bg-input",
         secondary:
@@ -19,10 +20,10 @@ const buttonVariants = cva(
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 dark:bg-destructive/20 dark:hover:bg-destructive/30",
         success:
           "bg-success/10 text-success hover:bg-success/20 focus-visible:border-success/40 dark:bg-success/20 dark:hover:bg-success/30",
-        brand:
-          "bg-brand text-brand-foreground hover:bg-brand/70",
+        brand: "bg-brand text-brand-foreground hover:bg-brand/70",
         link: "text-primary underline-offset-4 hover:underline",
-        "brand-link": "text-foreground hover:text-brand [transition:color_80ms_ease]",
+        "brand-link":
+          "text-foreground hover:text-brand [transition:color_80ms_ease]",
       },
       size: {
         default:
@@ -42,8 +43,8 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
 function Button({
   className,
@@ -57,7 +58,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

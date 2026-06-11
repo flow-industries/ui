@@ -1,60 +1,60 @@
-import * as React from "react"
-import { useCallback, useEffect, useId, useRef, useState } from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import type * as React from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
-import { cn } from "../../utils/cn"
+import { cn } from "../../utils/cn";
 
-type DockVariant = "default" | "secondary" | "primary"
-type DockSize = "sm" | "md" | "lg"
+type DockVariant = "default" | "secondary" | "primary";
+type DockSize = "sm" | "md" | "lg";
 
 interface DockItem {
-  icon?: LucideIcon
-  customIcon?: React.ReactNode
-  label: string
-  onClick?: () => void
-  customComponent?: React.ReactNode
-  extra?: React.ReactNode
-  variant?: DockVariant
-  isActive?: boolean
+  icon?: LucideIcon;
+  customIcon?: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  customComponent?: React.ReactNode;
+  extra?: React.ReactNode;
+  variant?: DockVariant;
+  isActive?: boolean;
 }
 
 interface DockProps extends Omit<React.ComponentProps<"div">, "children"> {
-  items: DockItem[]
-  size?: DockSize
+  items: DockItem[];
+  size?: DockSize;
 }
 
 interface DockIconButtonProps extends DockItem {
-  size: DockSize
-  className?: string
-  onHover?: () => void
-  onLeave?: () => void
-  ref?: React.Ref<HTMLButtonElement>
+  size: DockSize;
+  className?: string;
+  onHover?: () => void;
+  onLeave?: () => void;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 const variantClasses: Record<DockVariant, string> = {
   default: "hover:bg-secondary/50",
   secondary: "bg-secondary/50 hover:bg-primary hover:text-primary-foreground",
   primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-}
+};
 
 const containerSizeClasses: Record<DockSize, string> = {
   sm: "gap-1 rounded-xl p-1.5",
   md: "gap-1.5 rounded-xl p-2",
   lg: "gap-2 rounded-2xl p-2 md:gap-3",
-}
+};
 
 const buttonSizeClasses: Record<DockSize, string> = {
   sm: "h-8 w-8 rounded-lg p-1.5",
   md: "h-10 w-10 rounded-xl p-2",
   lg: "h-12 w-12 rounded-2xl p-3 md:h-14 md:w-14",
-}
+};
 
 const iconSizeClasses: Record<DockSize, string> = {
   sm: "h-4 w-4",
   md: "h-5 w-5",
   lg: "h-5 w-5 md:h-6 md:w-6",
-}
+};
 
 function DockIconButton({
   icon: Icon,
@@ -70,7 +70,7 @@ function DockIconButton({
   ref,
 }: DockIconButtonProps) {
   if (customComponent) {
-    return <div className="w-full">{customComponent}</div>
+    return <div className="w-full">{customComponent}</div>;
   }
 
   return (
@@ -93,56 +93,64 @@ function DockIconButton({
       )}
     >
       {customIcon ? (
-        <div className={cn("flex items-center justify-center", iconSizeClasses[size])}>{customIcon}</div>
+        <div
+          className={cn(
+            "flex items-center justify-center",
+            iconSizeClasses[size],
+          )}
+        >
+          {customIcon}
+        </div>
       ) : Icon ? (
         <Icon className={iconSizeClasses[size]} strokeWidth={2.25} />
       ) : null}
     </motion.button>
-  )
+  );
 }
 
 function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
-  const popoverLayoutId = useId()
-  const shouldReduceMotion = useReducedMotion()
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [showExtra, setShowExtra] = useState(false)
-  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const buttonRefs = useRef<Array<HTMLDivElement | null>>([])
-  const [isDesktop, setIsDesktop] = useState(true)
+  const popoverLayoutId = useId();
+  const shouldReduceMotion = useReducedMotion();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [showExtra, setShowExtra] = useState(false);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const buttonRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 640px)")
-    const onChange = () => setIsDesktop(mql.matches)
-    onChange()
-    mql.addEventListener("change", onChange)
-    return () => mql.removeEventListener("change", onChange)
-  }, [])
+    const mql = window.matchMedia("(min-width: 640px)");
+    const onChange = () => setIsDesktop(mql.matches);
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   const handleMouseEnter = useCallback((index: number) => {
-    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
-    setHoveredIndex(index)
-    setShowExtra(true)
-  }, [])
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    setHoveredIndex(index);
+    setShowExtra(true);
+  }, []);
 
   const clearAll = useCallback(() => {
     hideTimeoutRef.current = setTimeout(() => {
-      setShowExtra(false)
-      setHoveredIndex(null)
-    }, 200)
-  }, [])
+      setShowExtra(false);
+      setHoveredIndex(null);
+    }, 200);
+  }, []);
 
   const cancelHide = useCallback(() => {
-    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
-  }, [])
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+  }, []);
 
   useEffect(() => {
     return () => {
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current)
-    }
-  }, [])
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    };
+  }, []);
 
-  const hoveredItem = hoveredIndex !== null ? items[hoveredIndex] : null
-  const hoveredButton = hoveredIndex !== null ? buttonRefs.current[hoveredIndex] : null
+  const hoveredItem = hoveredIndex !== null ? items[hoveredIndex] : null;
+  const hoveredButton =
+    hoveredIndex !== null ? buttonRefs.current[hoveredIndex] : null;
 
   return (
     <div
@@ -164,7 +172,10 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
           {showExtra && hoveredItem && hoveredButton && (
             <div
               data-slot="dock-popover"
-              className={cn("pointer-events-auto absolute z-50", !isDesktop && "-translate-x-1/2")}
+              className={cn(
+                "pointer-events-auto absolute z-50",
+                !isDesktop && "-translate-x-1/2",
+              )}
               style={
                 isDesktop
                   ? {
@@ -200,7 +211,9 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
               >
                 <motion.div
                   key={hoveredIndex}
-                  style={{ transformOrigin: isDesktop ? "100% 50%" : "50% 100%" }}
+                  style={{
+                    transformOrigin: isDesktop ? "100% 50%" : "50% 100%",
+                  }}
                   initial={{ scale: shouldReduceMotion ? 1 : 0.96 }}
                   animate={{
                     scale: 1,
@@ -224,7 +237,7 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
           <div
             key={item.label}
             ref={(el) => {
-              buttonRefs.current[index] = el
+              buttonRefs.current[index] = el;
             }}
             className="relative"
           >
@@ -238,7 +251,7 @@ function Dock({ items, className, size = "md", ref, ...props }: DockProps) {
         ))}
       </motion.div>
     </div>
-  )
+  );
 }
 
-export { Dock, type DockItem, type DockProps, type DockSize }
+export { Dock, type DockItem, type DockProps, type DockSize };

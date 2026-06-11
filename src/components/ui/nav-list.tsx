@@ -1,7 +1,7 @@
-import * as React from "react"
+import type * as React from "react";
 
-import { cn } from "../../utils/cn"
-import { Overline } from "./typography"
+import { cn } from "../../utils/cn";
+import { Overline } from "./typography";
 
 function NavList({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -10,7 +10,7 @@ function NavList({ className, ...props }: React.ComponentProps<"nav">) {
       className={cn("flex flex-wrap gap-12", className)}
       {...props}
     />
-  )
+  );
 }
 
 function NavListGroup({ className, ...props }: React.ComponentProps<"div">) {
@@ -20,7 +20,7 @@ function NavListGroup({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("flex flex-col gap-4", className)}
       {...props}
     />
-  )
+  );
 }
 
 function NavListHeader({ className, ...props }: React.ComponentProps<"span">) {
@@ -31,17 +31,20 @@ function NavListHeader({ className, ...props }: React.ComponentProps<"span">) {
       className={className}
       {...props}
     />
-  )
+  );
 }
 
 function NavListItem({ className, ...props }: React.ComponentProps<"a">) {
   return (
     <a
       data-slot="nav-list-item"
-      className={cn("inline-flex items-center gap-2 text-xs font-[450] tracking-wide text-foreground [transition:color_80ms_ease] hover:text-brand", className)}
+      className={cn(
+        "inline-flex items-center gap-2 text-xs font-[450] tracking-wide text-foreground [transition:color_80ms_ease] hover:text-brand",
+        className,
+      )}
       {...props}
     />
-  )
+  );
 }
 
-export { NavList, NavListGroup, NavListHeader, NavListItem }
+export { NavList, NavListGroup, NavListHeader, NavListItem };
