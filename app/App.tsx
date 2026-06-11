@@ -1,126 +1,401 @@
-import { useState, useRef, useEffect } from "react"
-import { AnimatePresence, motion } from "motion/react"
-import { Logo, Logomark, Wordmark } from "../src/components/logo"
-import { XIcon, DiscordIcon, GitHubIcon, BlueskyIcon } from "../src/components/icons"
-import { Button } from "../src/components/ui/button"
-import { Badge } from "../src/components/ui/badge"
-import { Input } from "../src/components/ui/input"
-import { Textarea } from "../src/components/ui/textarea"
-import { Label } from "../src/components/ui/label"
-import { Checkbox } from "../src/components/ui/checkbox"
-import { Switch } from "../src/components/ui/switch"
-import { Slider } from "../src/components/ui/slider"
-import { Progress } from "../src/components/ui/progress"
-import { Separator } from "../src/components/ui/separator"
-import { Skeleton } from "../src/components/ui/skeleton"
-import { Spinner } from "../src/components/ui/spinner"
-import { Avatar, AvatarFallback } from "../src/components/ui/avatar"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../src/components/ui/card"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../src/components/ui/tabs"
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../src/components/ui/accordion"
-import { Toggle } from "../src/components/ui/toggle"
-import { ToggleGroup, ToggleGroupItem } from "../src/components/ui/toggle-group"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../src/components/ui/select"
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../src/components/ui/tooltip"
-import { Kbd } from "../src/components/ui/kbd"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../src/components/ui/table"
-import { RadioGroup, RadioGroupItem } from "../src/components/ui/radio-group"
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "../src/components/ui/dialog"
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "../src/components/ui/alert-dialog"
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "../src/components/ui/sheet"
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "../src/components/ui/drawer"
-import { Popover, PopoverTrigger, PopoverContent } from "../src/components/ui/popover"
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "../src/components/ui/hover-card"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuShortcut } from "../src/components/ui/dropdown-menu"
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "../src/components/ui/context-menu"
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../src/components/ui/collapsible"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "../src/components/ui/breadcrumb"
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "../src/components/ui/pagination"
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "../src/components/ui/input-otp"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "../src/components/ui/input-group"
-import { ValidatedInput, type ValidationStatus } from "../src/components/ui/validated-input"
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription as EmptyDesc } from "../src/components/ui/empty"
-import { ToastProvider, toast } from "../src/components/ui/toast"
-import { ButtonGroup } from "../src/components/ui/button-group"
-import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator as MenubarSep, MenubarShortcut } from "../src/components/ui/menubar"
-import { ScrollArea } from "../src/components/ui/scroll-area"
-import { AspectRatio } from "../src/components/ui/aspect-ratio"
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../src/components/ui/carousel"
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../src/components/ui/resizable"
-import { NavList, NavListGroup, NavListHeader, NavListItem } from "../src/components/ui/nav-list"
-import { Footer, FooterContent, FooterBottom, FooterBrand, FooterSocials, FooterLink, FooterCopyright } from "../src/components/ui/footer"
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../src/components/ui/navigation-menu"
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "../src/components/ui/sidebar"
-import { NativeSelect, NativeSelectOption } from "../src/components/ui/native-select"
-import { CopyCheckIcon, CopyButton } from "../src/components/ui/animated-icons"
-import { Dock } from "../src/components/ui/dock"
-import { DissolveFilter } from "../src/components/ui/dissolve-filter"
-import { TimeElapsed, TimeSince } from "../src/components/ui/time"
-import { ColorSwatch as ColorSwatchUI, HueGroup as HueGroupUI } from "../src/components/ui/color-swatch"
-import { Title, Subtitle, Overline, Paragraph, Mono } from "../src/components/ui/typography"
-import { cn } from "../src/utils/cn"
 import {
-  Bold, Italic, Underline,
-  Mail, Plus, Trash2, Settings, Star, Copy, Check,
-  ChevronsUpDown, Inbox, Search, User, CreditCard, LogOut,
-  Home, FileText, Image as ImageIcon,
-  Bell, Moon, Sun, Send, Filter, Globe, ChevronDown, Type, AlignLeft, LayoutGrid, Component,
-  Clock, MoreHorizontal, Reply, Archive, RefreshCw, Download, PenLine, Eye,
-} from "lucide-react"
+  Archive,
+  Bell,
+  Bold,
+  Check,
+  ChevronsUpDown,
+  Component,
+  CreditCard,
+  Download,
+  Eye,
+  FileText,
+  Filter,
+  Home,
+  Image as ImageIcon,
+  Inbox,
+  Italic,
+  LayoutGrid,
+  LogOut,
+  Mail,
+  Moon,
+  MoreHorizontal,
+  PenLine,
+  Plus,
+  RefreshCw,
+  Reply,
+  Search,
+  Send,
+  Settings,
+  Star,
+  Sun,
+  Trash2,
+  Type,
+  Underline,
+  User,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  BlueskyIcon,
+  DiscordIcon,
+  GitHubIcon,
+  XIcon,
+} from "../src/components/icons";
+import { Logo, Logomark, Wordmark } from "../src/components/logo";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../src/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../src/components/ui/alert-dialog";
+import { CopyButton } from "../src/components/ui/animated-icons";
+import { AspectRatio } from "../src/components/ui/aspect-ratio";
+import { Avatar, AvatarFallback } from "../src/components/ui/avatar";
+import { Badge } from "../src/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../src/components/ui/breadcrumb";
+import { Button } from "../src/components/ui/button";
+import { ButtonGroup } from "../src/components/ui/button-group";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../src/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../src/components/ui/carousel";
+import { Checkbox } from "../src/components/ui/checkbox";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../src/components/ui/collapsible";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "../src/components/ui/context-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../src/components/ui/dialog";
+import { DissolveFilter } from "../src/components/ui/dissolve-filter";
+import { Dock } from "../src/components/ui/dock";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../src/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "../src/components/ui/dropdown-menu";
+import {
+  Empty,
+  EmptyDescription as EmptyDesc,
+  EmptyHeader,
+  EmptyTitle,
+} from "../src/components/ui/empty";
+import {
+  Footer,
+  FooterBottom,
+  FooterBrand,
+  FooterContent,
+  FooterCopyright,
+  FooterLink,
+  FooterSocials,
+} from "../src/components/ui/footer";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../src/components/ui/hover-card";
+import { Input } from "../src/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../src/components/ui/input-group";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "../src/components/ui/input-otp";
+import { Kbd } from "../src/components/ui/kbd";
+import { Label } from "../src/components/ui/label";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator as MenubarSep,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "../src/components/ui/menubar";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "../src/components/ui/native-select";
+import {
+  NavList,
+  NavListGroup,
+  NavListHeader,
+  NavListItem,
+} from "../src/components/ui/nav-list";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "../src/components/ui/navigation-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../src/components/ui/pagination";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../src/components/ui/popover";
+import { Progress } from "../src/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "../src/components/ui/radio-group";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "../src/components/ui/resizable";
+import { ScrollArea } from "../src/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../src/components/ui/select";
+import { Separator } from "../src/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../src/components/ui/sheet";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "../src/components/ui/sidebar";
+import { Skeleton } from "../src/components/ui/skeleton";
+import { Slider } from "../src/components/ui/slider";
+import { Spinner } from "../src/components/ui/spinner";
+import { Switch } from "../src/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../src/components/ui/table";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../src/components/ui/tabs";
+import { Textarea } from "../src/components/ui/textarea";
+import { TimeElapsed, TimeSince } from "../src/components/ui/time";
+import { ToastProvider, toast } from "../src/components/ui/toast";
+import { Toggle } from "../src/components/ui/toggle";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "../src/components/ui/toggle-group";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../src/components/ui/tooltip";
+import {
+  Mono,
+  Overline,
+  Paragraph,
+  Subtitle,
+  Title,
+} from "../src/components/ui/typography";
+import {
+  ValidatedInput,
+  type ValidationStatus,
+} from "../src/components/ui/validated-input";
+import { cn } from "../src/utils/cn";
 
 const hues = [
-  { name: "Pink", fancy: "Flow Pink",
-    dark:  { token: "dark-pink", cls: "bg-dark-pink" },
-    std:   { token: "pink", cls: "bg-pink" },
+  {
+    name: "Pink",
+    fancy: "Flow Pink",
+    dark: { token: "dark-pink", cls: "bg-dark-pink" },
+    std: { token: "pink", cls: "bg-pink" },
     light: { token: "light-pink", cls: "bg-light-pink" },
   },
-  { name: "Green", fancy: "Mint",
-    dark:  { token: "dark-green", cls: "bg-dark-green" },
-    std:   { token: "green", cls: "bg-green" },
+  {
+    name: "Green",
+    fancy: "Mint",
+    dark: { token: "dark-green", cls: "bg-dark-green" },
+    std: { token: "green", cls: "bg-green" },
     light: { token: "light-green", cls: "bg-light-green" },
   },
-  { name: "Blue", fancy: "Blueberry",
-    dark:  { token: "dark-blue", cls: "bg-dark-blue" },
-    std:   { token: "blue", cls: "bg-blue" },
+  {
+    name: "Blue",
+    fancy: "Blueberry",
+    dark: { token: "dark-blue", cls: "bg-dark-blue" },
+    std: { token: "blue", cls: "bg-blue" },
     light: { token: "light-blue", cls: "bg-light-blue" },
   },
-  { name: "Purple", fancy: "Grape",
-    dark:  { token: "dark-purple", cls: "bg-dark-purple" },
-    std:   { token: "purple", cls: "bg-purple" },
+  {
+    name: "Purple",
+    fancy: "Grape",
+    dark: { token: "dark-purple", cls: "bg-dark-purple" },
+    std: { token: "purple", cls: "bg-purple" },
     light: { token: "light-purple", cls: "bg-light-purple" },
   },
-  { name: "Red", fancy: "Strawberry",
-    dark:  { token: "dark-red", cls: "bg-dark-red" },
-    std:   { token: "red", cls: "bg-red" },
+  {
+    name: "Red",
+    fancy: "Strawberry",
+    dark: { token: "dark-red", cls: "bg-dark-red" },
+    std: { token: "red", cls: "bg-red" },
     light: { token: "light-red", cls: "bg-light-red" },
   },
-  { name: "Orange", fancy: "Orange",
-    dark:  { token: "dark-orange", cls: "bg-dark-orange" },
-    std:   { token: "orange", cls: "bg-orange" },
+  {
+    name: "Orange",
+    fancy: "Orange",
+    dark: { token: "dark-orange", cls: "bg-dark-orange" },
+    std: { token: "orange", cls: "bg-orange" },
     light: { token: "light-orange", cls: "bg-light-orange" },
   },
-  { name: "Yellow", fancy: "Banana",
-    dark:  { token: "dark-yellow", cls: "bg-dark-yellow" },
-    std:   { token: "yellow", cls: "bg-yellow" },
+  {
+    name: "Yellow",
+    fancy: "Banana",
+    dark: { token: "dark-yellow", cls: "bg-dark-yellow" },
+    std: { token: "yellow", cls: "bg-yellow" },
     light: { token: "light-yellow", cls: "bg-light-yellow" },
   },
-]
+];
 
 const palette = {
   semantic: [
-    { name: "Background", token: "background", cls: "bg-background", border: true, fg: { token: "foreground", cls: "bg-foreground" } },
-    { name: "Primary", token: "primary", cls: "bg-primary", fg: { token: "primary-foreground", cls: "bg-primary-foreground" } },
-    { name: "Secondary", token: "secondary", cls: "bg-secondary", border: true, fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" } },
-    { name: "Muted", token: "muted", cls: "bg-muted", border: true, fg: { token: "muted-foreground", cls: "bg-muted-foreground" } },
-    { name: "Brand", token: "brand", cls: "bg-brand", fg: { token: "brand-foreground", cls: "bg-brand-foreground" } },
+    {
+      name: "Background",
+      token: "background",
+      cls: "bg-background",
+      border: true,
+      fg: { token: "foreground", cls: "bg-foreground" },
+    },
+    {
+      name: "Primary",
+      token: "primary",
+      cls: "bg-primary",
+      fg: { token: "primary-foreground", cls: "bg-primary-foreground" },
+    },
+    {
+      name: "Secondary",
+      token: "secondary",
+      cls: "bg-secondary",
+      border: true,
+      fg: { token: "secondary-foreground", cls: "bg-secondary-foreground" },
+    },
+    {
+      name: "Muted",
+      token: "muted",
+      cls: "bg-muted",
+      border: true,
+      fg: { token: "muted-foreground", cls: "bg-muted-foreground" },
+    },
+    {
+      name: "Brand",
+      token: "brand",
+      cls: "bg-brand",
+      fg: { token: "brand-foreground", cls: "bg-brand-foreground" },
+    },
     { name: "Destructive", token: "destructive", cls: "bg-destructive" },
     { name: "Success", token: "success", cls: "bg-success" },
   ],
-}
+};
 
-type PaletteColor = { name: string; fancy?: string; token: string; cls: string; border?: boolean; fg?: { token: string; cls: string } }
+type PaletteColor = {
+  name: string;
+  fancy?: string;
+  token: string;
+  cls: string;
+  border?: boolean;
+  fg?: { token: string; cls: string };
+};
 
-function Section({ title, children, wide }: { title: string; children: React.ReactNode; wide?: boolean }) {
+function Section({
+  title,
+  children,
+  wide,
+}: {
+  title: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}) {
   return (
     <section className={`space-y-4 ${wide ? "w-full" : "min-w-64"}`}>
       <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
@@ -128,34 +403,47 @@ function Section({ title, children, wide }: { title: string; children: React.Rea
       </h2>
       {children}
     </section>
-  )
+  );
 }
 
-const pixelVariants = ["Square", "Grid", "Circle", "Triangle", "Line"] as const
+const pixelVariants = ["Square", "Grid", "Circle", "Triangle", "Line"] as const;
 
 function PixelFontCard() {
-  const [variant, setVariant] = useState<typeof pixelVariants[number]>("Square")
-  const fontFamily = `"Geist Pixel ${variant}", monospace`
+  const [variant, setVariant] =
+    useState<(typeof pixelVariants)[number]>("Square");
+  const fontFamily = `"Geist Pixel ${variant}", monospace`;
 
   return (
     <div className="space-y-3 rounded-xl bg-secondary p-5">
       <div>
-        <p className="text-2xl font-normal" style={{ fontFamily }}>Geist Pixel</p>
-        <p className="text-xs text-muted-foreground font-mono mt-1">font-pixel</p>
+        <p className="text-2xl font-normal" style={{ fontFamily }}>
+          Geist Pixel
+        </p>
+        <p className="text-xs text-muted-foreground font-mono mt-1">
+          font-pixel
+        </p>
       </div>
-      <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl" style={{ fontFamily }}>
-        {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
-          <span key={pair}>{pair}</span>
-        ))}
+      <div
+        className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl"
+        style={{ fontFamily }}
+      >
+        {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+          .match(/.{2}/g)!
+          .map((pair) => (
+            <span key={pair}>{pair}</span>
+          ))}
       </div>
       <div className="flex gap-1.5 flex-wrap">
         {pixelVariants.map((v) => (
           <button
+            type="button"
             key={v}
             onClick={() => setVariant(v)}
             className={cn(
               "text-sm px-2.5 py-1 rounded-lg transition-colors",
-              v === variant ? "bg-primary text-primary-foreground" : "bg-secondary hover:bg-muted"
+              v === variant
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary hover:bg-muted",
             )}
             style={{ fontFamily: `"Geist Pixel ${v}", monospace` }}
           >
@@ -165,40 +453,80 @@ function PixelFontCard() {
       </div>
       <table className="w-full text-xs text-muted-foreground">
         <tbody>
-          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
-          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
-          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Pixel / bitmap display</td></tr>
-          <tr><td className="py-0.5 pr-4 font-medium text-foreground">Variants</td><td>Square, Grid, Circle, Triangle, Line</td></tr>
-          <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
+          <tr>
+            <td className="py-0.5 pr-4 font-medium text-foreground">
+              Designed by
+            </td>
+            <td>Basement Studio</td>
+          </tr>
+          <tr>
+            <td className="py-0.5 pr-4 font-medium text-foreground">
+              Published by
+            </td>
+            <td>Vercel</td>
+          </tr>
+          <tr>
+            <td className="py-0.5 pr-4 font-medium text-foreground">
+              Classification
+            </td>
+            <td>Pixel / bitmap display</td>
+          </tr>
+          <tr>
+            <td className="py-0.5 pr-4 font-medium text-foreground">
+              Variants
+            </td>
+            <td>Square, Grid, Circle, Triangle, Line</td>
+          </tr>
+          <tr>
+            <td className="py-0.5 pr-4 font-medium text-foreground">License</td>
+            <td>SIL Open Font License 1.1</td>
+          </tr>
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-function Preview({ label, children }: { label?: string; children: React.ReactNode }) {
+function Preview({
+  label,
+  children,
+}: {
+  label?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-2">
       {label && <p className="text-xs text-muted-foreground">{label}</p>}
-      <div className="flex flex-wrap items-center gap-3">
-        {children}
-      </div>
+      <div className="flex flex-wrap items-center gap-3">{children}</div>
     </div>
-  )
+  );
 }
 
-function Showcase({ children, className }: { children: React.ReactNode; className?: string }) {
+function Showcase({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <Card className={cn("overflow-hidden", className)}>
-      <CardContent>
-        {children}
-      </CardContent>
+      <CardContent>{children}</CardContent>
     </Card>
-  )
+  );
 }
 
 function AppShellShowcase() {
-  const sidebarItems = ["Dashboard", "Projects", "Tasks", "Messages", "Analytics", "Documents", "Calendar", "Settings"]
+  const sidebarItems = [
+    "Dashboard",
+    "Projects",
+    "Tasks",
+    "Messages",
+    "Analytics",
+    "Documents",
+    "Calendar",
+    "Settings",
+  ];
 
   return (
     <Showcase>
@@ -206,10 +534,25 @@ function AppShellShowcase() {
         <MenubarMenu>
           <MenubarTrigger>File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem>New <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>N</Kbd></MenubarShortcut></MenubarItem>
-            <MenubarItem>Open <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>O</Kbd></MenubarShortcut></MenubarItem>
+            <MenubarItem>
+              New{" "}
+              <MenubarShortcut>
+                <Kbd>Cmd</Kbd> <Kbd>N</Kbd>
+              </MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem>
+              Open{" "}
+              <MenubarShortcut>
+                <Kbd>Cmd</Kbd> <Kbd>O</Kbd>
+              </MenubarShortcut>
+            </MenubarItem>
             <MenubarSep />
-            <MenubarItem>Save <MenubarShortcut><Kbd>Cmd</Kbd> <Kbd>S</Kbd></MenubarShortcut></MenubarItem>
+            <MenubarItem>
+              Save{" "}
+              <MenubarShortcut>
+                <Kbd>Cmd</Kbd> <Kbd>S</Kbd>
+              </MenubarShortcut>
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
@@ -265,12 +608,23 @@ function AppShellShowcase() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem>
+                  <User /> Profile{" "}
+                  <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard /> Billing{" "}
+                  <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings /> Settings{" "}
+                  <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
+              <DropdownMenuItem variant="destructive">
+                <LogOut /> Log out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -295,16 +649,25 @@ function AppShellShowcase() {
       </div>
 
       <div className="px-4 pb-4">
-        <ResizablePanelGroup direction="horizontal" className="rounded-lg border min-h-[300px]">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="rounded-lg border min-h-[300px]"
+        >
           <ResizablePanel defaultSize={30} minSize={20}>
             <ScrollArea className="h-[300px]">
               <div className="p-2 space-y-0.5">
                 {sidebarItems.map((item, i) => (
                   <div key={item}>
-                    <Button variant="ghost" className="w-full justify-start text-sm" size="sm">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-sm"
+                      size="sm"
+                    >
                       {item}
                     </Button>
-                    {i < sidebarItems.length - 1 && <Separator className="my-0.5" />}
+                    {i < sidebarItems.length - 1 && (
+                      <Separator className="my-0.5" />
+                    )}
                   </div>
                 ))}
               </div>
@@ -315,19 +678,20 @@ function AppShellShowcase() {
             <div className="p-6">
               <h3 className="text-lg font-medium mb-2">Flow UI</h3>
               <p className="text-sm text-muted-foreground">
-                Shared design system and component library for Flow applications.
-                Select an item from the sidebar to navigate between sections.
+                Shared design system and component library for Flow
+                applications. Select an item from the sidebar to navigate
+                between sections.
               </p>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
     </Showcase>
-  )
+  );
 }
 
 function AccountSettingsShowcase() {
-  const [fontSize, setFontSize] = useState(16)
+  const [fontSize, setFontSize] = useState(16);
 
   return (
     <Showcase>
@@ -354,11 +718,18 @@ function AccountSettingsShowcase() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="settings-email">Email</Label>
-                  <Input id="settings-email" type="email" placeholder="john@example.com" />
+                  <Input
+                    id="settings-email"
+                    type="email"
+                    placeholder="john@example.com"
+                  />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="settings-bio">Bio</Label>
-                  <Textarea id="settings-bio" placeholder="Tell us about yourself..." />
+                  <Textarea
+                    id="settings-bio"
+                    placeholder="Tell us about yourself..."
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Timezone</Label>
@@ -387,7 +758,9 @@ function AccountSettingsShowcase() {
               <div className="flex justify-end gap-2 mt-6">
                 <ButtonGroup>
                   <Button variant="outline">Cancel</Button>
-                  <Button onClick={() => toast.success("Settings saved")}>Save</Button>
+                  <Button onClick={() => toast.success("Settings saved")}>
+                    Save
+                  </Button>
                 </ButtonGroup>
               </div>
             </TabsContent>
@@ -443,24 +816,50 @@ function AccountSettingsShowcase() {
               <div className="space-y-2 max-w-sm">
                 <div className="flex items-center justify-between">
                   <Label>Font Size</Label>
-                  <span className="text-sm text-muted-foreground">{fontSize}px</span>
+                  <span className="text-sm text-muted-foreground">
+                    {fontSize}px
+                  </span>
                 </div>
-                <Slider value={[fontSize]} onValueChange={(v) => setFontSize(v[0])} min={12} max={24} step={1} />
+                <Slider
+                  value={[fontSize]}
+                  onValueChange={(v) => setFontSize(v[0])}
+                  min={12}
+                  max={24}
+                  step={1}
+                />
               </div>
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
     </Showcase>
-  )
+  );
 }
 
 function TeamMembersShowcase() {
   const members = [
-    { name: "Alex Chen", email: "alex@flow.industries", role: "Admin", status: "Active", initials: "AC" },
-    { name: "Sam Wilson", email: "sam@flow.industries", role: "Developer", status: "Active", initials: "SW" },
-    { name: "Jordan Lee", email: "jordan@flow.industries", role: "Designer", status: "Away", initials: "JL" },
-  ]
+    {
+      name: "Alex Chen",
+      email: "alex@flow.industries",
+      role: "Admin",
+      status: "Active",
+      initials: "AC",
+    },
+    {
+      name: "Sam Wilson",
+      email: "sam@flow.industries",
+      role: "Developer",
+      status: "Active",
+      initials: "SW",
+    },
+    {
+      name: "Jordan Lee",
+      email: "jordan@flow.industries",
+      role: "Designer",
+      status: "Away",
+      initials: "JL",
+    },
+  ];
 
   return (
     <Showcase className="space-y-4">
@@ -476,7 +875,9 @@ function TeamMembersShowcase() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Member</DialogTitle>
-              <DialogDescription>Add a new team member to your project.</DialogDescription>
+              <DialogDescription>
+                Add a new team member to your project.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
@@ -485,12 +886,20 @@ function TeamMembersShowcase() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="add-email">Email</Label>
-                <Input id="add-email" type="email" placeholder="email@example.com" />
+                <Input
+                  id="add-email"
+                  type="email"
+                  placeholder="email@example.com"
+                />
               </div>
             </div>
             <DialogFooter>
-              <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
-              <Button onClick={() => toast.success("Member added")}>Save</Button>
+              <DialogClose render={<Button variant="outline" />}>
+                Cancel
+              </DialogClose>
+              <Button onClick={() => toast.success("Member added")}>
+                Save
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -513,37 +922,59 @@ function TeamMembersShowcase() {
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="size-8">
-                        <AvatarFallback className="text-xs">{m.initials}</AvatarFallback>
+                        <AvatarFallback className="text-xs">
+                          {m.initials}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-sm font-medium">{m.name}</p>
-                        <p className="text-xs text-muted-foreground">{m.email}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {m.email}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell><Badge variant="secondary">{m.role}</Badge></TableCell>
                   <TableCell>
-                    <Badge variant={m.status === "Active" ? "default" : "outline"}>{m.status}</Badge>
+                    <Badge variant="secondary">{m.role}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={m.status === "Active" ? "default" : "outline"}
+                    >
+                      {m.status}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <Tooltip>
-                        <TooltipTrigger render={
-                          <DropdownMenuTrigger render={<Button variant="ghost" size="icon" />}>
-                            <MoreHorizontal className="size-4" />
-                          </DropdownMenuTrigger>
-                        } />
+                        <TooltipTrigger
+                          render={
+                            <DropdownMenuTrigger
+                              render={<Button variant="ghost" size="icon" />}
+                            >
+                              <MoreHorizontal className="size-4" />
+                            </DropdownMenuTrigger>
+                          }
+                        />
                         <TooltipContent>Actions</TooltipContent>
                       </Tooltip>
                       <DropdownMenuContent align="end">
                         <Dialog>
-                          <DialogTrigger render={<DropdownMenuItem onSelect={(e) => e.preventDefault()} />}>
+                          <DialogTrigger
+                            render={
+                              <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                              />
+                            }
+                          >
                             <PenLine className="size-4" /> Edit
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
                               <DialogTitle>Edit Member</DialogTitle>
-                              <DialogDescription>Update member information.</DialogDescription>
+                              <DialogDescription>
+                                Update member information.
+                              </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-4 py-4">
                               <div className="space-y-2">
@@ -556,25 +987,45 @@ function TeamMembersShowcase() {
                               </div>
                             </div>
                             <DialogFooter>
-                              <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
-                              <Button onClick={() => toast.success("Member updated")}>Save</Button>
+                              <DialogClose
+                                render={<Button variant="outline" />}
+                              >
+                                Cancel
+                              </DialogClose>
+                              <Button
+                                onClick={() => toast.success("Member updated")}
+                              >
+                                Save
+                              </Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
                         <AlertDialog>
-                          <AlertDialogTrigger render={<DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()} />}>
+                          <AlertDialogTrigger
+                            render={
+                              <DropdownMenuItem
+                                variant="destructive"
+                                onSelect={(e) => e.preventDefault()}
+                              />
+                            }
+                          >
                             <Trash2 className="size-4" /> Remove
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>Remove Member</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to remove {m.name} from the team? This action cannot be undone.
+                                Are you sure you want to remove {m.name} from
+                                the team? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => toast.success("Member removed")}>Remove</AlertDialogAction>
+                              <AlertDialogAction
+                                onClick={() => toast.success("Member removed")}
+                              >
+                                Remove
+                              </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
@@ -593,16 +1044,26 @@ function TeamMembersShowcase() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell><Skeleton className="h-5 w-16" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-14" /></TableCell>
-                <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
+                <TableCell>
+                  <Skeleton className="h-5 w-16" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-5 w-14" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="h-8 w-8 ml-auto" />
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-48">
-          <ContextMenuItem><RefreshCw className="size-4" /> Refresh</ContextMenuItem>
-          <ContextMenuItem><Download className="size-4" /> Export</ContextMenuItem>
+          <ContextMenuItem>
+            <RefreshCw className="size-4" /> Refresh
+          </ContextMenuItem>
+          <ContextMenuItem>
+            <Download className="size-4" /> Export
+          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem>Select All</ContextMenuItem>
         </ContextMenuContent>
@@ -614,7 +1075,9 @@ function TeamMembersShowcase() {
             <PaginationPrevious href="#" />
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="#" isActive>1</PaginationLink>
+            <PaginationLink href="#" isActive>
+              1
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem>
             <PaginationLink href="#">2</PaginationLink>
@@ -627,13 +1090,12 @@ function TeamMembersShowcase() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-
     </Showcase>
-  )
+  );
 }
 
 function VerificationFlowShowcase() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(1);
 
   return (
     <Showcase className="w-md mx-auto">
@@ -644,17 +1106,23 @@ function VerificationFlowShowcase() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-center">Sign In</h3>
             <InputGroup>
-              <InputGroupAddon><Mail className="size-4" /></InputGroupAddon>
+              <InputGroupAddon>
+                <Mail className="size-4" />
+              </InputGroupAddon>
               <InputGroupInput placeholder="you@example.com" type="email" />
             </InputGroup>
-            <Button className="w-full" onClick={() => setStep(2)}>Continue</Button>
+            <Button className="w-full" onClick={() => setStep(2)}>
+              Continue
+            </Button>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-center">Verify</h3>
-            <Label className="text-center block text-sm text-muted-foreground">Enter the code we sent you</Label>
+            <Label className="text-center block text-sm text-muted-foreground">
+              Enter the code we sent you
+            </Label>
             <div className="flex justify-center">
               <InputOTP maxLength={6}>
                 <InputOTPGroup>
@@ -670,7 +1138,9 @@ function VerificationFlowShowcase() {
                 </InputOTPGroup>
               </InputOTP>
             </div>
-            <Button className="w-full" onClick={() => setStep(3)}>Verify</Button>
+            <Button className="w-full" onClick={() => setStep(3)}>
+              Verify
+            </Button>
           </div>
         )}
 
@@ -682,34 +1152,46 @@ function VerificationFlowShowcase() {
               </div>
             </div>
             <h3 className="text-lg font-medium">Verified</h3>
-            <Button className="w-full" onClick={() => setStep(1)}>Continue to Dashboard</Button>
+            <Button className="w-full" onClick={() => setStep(1)}>
+              Continue to Dashboard
+            </Button>
           </div>
         )}
       </div>
     </Showcase>
-  )
+  );
 }
 
 function MediaGalleryShowcase() {
-  const [collapsibleOpen, setCollapsibleOpen] = useState(false)
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const galleryItems = [
     { title: "Abstract Waves", creator: null },
-    { title: "Mountain Vista", creator: { name: "Alex Chen", initials: "AC", desc: "Landscape photographer based in Portland." } },
+    {
+      title: "Mountain Vista",
+      creator: {
+        name: "Alex Chen",
+        initials: "AC",
+        desc: "Landscape photographer based in Portland.",
+      },
+    },
     { title: "Urban Grid", creator: null },
     { title: "Neon Lights", creator: null },
     { title: "Ocean Calm", creator: null },
-  ]
+  ];
 
   return (
     <Showcase className="space-y-4">
       <div className="max-w-xs mx-auto">
         <Carousel>
           <CarouselContent>
-            {galleryItems.map((item, i) => (
-              <CarouselItem key={i}>
+            {galleryItems.map((item) => (
+              <CarouselItem key={item.title}>
                 <Card>
                   <CardContent className="p-0">
-                    <AspectRatio ratio={16 / 9} className="bg-muted rounded-t-lg flex items-center justify-center">
+                    <AspectRatio
+                      ratio={16 / 9}
+                      className="bg-muted rounded-t-lg flex items-center justify-center"
+                    >
                       <ImageIcon className="size-8 text-muted-foreground" />
                     </AspectRatio>
                     <div className="p-3">
@@ -722,11 +1204,17 @@ function MediaGalleryShowcase() {
                           <HoverCardContent className="w-64">
                             <div className="flex gap-3">
                               <Avatar>
-                                <AvatarFallback>{item.creator.initials}</AvatarFallback>
+                                <AvatarFallback>
+                                  {item.creator.initials}
+                                </AvatarFallback>
                               </Avatar>
                               <div className="space-y-1">
-                                <h4 className="text-sm font-medium">{item.creator.name}</h4>
-                                <p className="text-xs text-muted-foreground">{item.creator.desc}</p>
+                                <h4 className="text-sm font-medium">
+                                  {item.creator.name}
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {item.creator.desc}
+                                </p>
                               </div>
                             </div>
                           </HoverCardContent>
@@ -745,7 +1233,11 @@ function MediaGalleryShowcase() {
 
       <Separator />
 
-      <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="space-y-2">
+      <Collapsible
+        open={collapsibleOpen}
+        onOpenChange={setCollapsibleOpen}
+        className="space-y-2"
+      >
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Project Details</span>
           <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
@@ -753,12 +1245,13 @@ function MediaGalleryShowcase() {
           </CollapsibleTrigger>
         </div>
         <CollapsibleContent className="space-y-2">
-          <Accordion >
+          <Accordion>
             <AccordionItem value="description">
               <AccordionTrigger>Description</AccordionTrigger>
               <AccordionContent>
                 <p className="text-sm text-muted-foreground">
-                  A curated gallery of visual works exploring the intersection of nature and technology.
+                  A curated gallery of visual works exploring the intersection
+                  of nature and technology.
                 </p>
               </AccordionContent>
             </AccordionItem>
@@ -776,27 +1269,66 @@ function MediaGalleryShowcase() {
             <AccordionItem value="license">
               <AccordionTrigger>License</AccordionTrigger>
               <AccordionContent>
-                <p className="text-sm text-muted-foreground">MIT License. Free for commercial and personal use.</p>
+                <p className="text-sm text-muted-foreground">
+                  MIT License. Free for commercial and personal use.
+                </p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <Button variant="outline" className="w-full"><Eye className="size-4" /> View Project</Button>
+          <Button variant="outline" className="w-full">
+            <Eye className="size-4" /> View Project
+          </Button>
         </CollapsibleContent>
       </Collapsible>
     </Showcase>
-  )
+  );
 }
 
 function InboxShowcase() {
   const messages = [
-    { sender: "Alex Chen", initials: "AC", subject: "Sprint Planning", preview: "Hey team, let's sync on the...", time: "2m ago", unread: true },
-    { sender: "Sam Wilson", initials: "SW", subject: "Design Review", preview: "The new components look great...", time: "1h ago", unread: true },
-    { sender: "Jordan Lee", initials: "JL", subject: "Bug Report", preview: "Found an issue with the...", time: "3h ago", unread: true },
-    { sender: "Morgan Park", initials: "MP", subject: "Weekly Update", preview: "Here's what we shipped this...", time: "1d ago", unread: false },
-    { sender: "Riley Kim", initials: "RK", subject: "Feature Request", preview: "Would it be possible to add...", time: "2d ago", unread: false },
-  ]
+    {
+      sender: "Alex Chen",
+      initials: "AC",
+      subject: "Sprint Planning",
+      preview: "Hey team, let's sync on the...",
+      time: "2m ago",
+      unread: true,
+    },
+    {
+      sender: "Sam Wilson",
+      initials: "SW",
+      subject: "Design Review",
+      preview: "The new components look great...",
+      time: "1h ago",
+      unread: true,
+    },
+    {
+      sender: "Jordan Lee",
+      initials: "JL",
+      subject: "Bug Report",
+      preview: "Found an issue with the...",
+      time: "3h ago",
+      unread: true,
+    },
+    {
+      sender: "Morgan Park",
+      initials: "MP",
+      subject: "Weekly Update",
+      preview: "Here's what we shipped this...",
+      time: "1d ago",
+      unread: false,
+    },
+    {
+      sender: "Riley Kim",
+      initials: "RK",
+      subject: "Feature Request",
+      preview: "Would it be possible to add...",
+      time: "2d ago",
+      unread: false,
+    },
+  ];
 
-  const unreadCount = messages.filter((m) => m.unread).length
+  const unreadCount = messages.filter((m) => m.unread).length;
 
   return (
     <Showcase className="space-y-4">
@@ -812,7 +1344,9 @@ function InboxShowcase() {
             <div className="mx-auto w-full max-w-sm">
               <DrawerHeader>
                 <DrawerTitle>New Message</DrawerTitle>
-                <DrawerDescription>Compose a new message to send.</DrawerDescription>
+                <DrawerDescription>
+                  Compose a new message to send.
+                </DrawerDescription>
               </DrawerHeader>
               <div className="p-4 space-y-4">
                 <div className="space-y-2">
@@ -821,7 +1355,10 @@ function InboxShowcase() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="compose-msg">Message</Label>
-                  <Textarea id="compose-msg" placeholder="Write your message..." />
+                  <Textarea
+                    id="compose-msg"
+                    placeholder="Write your message..."
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Priority</Label>
@@ -837,7 +1374,10 @@ function InboxShowcase() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full" onClick={() => toast.success("Message sent")}>
+                <Button
+                  className="w-full"
+                  onClick={() => toast.success("Message sent")}
+                >
                   <Send className="size-4" /> Send
                 </Button>
               </div>
@@ -875,19 +1415,46 @@ function InboxShowcase() {
             <div key={msg.sender}>
               <Sheet>
                 <SheetTrigger className="w-full text-left">
-                  <div className={cn("flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer", msg.unread && "bg-muted/30")}>
+                  <div
+                    className={cn(
+                      "flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer",
+                      msg.unread && "bg-muted/30",
+                    )}
+                  >
                     <Avatar className="size-8 mt-0.5">
-                      <AvatarFallback className="text-xs">{msg.initials}</AvatarFallback>
+                      <AvatarFallback className="text-xs">
+                        {msg.initials}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className={cn("text-sm", msg.unread && "font-semibold")}>{msg.sender}</span>
-                        <span className="text-xs text-muted-foreground">{msg.time}</span>
+                        <span
+                          className={cn(
+                            "text-sm",
+                            msg.unread && "font-semibold",
+                          )}
+                        >
+                          {msg.sender}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {msg.time}
+                        </span>
                       </div>
-                      <p className={cn("text-sm", msg.unread ? "font-medium" : "text-muted-foreground")}>{msg.subject}</p>
-                      <p className="text-xs text-muted-foreground truncate">{msg.preview}</p>
+                      <p
+                        className={cn(
+                          "text-sm",
+                          msg.unread ? "font-medium" : "text-muted-foreground",
+                        )}
+                      >
+                        {msg.subject}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {msg.preview}
+                      </p>
                     </div>
-                    {msg.unread && <div className="size-2 rounded-full bg-primary mt-2 shrink-0" />}
+                    {msg.unread && (
+                      <div className="size-2 rounded-full bg-primary mt-2 shrink-0" />
+                    )}
                   </div>
                 </SheetTrigger>
                 <SheetContent>
@@ -898,12 +1465,17 @@ function InboxShowcase() {
                   <div className="py-6 space-y-4">
                     <h4 className="font-medium">{msg.subject}</h4>
                     <p className="text-sm text-muted-foreground">
-                      {msg.preview} Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                      {msg.preview} Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua.
                     </p>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm"><Reply className="size-4" /> Reply</Button>
-                      <Button variant="outline" size="sm"><Archive className="size-4" /> Archive</Button>
+                      <Button variant="outline" size="sm">
+                        <Reply className="size-4" /> Reply
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Archive className="size-4" /> Archive
+                      </Button>
                     </div>
                   </div>
                 </SheetContent>
@@ -914,13 +1486,13 @@ function InboxShowcase() {
         </div>
       </ScrollArea>
     </Showcase>
-  )
+  );
 }
 
 function ComponentsShowcase() {
-  const [collapsibleOpen, setCollapsibleOpen] = useState(false)
-  const [sliderValue, setSliderValue] = useState(40)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
+  const [sliderValue, setSliderValue] = useState(40);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap gap-12">
@@ -941,7 +1513,9 @@ function ComponentsShowcase() {
           <Button size="sm">Small</Button>
           <Button size="default">Default</Button>
           <Button size="lg">Large</Button>
-          <Button size="icon"><Star /></Button>
+          <Button size="icon">
+            <Star />
+          </Button>
         </Preview>
         <Preview label="Combos">
           <Card variant="secondary" className="flex-row items-center gap-3 p-4">
@@ -1018,9 +1592,24 @@ function ComponentsShowcase() {
         <div className="max-w-sm space-y-3">
           <ValidatedInputDemo />
           <div className="space-y-2">
-            <ValidatedInput inputSize="lg" status="checking" defaultValue="checking" readOnly />
-            <ValidatedInput inputSize="lg" status="valid" defaultValue="available" readOnly />
-            <ValidatedInput inputSize="lg" status="invalid" defaultValue="taken" readOnly />
+            <ValidatedInput
+              inputSize="lg"
+              status="checking"
+              defaultValue="checking"
+              readOnly
+            />
+            <ValidatedInput
+              inputSize="lg"
+              status="valid"
+              defaultValue="available"
+              readOnly
+            />
+            <ValidatedInput
+              inputSize="lg"
+              status="invalid"
+              defaultValue="taken"
+              readOnly
+            />
           </div>
         </div>
       </Section>
@@ -1046,7 +1635,10 @@ function ComponentsShowcase() {
       <Section title="Textarea">
         <div className="max-w-md space-y-2">
           <Label htmlFor="demo-textarea">Message</Label>
-          <Textarea id="demo-textarea" placeholder="Type your message here..." />
+          <Textarea
+            id="demo-textarea"
+            placeholder="Type your message here..."
+          />
         </div>
       </Section>
 
@@ -1063,7 +1655,9 @@ function ComponentsShowcase() {
           </div>
           <div className="flex items-center gap-2">
             <Checkbox id="check-3" disabled />
-            <Label htmlFor="check-3" className="text-muted-foreground">Disabled</Label>
+            <Label htmlFor="check-3" className="text-muted-foreground">
+              Disabled
+            </Label>
           </div>
         </div>
       </Section>
@@ -1103,14 +1697,24 @@ function ComponentsShowcase() {
       {/* Toggle */}
       <Section title="Toggle" wide>
         <Preview label="Variants">
-          <Toggle aria-label="Bold"><Bold /></Toggle>
-          <Toggle variant="outline" aria-label="Italic"><Italic /></Toggle>
+          <Toggle aria-label="Bold">
+            <Bold />
+          </Toggle>
+          <Toggle variant="outline" aria-label="Italic">
+            <Italic />
+          </Toggle>
         </Preview>
         <Preview label="Toggle Group">
           <ToggleGroup type="multiple">
-            <ToggleGroupItem value="bold" aria-label="Bold"><Bold /></ToggleGroupItem>
-            <ToggleGroupItem value="italic" aria-label="Italic"><Italic /></ToggleGroupItem>
-            <ToggleGroupItem value="underline" aria-label="Underline"><Underline /></ToggleGroupItem>
+            <ToggleGroupItem value="bold" aria-label="Bold">
+              <Bold />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="italic" aria-label="Italic">
+              <Italic />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="underline" aria-label="Underline">
+              <Underline />
+            </ToggleGroupItem>
           </ToggleGroup>
         </Preview>
       </Section>
@@ -1118,7 +1722,12 @@ function ComponentsShowcase() {
       {/* Slider */}
       <Section title="Slider">
         <div className="max-w-sm space-y-2">
-          <Slider value={sliderValue} onValueChange={setSliderValue} max={100} step={1} />
+          <Slider
+            value={sliderValue}
+            onValueChange={setSliderValue}
+            max={100}
+            step={1}
+          />
           <p className="text-xs text-muted-foreground">Value: {sliderValue}</p>
         </div>
       </Section>
@@ -1148,13 +1757,18 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
-
       {/* Avatar */}
       <Section title="Avatar">
         <Preview>
-          <Avatar><AvatarFallback>FL</AvatarFallback></Avatar>
-          <Avatar><AvatarFallback>UI</AvatarFallback></Avatar>
-          <Avatar><AvatarFallback>KU</AvatarFallback></Avatar>
+          <Avatar>
+            <AvatarFallback>FL</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>UI</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>KU</AvatarFallback>
+          </Avatar>
         </Preview>
       </Section>
 
@@ -1167,7 +1781,9 @@ function ComponentsShowcase() {
               <CardDescription>bg-background</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Primary surface. Used for main content areas.</p>
+              <p className="text-sm text-muted-foreground">
+                Primary surface. Used for main content areas.
+              </p>
             </CardContent>
           </Card>
           <Card variant="secondary">
@@ -1176,7 +1792,9 @@ function ComponentsShowcase() {
               <CardDescription>bg-secondary</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Elevated surface. Used for cards and panels.</p>
+              <p className="text-sm text-muted-foreground">
+                Elevated surface. Used for cards and panels.
+              </p>
             </CardContent>
           </Card>
           <Card variant="muted">
@@ -1185,7 +1803,9 @@ function ComponentsShowcase() {
               <CardDescription>bg-muted</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Subtle surface. Used for background sections.</p>
+              <p className="text-sm text-muted-foreground">
+                Subtle surface. Used for background sections.
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -1199,13 +1819,22 @@ function ComponentsShowcase() {
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
-          <TabsContent value="overview" className="text-sm text-muted-foreground pt-2">
+          <TabsContent
+            value="overview"
+            className="text-sm text-muted-foreground pt-2"
+          >
             Overview content goes here.
           </TabsContent>
-          <TabsContent value="analytics" className="text-sm text-muted-foreground pt-2">
+          <TabsContent
+            value="analytics"
+            className="text-sm text-muted-foreground pt-2"
+          >
             Analytics content goes here.
           </TabsContent>
-          <TabsContent value="settings" className="text-sm text-muted-foreground pt-2">
+          <TabsContent
+            value="settings"
+            className="text-sm text-muted-foreground pt-2"
+          >
             Settings content goes here.
           </TabsContent>
         </Tabs>
@@ -1213,23 +1842,29 @@ function ComponentsShowcase() {
 
       {/* Accordion */}
       <Section title="Accordion" wide>
-        <Accordion  className="max-w-md">
+        <Accordion className="max-w-md">
           <AccordionItem value="item-1">
             <AccordionTrigger>What is Flow UI?</AccordionTrigger>
             <AccordionContent>
-              A shared design system and component library for Flow applications, published as @flow-industries/ui.
+              A shared design system and component library for Flow
+              applications, published as @flow-industries/ui.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
             <AccordionTrigger>How do I install it?</AccordionTrigger>
             <AccordionContent>
-              Run <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">bun add @flow-industries/ui</code> in your project.
+              Run{" "}
+              <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">
+                bun add @flow-industries/ui
+              </code>{" "}
+              in your project.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
             <AccordionTrigger>Does it ship pre-built?</AccordionTrigger>
             <AccordionContent>
-              No, it ships raw TypeScript source. Your Vite + Tailwind pipeline compiles it at build time.
+              No, it ships raw TypeScript source. Your Vite + Tailwind pipeline
+              compiles it at build time.
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -1237,7 +1872,11 @@ function ComponentsShowcase() {
 
       {/* Collapsible */}
       <Section title="Collapsible">
-        <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="max-w-sm space-y-2">
+        <Collapsible
+          open={collapsibleOpen}
+          onOpenChange={setCollapsibleOpen}
+          className="max-w-sm space-y-2"
+        >
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">3 items</span>
             <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
@@ -1246,8 +1885,12 @@ function ComponentsShowcase() {
           </div>
           <div className="rounded-md border px-4 py-2 text-sm">First item</div>
           <CollapsibleContent className="space-y-2">
-            <div className="rounded-md border px-4 py-2 text-sm">Second item</div>
-            <div className="rounded-md border px-4 py-2 text-sm">Third item</div>
+            <div className="rounded-md border px-4 py-2 text-sm">
+              Second item
+            </div>
+            <div className="rounded-md border px-4 py-2 text-sm">
+              Third item
+            </div>
           </CollapsibleContent>
         </Collapsible>
       </Section>
@@ -1267,17 +1910,23 @@ function ComponentsShowcase() {
               <TableRow>
                 <TableCell className="font-medium">game</TableCell>
                 <TableCell>GDScript, Godot</TableCell>
-                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="outline">Active</Badge>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">auth</TableCell>
                 <TableCell>TypeScript, Hono</TableCell>
-                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="outline">Active</Badge>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">site</TableCell>
                 <TableCell>TypeScript, React</TableCell>
-                <TableCell className="text-right"><Badge variant="outline">Active</Badge></TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="outline">Active</Badge>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -1288,11 +1937,15 @@ function ComponentsShowcase() {
       <Section title="Dialog">
         <Preview>
           <Dialog>
-            <DialogTrigger render={<Button variant="outline" />}>Open Dialog</DialogTrigger>
+            <DialogTrigger render={<Button variant="outline" />}>
+              Open Dialog
+            </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
-                <DialogDescription>Make changes to your profile here.</DialogDescription>
+                <DialogDescription>
+                  Make changes to your profile here.
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
@@ -1301,7 +1954,9 @@ function ComponentsShowcase() {
                 </div>
               </div>
               <DialogFooter>
-                <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+                <DialogClose render={<Button variant="outline" />}>
+                  Cancel
+                </DialogClose>
                 <Button>Save</Button>
               </DialogFooter>
             </DialogContent>
@@ -1313,11 +1968,16 @@ function ComponentsShowcase() {
       <Section title="Alert Dialog">
         <Preview>
           <AlertDialog>
-            <AlertDialogTrigger render={<Button variant="destructive" />}><Trash2 /> Delete Account</AlertDialogTrigger>
+            <AlertDialogTrigger render={<Button variant="destructive" />}>
+              <Trash2 /> Delete Account
+            </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>This action cannot be undone. This will permanently delete your account.</AlertDialogDescription>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account.
+                </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -1332,11 +1992,15 @@ function ComponentsShowcase() {
       <Section title="Sheet">
         <Preview>
           <Sheet>
-            <SheetTrigger render={<Button variant="outline" />}>Open Sheet</SheetTrigger>
+            <SheetTrigger render={<Button variant="outline" />}>
+              Open Sheet
+            </SheetTrigger>
             <SheetContent>
               <SheetHeader>
                 <SheetTitle>Settings</SheetTitle>
-                <SheetDescription>Manage your preferences here.</SheetDescription>
+                <SheetDescription>
+                  Manage your preferences here.
+                </SheetDescription>
               </SheetHeader>
               <div className="py-6 space-y-4">
                 <div className="flex items-center justify-between">
@@ -1358,15 +2022,21 @@ function ComponentsShowcase() {
       <Section title="Drawer">
         <Preview>
           <Drawer>
-            <DrawerTrigger render={<Button variant="outline" />}>Open Drawer</DrawerTrigger>
+            <DrawerTrigger render={<Button variant="outline" />}>
+              Open Drawer
+            </DrawerTrigger>
             <DrawerContent>
               <div className="mx-auto w-full max-w-sm">
                 <DrawerHeader>
                   <DrawerTitle>Move Goal</DrawerTitle>
-                  <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                  <DrawerDescription>
+                    Set your daily activity goal.
+                  </DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4">
-                  <div className="flex items-center justify-center text-4xl font-bold py-8">350</div>
+                  <div className="flex items-center justify-center text-4xl font-bold py-8">
+                    350
+                  </div>
                 </div>
               </div>
             </DrawerContent>
@@ -1378,7 +2048,9 @@ function ComponentsShowcase() {
       <Section title="Popover">
         <Preview>
           <Popover>
-            <PopoverTrigger render={<Button variant="outline" />}>Open Popover</PopoverTrigger>
+            <PopoverTrigger render={<Button variant="outline" />}>
+              Open Popover
+            </PopoverTrigger>
             <PopoverContent className="w-64">
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Dimensions</h4>
@@ -1402,13 +2074,19 @@ function ComponentsShowcase() {
       <Section title="Hover Card">
         <Preview>
           <HoverCard>
-            <HoverCardTrigger render={<Button variant="link" />}>@flow-industries</HoverCardTrigger>
+            <HoverCardTrigger render={<Button variant="link" />}>
+              @flow-industries
+            </HoverCardTrigger>
             <HoverCardContent className="w-64">
               <div className="flex gap-3">
-                <Avatar><AvatarFallback>FL</AvatarFallback></Avatar>
+                <Avatar>
+                  <AvatarFallback>FL</AvatarFallback>
+                </Avatar>
                 <div className="space-y-1">
                   <h4 className="text-sm font-medium">Flow Industries</h4>
-                  <p className="text-xs text-muted-foreground">Building the future of decentralized identity and gaming.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Building the future of decentralized identity and gaming.
+                  </p>
                 </div>
               </div>
             </HoverCardContent>
@@ -1420,8 +2098,12 @@ function ComponentsShowcase() {
       <Section title="Tooltip">
         <Preview>
           <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Hover me</TooltipTrigger>
-            <TooltipContent><p>This is a tooltip</p></TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>
+              Hover me
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>This is a tooltip</p>
+            </TooltipContent>
           </Tooltip>
         </Preview>
       </Section>
@@ -1430,17 +2112,30 @@ function ComponentsShowcase() {
       <Section title="Dropdown Menu">
         <Preview>
           <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" />}>Options</DropdownMenuTrigger>
+            <DropdownMenuTrigger render={<Button variant="outline" />}>
+              Options
+            </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><User /> Profile <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><CreditCard /> Billing <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut></DropdownMenuItem>
-                <DropdownMenuItem><Settings /> Settings <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut></DropdownMenuItem>
+                <DropdownMenuItem>
+                  <User /> Profile{" "}
+                  <DropdownMenuShortcut>&#8984;P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard /> Billing{" "}
+                  <DropdownMenuShortcut>&#8984;B</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings /> Settings{" "}
+                  <DropdownMenuShortcut>&#8984;S</DropdownMenuShortcut>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive"><LogOut /> Log out</DropdownMenuItem>
+              <DropdownMenuItem variant="destructive">
+                <LogOut /> Log out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </Preview>
@@ -1469,17 +2164,27 @@ function ComponentsShowcase() {
           <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>New <MenubarShortcut>&#8984;N</MenubarShortcut></MenubarItem>
-              <MenubarItem>Open <MenubarShortcut>&#8984;O</MenubarShortcut></MenubarItem>
+              <MenubarItem>
+                New <MenubarShortcut>&#8984;N</MenubarShortcut>
+              </MenubarItem>
+              <MenubarItem>
+                Open <MenubarShortcut>&#8984;O</MenubarShortcut>
+              </MenubarItem>
               <MenubarSep />
-              <MenubarItem>Save <MenubarShortcut>&#8984;S</MenubarShortcut></MenubarItem>
+              <MenubarItem>
+                Save <MenubarShortcut>&#8984;S</MenubarShortcut>
+              </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
             <MenubarTrigger>Edit</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>Undo <MenubarShortcut>&#8984;Z</MenubarShortcut></MenubarItem>
-              <MenubarItem>Redo <MenubarShortcut>&#8679;&#8984;Z</MenubarShortcut></MenubarItem>
+              <MenubarItem>
+                Undo <MenubarShortcut>&#8984;Z</MenubarShortcut>
+              </MenubarItem>
+              <MenubarItem>
+                Redo <MenubarShortcut>&#8679;&#8984;Z</MenubarShortcut>
+              </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
@@ -1513,11 +2218,17 @@ function ComponentsShowcase() {
       <Section title="Breadcrumb">
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Home</BreadcrumbLink>
+            </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem><BreadcrumbLink href="#">Products</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="#">Products</BreadcrumbLink>
+            </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem><BreadcrumbPage>Current Page</BreadcrumbPage></BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current Page</BreadcrumbPage>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </Section>
@@ -1526,23 +2237,55 @@ function ComponentsShowcase() {
       <Section title="Pagination">
         <Pagination>
           <PaginationContent>
-            <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
-            <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-            <PaginationItem><PaginationEllipsis /></PaginationItem>
-            <PaginationItem><PaginationNext href="#" /></PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">2</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
       </Section>
 
-
       {/* Sonner / Toast */}
       <Section title="Sonner / Toast">
         <Preview>
-          <Button variant="outline" onClick={() => toast("Event has been created", { description: "Monday, January 1st at 9:00 AM" })}>Show Toast</Button>
-          <Button variant="outline" onClick={() => toast.success("Successfully saved!")}>Success</Button>
-          <Button variant="outline" onClick={() => toast.error("Something went wrong")}>Error</Button>
+          <Button
+            variant="outline"
+            onClick={() =>
+              toast("Event has been created", {
+                description: "Monday, January 1st at 9:00 AM",
+              })
+            }
+          >
+            Show Toast
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => toast.success("Successfully saved!")}
+          >
+            Success
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => toast.error("Something went wrong")}
+          >
+            Error
+          </Button>
         </Preview>
       </Section>
 
@@ -1552,7 +2295,9 @@ function ComponentsShowcase() {
           <Empty>
             <EmptyHeader>
               <EmptyTitle>No results</EmptyTitle>
-              <EmptyDesc>Try adjusting your search to find what you're looking for.</EmptyDesc>
+              <EmptyDesc>
+                Try adjusting your search to find what you're looking for.
+              </EmptyDesc>
             </EmptyHeader>
           </Empty>
         </div>
@@ -1563,7 +2308,10 @@ function ComponentsShowcase() {
         <ScrollArea className="h-48 w-64 rounded-md border p-4">
           <div className="space-y-4">
             {Array.from({ length: 20 }, (_, i) => (
-              <div key={i} className="text-sm">Item {i + 1}</div>
+              // biome-ignore lint/suspicious/noArrayIndexKey: static generated list, index is the identity
+              <div key={i} className="text-sm">
+                Item {i + 1}
+              </div>
             ))}
           </div>
         </ScrollArea>
@@ -1571,13 +2319,20 @@ function ComponentsShowcase() {
 
       {/* Resizable */}
       <Section title="Resizable" wide>
-        <ResizablePanelGroup direction="horizontal" className="max-w-md rounded-lg border">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="max-w-md rounded-lg border"
+        >
           <ResizablePanel defaultSize={50}>
-            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Left</div>
+            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
+              Left
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50}>
-            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">Right</div>
+            <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
+              Right
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </Section>
@@ -1585,7 +2340,10 @@ function ComponentsShowcase() {
       {/* Aspect Ratio */}
       <Section title="Aspect Ratio">
         <div className="max-w-xs">
-          <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg flex items-center justify-center">
+          <AspectRatio
+            ratio={16 / 9}
+            className="bg-muted rounded-lg flex items-center justify-center"
+          >
             <ImageIcon className="size-8 text-muted-foreground" />
           </AspectRatio>
         </div>
@@ -1598,7 +2356,9 @@ function ComponentsShowcase() {
             <CarouselContent>
               {[1, 2, 3, 4, 5].map((i) => (
                 <CarouselItem key={i}>
-                  <div className="flex aspect-square items-center justify-center rounded-lg border bg-secondary text-2xl font-medium">{i}</div>
+                  <div className="flex aspect-square items-center justify-center rounded-lg border bg-secondary text-2xl font-medium">
+                    {i}
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -1633,7 +2393,9 @@ function ComponentsShowcase() {
         <div className="max-w-sm space-y-1">
           <p className="text-sm font-medium">Flow Industries</p>
           <Separator />
-          <p className="text-sm text-muted-foreground">Design system and component library.</p>
+          <p className="text-sm text-muted-foreground">
+            Design system and component library.
+          </p>
         </div>
       </Section>
 
@@ -1642,9 +2404,15 @@ function ComponentsShowcase() {
         <NavList>
           <NavListGroup>
             <NavListHeader>Products</NavListHeader>
-            <NavListItem href="#"><Logo size={14} /> Flow Game</NavListItem>
-            <NavListItem href="#"><Logo size={14} /> Flow ID</NavListItem>
-            <NavListItem href="#"><Logo size={14} /> Flow Talk</NavListItem>
+            <NavListItem href="#">
+              <Logo size={14} /> Flow Game
+            </NavListItem>
+            <NavListItem href="#">
+              <Logo size={14} /> Flow ID
+            </NavListItem>
+            <NavListItem href="#">
+              <Logo size={14} /> Flow Talk
+            </NavListItem>
           </NavListGroup>
           <NavListGroup>
             <NavListHeader>Resources</NavListHeader>
@@ -1662,7 +2430,11 @@ function ComponentsShowcase() {
       {/* Sidebar */}
       <Section title="Sidebar" wide>
         <Preview>
-          <Button variant="outline" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
             {sidebarOpen ? "Collapse" : "Expand"} Sidebar
           </Button>
         </Preview>
@@ -1672,7 +2444,9 @@ function ComponentsShowcase() {
               <SidebarHeader>
                 <div className="flex items-center gap-2 px-2 py-1">
                   <div className="size-6 shrink-0 rounded-md bg-primary" />
-                  <span className="text-sm font-medium tracking-tighter group-data-[collapsible=icon]:hidden">Acme Inc</span>
+                  <span className="text-sm font-medium tracking-tighter group-data-[collapsible=icon]:hidden">
+                    Acme Inc
+                  </span>
                 </div>
               </SidebarHeader>
               <SidebarContent>
@@ -1700,14 +2474,16 @@ function ComponentsShowcase() {
                   <SidebarGroupLabel>Projects</SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
-                      {["Design System", "Marketing Site", "Mobile App"].map((project) => (
-                        <SidebarMenuItem key={project}>
-                          <SidebarMenuButton>
-                            <FileText />
-                            <span>{project}</span>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
+                      {["Design System", "Marketing Site", "Mobile App"].map(
+                        (project) => (
+                          <SidebarMenuItem key={project}>
+                            <SidebarMenuButton>
+                              <FileText />
+                              <span>{project}</span>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ),
+                      )}
                     </SidebarMenu>
                   </SidebarGroupContent>
                 </SidebarGroup>
@@ -1730,7 +2506,9 @@ function ComponentsShowcase() {
                 <span className="text-sm text-muted-foreground">Dashboard</span>
               </div>
               <div className="flex-1 p-4">
-                <p className="text-sm text-muted-foreground">Main content area</p>
+                <p className="text-sm text-muted-foreground">
+                  Main content area
+                </p>
               </div>
             </SidebarInset>
           </SidebarProvider>
@@ -1778,35 +2556,50 @@ function ComponentsShowcase() {
       {/* Time */}
       <Section title="Time">
         <Preview label="TimeElapsed — relative until 3 weeks, then formatted date">
-          <span className="text-sm">5m ago: <TimeElapsed date={new Date(Date.now() - 5 * 60_000)} /></span>
-          <span className="text-sm">2h ago: <TimeElapsed date={new Date(Date.now() - 2 * 60 * 60_000)} /></span>
-          <span className="text-sm">3d ago: <TimeElapsed date={new Date(Date.now() - 3 * 24 * 60 * 60_000)} /></span>
-          <span className="text-sm">2mo ago: <TimeElapsed date={new Date(Date.now() - 60 * 24 * 60 * 60_000)} /></span>
+          <span className="text-sm">
+            5m ago: <TimeElapsed date={new Date(Date.now() - 5 * 60_000)} />
+          </span>
+          <span className="text-sm">
+            2h ago:{" "}
+            <TimeElapsed date={new Date(Date.now() - 2 * 60 * 60_000)} />
+          </span>
+          <span className="text-sm">
+            3d ago:{" "}
+            <TimeElapsed date={new Date(Date.now() - 3 * 24 * 60 * 60_000)} />
+          </span>
+          <span className="text-sm">
+            2mo ago:{" "}
+            <TimeElapsed date={new Date(Date.now() - 60 * 24 * 60 * 60_000)} />
+          </span>
         </Preview>
         <Preview label="TimeSince — fixed month + year">
-          <span className="text-sm"><TimeSince date={new Date(2024, 5, 12)} /></span>
-          <span className="text-sm"><TimeSince date={new Date(2025, 11, 1)} /></span>
+          <span className="text-sm">
+            <TimeSince date={new Date(2024, 5, 12)} />
+          </span>
+          <span className="text-sm">
+            <TimeSince date={new Date(2025, 11, 1)} />
+          </span>
         </Preview>
       </Section>
     </div>
-  )
+  );
 }
 
 function ValidatedInputDemo() {
-  const [value, setValue] = useState("")
-  const [status, setStatus] = useState<ValidationStatus>("idle")
+  const [value, setValue] = useState("");
+  const [status, setStatus] = useState<ValidationStatus>("idle");
 
   useEffect(() => {
     if (value.length === 0) {
-      setStatus("idle")
-      return
+      setStatus("idle");
+      return;
     }
-    setStatus("checking")
+    setStatus("checking");
     const t = setTimeout(() => {
-      setStatus(value.toLowerCase() === "taken" ? "invalid" : "valid")
-    }, 700)
-    return () => clearTimeout(t)
-  }, [value])
+      setStatus(value.toLowerCase() === "taken" ? "invalid" : "valid");
+    }, 700);
+    return () => clearTimeout(t);
+  }, [value]);
 
   return (
     <ValidatedInput
@@ -1816,12 +2609,12 @@ function ValidatedInputDemo() {
       onChange={(e) => setValue(e.target.value)}
       status={status}
     />
-  )
+  );
 }
 
 function DissolveDemo() {
-  const [hovered, setHovered] = useState(false)
-  const filterId = "dissolve-demo"
+  const [hovered, setHovered] = useState(false);
+  const filterId = "dissolve-demo";
   return (
     <>
       <DissolveFilter filterId={filterId} />
@@ -1838,457 +2631,620 @@ function DissolveDemo() {
         Hover to dissolve
       </button>
     </>
-  )
+  );
 }
 
 function useHashRoute() {
-  const [page, setPage] = useState(() => window.location.hash.slice(1) || "design")
+  const [page, setPage] = useState(
+    () => window.location.hash.slice(1) || "design",
+  );
 
   useEffect(() => {
     const onHashChange = () => {
-      setPage(window.location.hash.slice(1) || "design")
-      window.scrollTo({ top: 0, behavior: "instant" })
-    }
-    window.addEventListener("hashchange", onHashChange)
-    return () => window.removeEventListener("hashchange", onHashChange)
-  }, [])
+      setPage(window.location.hash.slice(1) || "design");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
-  return page
+  return page;
 }
 
 export function App() {
-  const page = useHashRoute()
-  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"))
+  const page = useHashRoute();
+  const [dark, setDark] = useState(() =>
+    document.documentElement.classList.contains("dark"),
+  );
 
   const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark")
-    setDark((d) => !d)
-  }
+    document.documentElement.classList.toggle("dark");
+    setDark((d) => !d);
+  };
 
   return (
     <ToastProvider>
-    <TooltipProvider>
-      <div className="min-h-screen">
-        <header className="flex items-center justify-between px-6 md:px-12 py-8">
-          <Logomark start="Flow" end="UI" />
-          <a
-            href="https://github.com/flow-industries/ui"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <GitHubIcon className="w-5 h-5" />
-          </a>
-        </header>
+      <TooltipProvider>
+        <div className="min-h-screen">
+          <header className="flex items-center justify-between px-6 md:px-12 py-8">
+            <Logomark start="Flow" end="UI" />
+            <a
+              href="https://github.com/flow-industries/ui"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <GitHubIcon className="w-5 h-5" />
+            </a>
+          </header>
 
-        <Dock
-          size="md"
-          className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
-          items={[
-            ...([
-              { hash: "design", icon: Type, label: "Design System" },
-              { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
-              { hash: "components", icon: Component, label: "Components" },
-            ] as const).map(({ hash, icon, label }) => ({
-              icon,
-              label,
-              isActive: page === hash,
-              onClick: () => {
-                window.location.hash = hash
+          <Dock
+            size="md"
+            className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
+            items={[
+              ...(
+                [
+                  { hash: "design", icon: Type, label: "Design System" },
+                  { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
+                  { hash: "components", icon: Component, label: "Components" },
+                ] as const
+              ).map(({ hash, icon, label }) => ({
+                icon,
+                label,
+                isActive: page === hash,
+                onClick: () => {
+                  window.location.hash = hash;
+                },
+              })),
+              {
+                label: dark ? "Light mode" : "Dark mode",
+                customIcon: dark ? (
+                  <Sun className="size-5" />
+                ) : (
+                  <Moon className="size-5" />
+                ),
+                onClick: toggleTheme,
               },
-            })),
-            {
-              label: dark ? "Light mode" : "Dark mode",
-              customIcon: dark ? <Sun className="size-5" /> : <Moon className="size-5" />,
-              onClick: toggleTheme,
-            },
-          ]}
-        />
+            ]}
+          />
 
-        <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
-          {/* Hero */}
-          <div className="space-y-3 w-full">
-            <Title size="lg">@flow-industries/ui</Title>
-            <Subtitle size="lg">Shared design system and component library for Flow applications.</Subtitle>
-            <Mono>bun add @flow-industries/ui</Mono>
-          </div>
-
-          {page === "design" && (
-            <div className="flex flex-col gap-12">
-
-          {/* Palette */}
-          <Section title="Palette" wide>
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <p className="text-xs text-muted-foreground">Hues</p>
-                <div className="flex flex-wrap gap-3">
-                  {hues.map((hue) => (
-                    <HueGroup key={hue.name} hue={hue} />
-                  ))}
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-12">
-                <ColorRow label="Semantic" colors={palette.semantic} />
-              </div>
+          <main className="px-6 md:px-12 py-12 max-w-5xl mx-auto flex flex-col gap-12">
+            {/* Hero */}
+            <div className="space-y-3 w-full">
+              <Title size="lg">@flow-industries/ui</Title>
+              <Subtitle size="lg">
+                Shared design system and component library for Flow
+                applications.
+              </Subtitle>
+              <Mono>bun add @flow-industries/ui</Mono>
             </div>
-          </Section>
 
-          {/* Usage */}
-          <div className="w-full bg-secondary rounded-xl p-6 space-y-4">
-            <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">Usage</h2>
-            <CodeBlock
-              label="Import a component"
-              code={`import { Button } from "@flow-industries/ui/components/button"\nimport { Card, CardContent } from "@flow-industries/ui/components/card"\nimport { toast } from "@flow-industries/ui/components/toast"`}
-            />
-            <CodeBlock
-              label="Import utilities"
-              code={`import { cn } from "@flow-industries/ui"`}
-            />
-            <CodeBlock
-              label="Import styles"
-              code={`@import "@flow-industries/ui/styles/tokens.css";\n@import "@flow-industries/ui/styles/base.css";`}
-            />
-          </div>
-
-          {/* Typography */}
-          <Section title="Typography" wide>
-            <div className="flex flex-wrap gap-12">
-              {/* Fonts */}
-              <div className="space-y-3 w-full">
-                <p className="text-xs text-muted-foreground">Fonts</p>
-                <div className="grid grid-cols-1 gap-6">
-                  <div className="space-y-3 rounded-xl bg-secondary p-5">
-                    <div>
-                      <p className="text-2xl font-normal">Geist Sans</p>
-                      <p className="text-xs text-muted-foreground font-mono mt-1">font-sans</p>
+            {page === "design" && (
+              <div className="flex flex-col gap-12">
+                {/* Palette */}
+                <Section title="Palette" wide>
+                  <div className="space-y-6">
+                    <div className="space-y-3">
+                      <p className="text-xs text-muted-foreground">Hues</p>
+                      <div className="flex flex-wrap gap-3">
+                        {hues.map((hue) => (
+                          <HueGroup key={hue.name} hue={hue} />
+                        ))}
+                      </div>
                     </div>
-                    <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl">
-                      {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
-                        <span key={pair}>{pair}</span>
-                      ))}
+                    <div className="flex flex-wrap gap-12">
+                      <ColorRow label="Semantic" colors={palette.semantic} />
                     </div>
-                    <table className="w-full text-xs text-muted-foreground">
-                      <tbody>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Neo-grotesque sans-serif</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Weights</td><td>100–900 (variable)</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
-                      </tbody>
-                    </table>
                   </div>
-                  <div className="space-y-3 rounded-xl bg-secondary p-5">
-                    <div>
-                      <p className="text-2xl font-normal font-mono">Geist Mono</p>
-                      <p className="text-xs text-muted-foreground font-mono mt-1">font-mono</p>
+                </Section>
+
+                {/* Usage */}
+                <div className="w-full bg-secondary rounded-xl p-6 space-y-4">
+                  <h2 className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
+                    Usage
+                  </h2>
+                  <CodeBlock
+                    label="Import a component"
+                    code={`import { Button } from "@flow-industries/ui/components/button"\nimport { Card, CardContent } from "@flow-industries/ui/components/card"\nimport { toast } from "@flow-industries/ui/components/toast"`}
+                  />
+                  <CodeBlock
+                    label="Import utilities"
+                    code={`import { cn } from "@flow-industries/ui"`}
+                  />
+                  <CodeBlock
+                    label="Import styles"
+                    code={`@import "@flow-industries/ui/styles/tokens.css";\n@import "@flow-industries/ui/styles/base.css";`}
+                  />
+                </div>
+
+                {/* Typography */}
+                <Section title="Typography" wide>
+                  <div className="flex flex-wrap gap-12">
+                    {/* Fonts */}
+                    <div className="space-y-3 w-full">
+                      <p className="text-xs text-muted-foreground">Fonts</p>
+                      <div className="grid grid-cols-1 gap-6">
+                        <div className="space-y-3 rounded-xl bg-secondary p-5">
+                          <div>
+                            <p className="text-2xl font-normal">Geist Sans</p>
+                            <p className="text-xs text-muted-foreground font-mono mt-1">
+                              font-sans
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl">
+                            {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+                              .match(/.{2}/g)!
+                              .map((pair) => (
+                                <span key={pair}>{pair}</span>
+                              ))}
+                          </div>
+                          <table className="w-full text-xs text-muted-foreground">
+                            <tbody>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Designed by
+                                </td>
+                                <td>Basement Studio</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Published by
+                                </td>
+                                <td>Vercel</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Classification
+                                </td>
+                                <td>Neo-grotesque sans-serif</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Weights
+                                </td>
+                                <td>100–900 (variable)</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  License
+                                </td>
+                                <td>SIL Open Font License 1.1</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="space-y-3 rounded-xl bg-secondary p-5">
+                          <div>
+                            <p className="text-2xl font-normal font-mono">
+                              Geist Mono
+                            </p>
+                            <p className="text-xs text-muted-foreground font-mono mt-1">
+                              font-mono
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl font-mono">
+                            {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+                              .match(/.{2}/g)!
+                              .map((pair) => (
+                                <span key={pair}>{pair}</span>
+                              ))}
+                          </div>
+                          <table className="w-full text-xs text-muted-foreground">
+                            <tbody>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Designed by
+                                </td>
+                                <td>Basement Studio</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Published by
+                                </td>
+                                <td>Vercel</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Classification
+                                </td>
+                                <td>Monospaced</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  Weights
+                                </td>
+                                <td>100–900 (variable)</td>
+                              </tr>
+                              <tr>
+                                <td className="py-0.5 pr-4 font-medium text-foreground">
+                                  License
+                                </td>
+                                <td>SIL Open Font License 1.1</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <PixelFontCard />
+                      </div>
                     </div>
-                    <div className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl font-mono">
-                      {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".match(/.{2}/g)!.map((pair) => (
-                        <span key={pair}>{pair}</span>
-                      ))}
+
+                    {/* Type Scale */}
+                    <div className="space-y-3 min-w-80">
+                      <p className="text-xs text-muted-foreground">
+                        Type Scale
+                      </p>
+                      <div className="space-y-2">
+                        {(
+                          [
+                            ["text-xs", "0.825rem"],
+                            ["text-sm", "0.9625rem"],
+                            ["text-base", "1.1rem"],
+                            ["text-lg", "1.2375rem"],
+                            ["text-xl", "1.375rem"],
+                            ["text-2xl", "1.65rem"],
+                            ["text-3xl", "2.0625rem"],
+                            ["text-4xl", "2.475rem"],
+                            ["text-5xl", "3.3rem"],
+                          ] as const
+                        ).map(([cls, size]) => (
+                          <div key={cls} className="flex items-baseline gap-4">
+                            <span className="text-xs text-muted-foreground font-mono w-20 shrink-0">
+                              {cls}
+                            </span>
+                            <span className={cls}>The quick brown fox</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <table className="w-full text-xs text-muted-foreground">
-                      <tbody>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Designed by</td><td>Basement Studio</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Published by</td><td>Vercel</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Classification</td><td>Monospaced</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">Weights</td><td>100–900 (variable)</td></tr>
-                        <tr><td className="py-0.5 pr-4 font-medium text-foreground">License</td><td>SIL Open Font License 1.1</td></tr>
-                      </tbody>
-                    </table>
+
+                    {/* Weights */}
+                    <div className="space-y-3">
+                      <p className="text-xs text-muted-foreground">Weights</p>
+                      <div className="space-y-2">
+                        {(
+                          [
+                            ["font-normal", "400"],
+                            ["font-medium", "500"],
+                            ["font-semibold", "600"],
+                            ["font-bold", "700"],
+                          ] as const
+                        ).map(([cls, weight]) => (
+                          <div key={cls} className="flex items-baseline gap-4">
+                            <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                              {cls}
+                            </span>
+                            <span className={`text-lg ${cls}`}>
+                              The quick brown fox
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Tracking */}
+                    <div className="space-y-3">
+                      <p className="text-xs text-muted-foreground">Tracking</p>
+                      <div className="space-y-2">
+                        {(
+                          [
+                            "tracking-tighter",
+                            "tracking-tight",
+                            "tracking-normal",
+                            "tracking-wide",
+                            "tracking-wider",
+                            "tracking-widest",
+                          ] as const
+                        ).map((cls) => (
+                          <div key={cls} className="flex items-baseline gap-4">
+                            <span className="text-xs text-muted-foreground font-mono w-36 shrink-0">
+                              {cls}
+                            </span>
+                            <span className={`text-base ${cls}`}>
+                              The quick brown fox
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <PixelFontCard />
-                </div>
-              </div>
 
-              {/* Type Scale */}
-              <div className="space-y-3 min-w-80">
-                <p className="text-xs text-muted-foreground">Type Scale</p>
-                <div className="space-y-2">
-                  {([
-                    ["text-xs", "0.825rem"],
-                    ["text-sm", "0.9625rem"],
-                    ["text-base", "1.1rem"],
-                    ["text-lg", "1.2375rem"],
-                    ["text-xl", "1.375rem"],
-                    ["text-2xl", "1.65rem"],
-                    ["text-3xl", "2.0625rem"],
-                    ["text-4xl", "2.475rem"],
-                    ["text-5xl", "3.3rem"],
-                  ] as const).map(([cls, size]) => (
-                    <div key={cls} className="flex items-baseline gap-4">
-                      <span className="text-xs text-muted-foreground font-mono w-20 shrink-0">{cls}</span>
-                      <span className={cls}>The quick brown fox</span>
+                  {/* Patterns */}
+                  <div className="space-y-3 mt-4">
+                    <p className="text-xs text-muted-foreground">Patterns</p>
+                    <div className="space-y-4 rounded-xl bg-secondary p-6">
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Title lg
+                        </span>
+                        <Title size="lg">Welcome to Flow</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Subtitle lg
+                        </span>
+                        <Subtitle size="lg">
+                          Sign in to start your journey.
+                        </Subtitle>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Title
+                        </span>
+                        <Title>Account Settings</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Subtitle
+                        </span>
+                        <Subtitle>Manage your account preferences.</Subtitle>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Title sm
+                        </span>
+                        <Title size="sm">Email address</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Subtitle sm
+                        </span>
+                        <Subtitle size="sm">Last updated 2 hours ago</Subtitle>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Overline
+                        </span>
+                        <Overline>Getting Started</Overline>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Overline Brand
+                        </span>
+                        <Overline variant="brand">Products</Overline>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                          Paragraph
+                        </span>
+                        <Paragraph>Flow Game</Paragraph>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                </Section>
 
-              {/* Weights */}
-              <div className="space-y-3">
-                <p className="text-xs text-muted-foreground">Weights</p>
-                <div className="space-y-2">
-                  {([
-                    ["font-normal", "400"],
-                    ["font-medium", "500"],
-                    ["font-semibold", "600"],
-                    ["font-bold", "700"],
-                  ] as const).map(([cls, weight]) => (
-                    <div key={cls} className="flex items-baseline gap-4">
-                      <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">{cls}</span>
-                      <span className={`text-lg ${cls}`}>The quick brown fox</span>
+                {/* Brand */}
+                <Section title="Brand" wide>
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">Logo</p>
+                      <div className="flex items-center gap-4">
+                        <Logo size={52} />
+                        <Logo size={40} />
+                        <Logo size={28} />
+                        <Logo size={20} />
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tracking */}
-              <div className="space-y-3">
-                <p className="text-xs text-muted-foreground">Tracking</p>
-                <div className="space-y-2">
-                  {([
-                    "tracking-tighter",
-                    "tracking-tight",
-                    "tracking-normal",
-                    "tracking-wide",
-                    "tracking-wider",
-                    "tracking-widest",
-                  ] as const).map((cls) => (
-                    <div key={cls} className="flex items-baseline gap-4">
-                      <span className="text-xs text-muted-foreground font-mono w-36 shrink-0">{cls}</span>
-                      <span className={`text-base ${cls}`}>The quick brown fox</span>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">Logomark</p>
+                      <div className="flex flex-col items-start gap-3">
+                        <Logomark start="Flow" end="Game" size="2xl" />
+                        <Logomark start="Flow" end="Talk" size="xl" />
+                        <Logomark start="Flow" end="Iron" size="lg" />
+                        <Logomark start="Flow" end="ID" />
+                        <Logomark start="Flow" end="UI" size="sm" />
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">Wordmark</p>
+                      <div className="flex flex-col items-start gap-3">
+                        <Wordmark start="Flow" end="Game" size="2xl" />
+                        <Wordmark start="Flow" end="Talk" size="xl" />
+                        <Wordmark start="Flow" end="Iron" size="lg" />
+                        <Wordmark start="Flow" end="ID" />
+                        <Wordmark start="Flow" end="UI" size="sm" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">Icons</p>
+                      <div className="flex items-center gap-4">
+                        <XIcon className="w-5 h-5" />
+                        <DiscordIcon className="w-5 h-5" />
+                        <GitHubIcon className="w-5 h-5" />
+                        <BlueskyIcon className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+                </Section>
               </div>
-            </div>
+            )}
 
-            {/* Patterns */}
-            <div className="space-y-3 mt-4">
-              <p className="text-xs text-muted-foreground">Patterns</p>
-              <div className="space-y-4 rounded-xl bg-secondary p-6">
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title lg</span>
-                  <Title size="lg">Welcome to Flow</Title>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle lg</span>
-                  <Subtitle size="lg">Sign in to start your journey.</Subtitle>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title</span>
-                  <Title>Account Settings</Title>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle</span>
-                  <Subtitle>Manage your account preferences.</Subtitle>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Title sm</span>
-                  <Title size="sm">Email address</Title>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Subtitle sm</span>
-                  <Subtitle size="sm">Last updated 2 hours ago</Subtitle>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Overline</span>
-                  <Overline>Getting Started</Overline>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Overline Brand</span>
-                  <Overline variant="brand">Products</Overline>
-                </div>
-                <div className="flex items-baseline gap-6">
-                  <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">Paragraph</span>
-                  <Paragraph>Flow Game</Paragraph>
-                </div>
+            {page === "showcases" && (
+              <div className="flex flex-col gap-12">
+                <AppShellShowcase />
+                <AccountSettingsShowcase />
+                <TeamMembersShowcase />
+                <VerificationFlowShowcase />
+                <MediaGalleryShowcase />
+                <InboxShowcase />
               </div>
-            </div>
-          </Section>
+            )}
 
-          {/* Brand */}
-          <Section title="Brand" wide>
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Logo</p>
-                <div className="flex items-center gap-4">
-                  <Logo size={52} />
-                  <Logo size={40} />
-                  <Logo size={28} />
-                  <Logo size={20} />
-                </div>
+            {page === "components" && <ComponentsShowcase />}
+          </main>
+
+          <Footer className="px-6 md:px-12 p-8 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl">
+            <FooterContent>
+              <NavList className="w-full justify-between">
+                <NavListGroup>
+                  <NavListHeader>Products</NavListHeader>
+                  <NavListItem href="https://flow.game">
+                    <Logomark size="default" start="Flow" end="Game" />
+                  </NavListItem>
+                  <NavListItem href="https://flow.talk">
+                    <Logomark size="default" start="Flow" end="Talk" />
+                  </NavListItem>
+                  <NavListItem href="https://id.flow.industries">
+                    <Logomark size="default" start="Flow" end="ID" />
+                  </NavListItem>
+                  <NavListItem href="https://ui.flow.industries">
+                    <Logomark size="default" start="Flow" end="UI" />
+                  </NavListItem>
+                </NavListGroup>
+                <NavListGroup>
+                  <NavListHeader>Resources</NavListHeader>
+                  <NavListItem
+                    href="https://github.com/flow-industries"
+                    target="_blank"
+                  >
+                    GitHub
+                  </NavListItem>
+                  <NavListItem
+                    href="https://discord.gg/g2JXf8t4Vg"
+                    target="_blank"
+                  >
+                    Discord
+                  </NavListItem>
+                </NavListGroup>
+              </NavList>
+            </FooterContent>
+            <FooterBottom className="flex-col items-start gap-4">
+              <div className="flex w-full items-center justify-between">
+                <FooterBrand>
+                  <a href="https://flow.industries">
+                    <Logomark size="lg" start="Flow" end="Industries" />
+                  </a>
+                </FooterBrand>
+                <FooterSocials>
+                  <FooterLink
+                    href="https://x.com/flowdotgame"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <XIcon className="w-4 h-4" />
+                  </FooterLink>
+                  <FooterLink
+                    href="https://discord.gg/g2JXf8t4Vg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <DiscordIcon className="w-5 h-5" />
+                  </FooterLink>
+                  <FooterLink
+                    href="https://github.com/flow-industries/ui"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <GitHubIcon className="w-4 h-4" />
+                  </FooterLink>
+                  <FooterLink
+                    href="https://bsky.app/profile/flow.industries"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <BlueskyIcon className="w-4 h-4" />
+                  </FooterLink>
+                </FooterSocials>
               </div>
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Logomark</p>
-                <div className="flex flex-col items-start gap-3">
-                  <Logomark start="Flow" end="Game" size="2xl" />
-                  <Logomark start="Flow" end="Talk" size="xl" />
-                  <Logomark start="Flow" end="Iron" size="lg" />
-                  <Logomark start="Flow" end="ID" />
-                  <Logomark start="Flow" end="UI" size="sm" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Wordmark</p>
-                <div className="flex flex-col items-start gap-3">
-                  <Wordmark start="Flow" end="Game" size="2xl" />
-                  <Wordmark start="Flow" end="Talk" size="xl" />
-                  <Wordmark start="Flow" end="Iron" size="lg" />
-                  <Wordmark start="Flow" end="ID" />
-                  <Wordmark start="Flow" end="UI" size="sm" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Icons</p>
-                <div className="flex items-center gap-4">
-                  <XIcon className="w-5 h-5" />
-                  <DiscordIcon className="w-5 h-5" />
-                  <GitHubIcon className="w-5 h-5" />
-                  <BlueskyIcon className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
-          </Section>
-
-            </div>
-          )}
-
-          {page === "showcases" && (
-            <div className="flex flex-col gap-12">
-              <AppShellShowcase />
-              <AccountSettingsShowcase />
-              <TeamMembersShowcase />
-              <VerificationFlowShowcase />
-              <MediaGalleryShowcase />
-              <InboxShowcase />
-
-            </div>
-          )}
-
-          {page === "components" && (
-            <ComponentsShowcase />
-          )}
-
-        </main>
-
-        <Footer className="px-6 md:px-12 p-8 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl">
-          <FooterContent>
-            <NavList className="w-full justify-between">
-              <NavListGroup>
-                <NavListHeader>Products</NavListHeader>
-                <NavListItem href="https://flow.game"><Logomark size="default" start="Flow" end="Game" /></NavListItem>
-                <NavListItem href="https://flow.talk"><Logomark size="default" start="Flow" end="Talk" /></NavListItem>
-                <NavListItem href="https://id.flow.industries"><Logomark size="default" start="Flow" end="ID" /></NavListItem>
-                <NavListItem href="https://ui.flow.industries"><Logomark size="default" start="Flow" end="UI" /></NavListItem>
-              </NavListGroup>
-              <NavListGroup>
-                <NavListHeader>Resources</NavListHeader>
-                <NavListItem href="https://github.com/flow-industries" target="_blank">GitHub</NavListItem>
-                <NavListItem href="https://discord.gg/g2JXf8t4Vg" target="_blank">Discord</NavListItem>
-              </NavListGroup>
-            </NavList>
-          </FooterContent>
-          <FooterBottom className="flex-col items-start gap-4">
-            <div className="flex w-full items-center justify-between">
-              <FooterBrand>
-                <a href="https://flow.industries"><Logomark size="lg" start="Flow" end="Industries" /></a>
-              </FooterBrand>
-              <FooterSocials>
-                <FooterLink href="https://x.com/flowdotgame" target="_blank" rel="noopener noreferrer">
-                  <XIcon className="w-4 h-4" />
-                </FooterLink>
-                <FooterLink href="https://discord.gg/g2JXf8t4Vg" target="_blank" rel="noopener noreferrer">
-                  <DiscordIcon className="w-5 h-5" />
-                </FooterLink>
-                <FooterLink href="https://github.com/flow-industries/ui" target="_blank" rel="noopener noreferrer">
-                  <GitHubIcon className="w-4 h-4" />
-                </FooterLink>
-                <FooterLink href="https://bsky.app/profile/flow.industries" target="_blank" rel="noopener noreferrer">
-                  <BlueskyIcon className="w-4 h-4" />
-                </FooterLink>
-              </FooterSocials>
-            </div>
-            <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
-          </FooterBottom>
-        </Footer>
-      </div>
-    </TooltipProvider>
+              <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
+            </FooterBottom>
+          </Footer>
+        </div>
+      </TooltipProvider>
     </ToastProvider>
-  )
+  );
 }
 
 function oklchToRgb(L: number, C: number, h: number): [number, number, number] {
-  const hRad = h * Math.PI / 180
-  const a = C * Math.cos(hRad)
-  const b = C * Math.sin(hRad)
+  const hRad = (h * Math.PI) / 180;
+  const a = C * Math.cos(hRad);
+  const b = C * Math.sin(hRad);
 
-  const l_ = L + 0.3963377774 * a + 0.2158037573 * b
-  const m_ = L - 0.1055613458 * a - 0.0638541728 * b
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b;
 
-  const l = l_ * l_ * l_
-  const m = m_ * m_ * m_
-  const s = s_ * s_ * s_
+  const l = l_ * l_ * l_;
+  const m = m_ * m_ * m_;
+  const s = s_ * s_ * s_;
 
-  const lr = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
-  const lg = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
-  const lb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+  const lr = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+  const lg = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+  const lb = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
 
-  const gamma = (c: number) => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055
-  const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v * 255)))
+  const gamma = (c: number) =>
+    c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+  const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v * 255)));
 
-  return [clamp(gamma(lr)), clamp(gamma(lg)), clamp(gamma(lb))]
+  return [clamp(gamma(lr)), clamp(gamma(lg)), clamp(gamma(lb))];
 }
 
 function parseComputedColor(computed: string): [number, number, number] {
-  const oklchMatch = computed.match(/oklch\(([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\)/)
+  const oklchMatch = computed.match(
+    /oklch\(([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\)/,
+  );
   if (oklchMatch) {
-    return oklchToRgb(parseFloat(oklchMatch[1]), parseFloat(oklchMatch[2]), parseFloat(oklchMatch[3]))
+    return oklchToRgb(
+      parseFloat(oklchMatch[1]),
+      parseFloat(oklchMatch[2]),
+      parseFloat(oklchMatch[3]),
+    );
   }
-  const rgbMatch = computed.match(/rgba?\(\s*(\d+),?\s*(\d+),?\s*(\d+)/)
+  const rgbMatch = computed.match(/rgba?\(\s*(\d+),?\s*(\d+),?\s*(\d+)/);
   if (rgbMatch) {
-    return [parseInt(rgbMatch[1]), parseInt(rgbMatch[2]), parseInt(rgbMatch[3])]
+    return [
+      parseInt(rgbMatch[1], 10),
+      parseInt(rgbMatch[2], 10),
+      parseInt(rgbMatch[3], 10),
+    ];
   }
-  return [0, 0, 0]
+  return [0, 0, 0];
 }
 
 function parseColor(computed: string) {
-  const [r, g, b] = parseComputedColor(computed)
-  const rf = r / 255, gf = g / 255, bf = b / 255
+  const [r, g, b] = parseComputedColor(computed);
+  const rf = r / 255,
+    gf = g / 255,
+    bf = b / 255;
 
-  const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase()
-  const rgb = `rgb(${r} ${g} ${b})`
+  const hex =
+    `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase();
+  const rgb = `rgb(${r} ${g} ${b})`;
 
-  const max = Math.max(rf, gf, bf), min = Math.min(rf, gf, bf)
-  const l = (max + min) / 2
-  let h = 0, s = 0
+  const max = Math.max(rf, gf, bf),
+    min = Math.min(rf, gf, bf);
+  const l = (max + min) / 2;
+  let h = 0,
+    s = 0;
   if (max !== min) {
-    const d = max - min
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-    if (max === rf) h = ((gf - bf) / d + (gf < bf ? 6 : 0)) / 6
-    else if (max === gf) h = ((bf - rf) / d + 2) / 6
-    else h = ((rf - gf) / d + 4) / 6
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === rf) h = ((gf - bf) / d + (gf < bf ? 6 : 0)) / 6;
+    else if (max === gf) h = ((bf - rf) / d + 2) / 6;
+    else h = ((rf - gf) / d + 4) / 6;
   }
-  const hsl = `hsl(${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`
+  const hsl = `hsl(${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`;
 
-  const lin = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-  const lr = lin(rf), lg = lin(gf), lb = lin(bf)
-  const ll = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb
-  const mm = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb
-  const ss = 0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb
-  const l_ = Math.cbrt(ll), m_ = Math.cbrt(mm), s_ = Math.cbrt(ss)
-  const L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_
-  const a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_
-  const bv = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_
-  const C = Math.sqrt(a * a + bv * bv)
-  let hh = Math.atan2(bv, a) * 180 / Math.PI
-  if (hh < 0) hh += 360
-  const oklch = `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${hh.toFixed(1)})`
+  const lin = (c: number) =>
+    c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  const lr = lin(rf),
+    lg = lin(gf),
+    lb = lin(bf);
+  const ll = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb;
+  const mm = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb;
+  const ss = 0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb;
+  const l_ = Math.cbrt(ll),
+    m_ = Math.cbrt(mm),
+    s_ = Math.cbrt(ss);
+  const L = 0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_;
+  const a = 1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_;
+  const bv = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_;
+  const C = Math.sqrt(a * a + bv * bv);
+  let hh = (Math.atan2(bv, a) * 180) / Math.PI;
+  if (hh < 0) hh += 360;
+  const oklch = `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${hh.toFixed(1)})`;
 
-  return { hex, rgb, hsl, oklch }
+  return { hex, rgb, hsl, oklch };
 }
-
 
 function ColorPopover({
   swatchRef,
@@ -2297,21 +3253,21 @@ function ColorPopover({
   token,
   children,
 }: {
-  swatchRef: React.RefObject<HTMLDivElement | null>
-  computedColor: string | null
-  label: string
-  token?: string
-  children: React.ReactNode
+  swatchRef: React.RefObject<HTMLDivElement | null>;
+  computedColor: string | null;
+  label: string;
+  token?: string;
+  children: React.ReactNode;
 }) {
-  const [color, setColor] = useState<string | null>(computedColor)
+  const [color, setColor] = useState<string | null>(computedColor);
 
   const handleOpen = (open: boolean) => {
     if (open && swatchRef.current) {
-      setColor(getComputedStyle(swatchRef.current).backgroundColor)
+      setColor(getComputedStyle(swatchRef.current).backgroundColor);
     }
-  }
+  };
 
-  const parsed = color ? parseColor(color) : null
+  const parsed = color ? parseColor(color) : null;
   const formats = parsed
     ? [
         { label: "HEX", value: parsed.hex },
@@ -2319,7 +3275,7 @@ function ColorPopover({
         { label: "HSL", value: parsed.hsl },
         { label: "OKLCH", value: parsed.oklch },
       ]
-    : []
+    : [];
 
   return (
     <HoverCard onOpenChange={handleOpen}>
@@ -2328,16 +3284,25 @@ function ColorPopover({
         {parsed && (
           <>
             <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-10 h-10 rounded-lg shrink-0" style={{ backgroundColor: color! }} />
+              <div
+                className="w-10 h-10 rounded-lg shrink-0"
+                style={{ backgroundColor: color! }}
+              />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{label}</span>
-                {token && <span className="text-xs text-muted-foreground font-mono">{token}</span>}
+                {token && (
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {token}
+                  </span>
+                )}
               </div>
             </div>
             <div className="space-y-1">
               {formats.map((f) => (
                 <div key={f.label} className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground w-11 shrink-0">{f.label}</span>
+                  <span className="text-xs text-muted-foreground w-11 shrink-0">
+                    {f.label}
+                  </span>
                   <CopyButton value={f.value}>{f.value}</CopyButton>
                 </div>
               ))}
@@ -2346,45 +3311,83 @@ function ColorPopover({
         )}
       </HoverCardContent>
     </HoverCard>
-  )
+  );
 }
 
-function HueGroup({ hue }: { hue: typeof hues[number] }) {
-  const darkRef = useRef<HTMLDivElement>(null)
-  const stdRef = useRef<HTMLDivElement>(null)
-  const lightRef = useRef<HTMLDivElement>(null)
+function HueGroup({ hue }: { hue: (typeof hues)[number] }) {
+  const darkRef = useRef<HTMLDivElement>(null);
+  const stdRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="flex gap-0.5">
-      <ColorPopover swatchRef={darkRef} computedColor={null} label={`${hue.fancy} Dark`} token={hue.dark.token}>
-        <HoverCardTrigger render={<button />} className="group cursor-pointer">
-          <div ref={darkRef} className={`w-16 h-16 rounded-l-xl rounded-r-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.dark.cls}`} />
+      <ColorPopover
+        swatchRef={darkRef}
+        computedColor={null}
+        label={`${hue.fancy} Dark`}
+        token={hue.dark.token}
+      >
+        <HoverCardTrigger
+          render={<button type="button" />}
+          className="group cursor-pointer"
+        >
+          <div
+            ref={darkRef}
+            className={`w-16 h-16 rounded-l-xl rounded-r-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.dark.cls}`}
+          />
         </HoverCardTrigger>
       </ColorPopover>
-      <ColorPopover swatchRef={stdRef} computedColor={null} label={hue.fancy} token={hue.std.token}>
-        <HoverCardTrigger render={<button />} className="group cursor-pointer">
-          <div ref={stdRef} className={`w-16 h-16 rounded-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.std.cls}`} />
+      <ColorPopover
+        swatchRef={stdRef}
+        computedColor={null}
+        label={hue.fancy}
+        token={hue.std.token}
+      >
+        <HoverCardTrigger
+          render={<button type="button" />}
+          className="group cursor-pointer"
+        >
+          <div
+            ref={stdRef}
+            className={`w-16 h-16 rounded-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.std.cls}`}
+          />
         </HoverCardTrigger>
       </ColorPopover>
-      <ColorPopover swatchRef={lightRef} computedColor={null} label={`${hue.fancy} Light`} token={hue.light.token}>
-        <HoverCardTrigger render={<button />} className="group cursor-pointer">
-          <div ref={lightRef} className={`w-16 h-16 rounded-r-xl rounded-l-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.light.cls}`} />
+      <ColorPopover
+        swatchRef={lightRef}
+        computedColor={null}
+        label={`${hue.fancy} Light`}
+        token={hue.light.token}
+      >
+        <HoverCardTrigger
+          render={<button type="button" />}
+          className="group cursor-pointer"
+        >
+          <div
+            ref={lightRef}
+            className={`w-16 h-16 rounded-r-xl rounded-l-sm transition-transform group-hover:scale-110 group-hover:z-10 relative ${hue.light.cls}`}
+          />
         </HoverCardTrigger>
       </ColorPopover>
     </div>
-  )
+  );
 }
 
 function ColorSwatch({ c }: { c: PaletteColor }) {
-  const swatchRef = useRef<HTMLDivElement>(null)
-  const fgRef = useRef<HTMLDivElement>(null)
-  const [fgHovered, setFgHovered] = useState(false)
+  const swatchRef = useRef<HTMLDivElement>(null);
+  const fgRef = useRef<HTMLDivElement>(null);
+  const [fgHovered, setFgHovered] = useState(false);
 
   return (
     <div className="relative">
-      <ColorPopover swatchRef={swatchRef} computedColor={null} label={c.fancy ?? c.name} token={c.token}>
+      <ColorPopover
+        swatchRef={swatchRef}
+        computedColor={null}
+        label={c.fancy ?? c.name}
+        token={c.token}
+      >
         <HoverCardTrigger
-          render={<button />}
+          render={<button type="button" />}
           className="group/bg cursor-pointer"
           onMouseEnter={() => setFgHovered(false)}
         >
@@ -2395,9 +3398,14 @@ function ColorSwatch({ c }: { c: PaletteColor }) {
         </HoverCardTrigger>
       </ColorPopover>
       {c.fg && (
-        <ColorPopover swatchRef={fgRef} computedColor={null} label={`${c.name} Foreground`} token={c.fg.token}>
+        <ColorPopover
+          swatchRef={fgRef}
+          computedColor={null}
+          label={`${c.name} Foreground`}
+          token={c.fg.token}
+        >
           <HoverCardTrigger
-            render={<button />}
+            render={<button type="button" />}
             className="group/fg absolute -bottom-1.5 -right-1.5 cursor-pointer z-10"
             onMouseEnter={() => setFgHovered(true)}
             onMouseLeave={() => setFgHovered(false)}
@@ -2410,10 +3418,16 @@ function ColorSwatch({ c }: { c: PaletteColor }) {
         </ColorPopover>
       )}
     </div>
-  )
+  );
 }
 
-function ColorRow({ label, colors }: { label: string; colors: PaletteColor[] }) {
+function ColorRow({
+  label,
+  colors,
+}: {
+  label: string;
+  colors: PaletteColor[];
+}) {
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">{label}</p>
@@ -2423,7 +3437,7 @@ function ColorRow({ label, colors }: { label: string; colors: PaletteColor[] }) 
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function CodeBlock({ label, code }: { label: string; code: string }) {
@@ -2434,5 +3448,5 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
         <code>{code}</code>
       </pre>
     </div>
-  )
+  );
 }
