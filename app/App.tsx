@@ -244,6 +244,7 @@ import {
 import { Skeleton } from "../src/components/ui/skeleton";
 import { Slider } from "../src/components/ui/slider";
 import { Spinner } from "../src/components/ui/spinner";
+import { StatusWidget } from "../src/components/ui/status-widget";
 import { Switch } from "../src/components/ui/switch";
 import {
   Table,
@@ -3145,7 +3146,10 @@ export function App() {
                   </FooterLink>
                 </FooterSocials>
               </div>
-              <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
+              <div className="flex w-full items-center justify-between gap-4">
+                <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
+                <StatusWidget />
+              </div>
             </FooterBottom>
           </Footer>
         </div>
