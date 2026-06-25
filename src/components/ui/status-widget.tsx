@@ -81,9 +81,19 @@ export function StatusWidget({
       {...props}
     >
       <span
-        className={cn("size-2 shrink-0 rounded-full", meta.dot)}
+        className="relative flex size-2 shrink-0 items-center justify-center"
         aria-hidden="true"
-      />
+      >
+        <span
+          className={cn(
+            "absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:animate-none",
+            meta.dot,
+          )}
+        />
+        <span
+          className={cn("relative inline-flex size-2 rounded-full", meta.dot)}
+        />
+      </span>
       {meta.label}
     </a>
   );
