@@ -3093,6 +3093,9 @@ export function App() {
                 </NavListGroup>
                 <NavListGroup>
                   <NavListHeader>Resources</NavListHeader>
+                  <NavListItem href="https://status.flow.industries">
+                    Status
+                  </NavListItem>
                   <NavListItem
                     href="https://github.com/flow-industries"
                     target="_blank"
