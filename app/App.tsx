@@ -3109,6 +3109,15 @@ export function App() {
                     Discord
                   </NavListItem>
                 </NavListGroup>
+                <NavListGroup>
+                  <NavListHeader>Legal</NavListHeader>
+                  <NavListItem href="https://flow.industries/terms">
+                    Terms
+                  </NavListItem>
+                  <NavListItem href="https://flow.industries/privacy">
+                    Privacy
+                  </NavListItem>
+                </NavListGroup>
               </NavList>
             </FooterContent>
             <FooterBottom className="flex-col items-start gap-4">
