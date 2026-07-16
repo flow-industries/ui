@@ -109,6 +109,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../src/components/ui/dialog";
+import {
+  DisplayMenu,
+  DisplayMenuItem,
+} from "../src/components/ui/display-menu";
 import { DissolveFilter } from "../src/components/ui/dissolve-filter";
 import { Dock } from "../src/components/ui/dock";
 import {
@@ -2580,6 +2584,31 @@ function ComponentsShowcase() {
           <span className="text-sm">
             <TimeSince date={new Date(2025, 11, 1)} />
           </span>
+        </Preview>
+      </Section>
+
+      {/* Display Menu */}
+      <Section title="Display Menu" wide>
+        <Preview label="xl with trailing while disabled, lg items, anchor render, disabled anchor blocks navigation">
+          <DisplayMenu>
+            <DisplayMenuItem size="xl" disabled trailing="42%">
+              Play
+            </DisplayMenuItem>
+            <DisplayMenuItem>Rooms</DisplayMenuItem>
+            <DisplayMenuItem
+              // biome-ignore lint/a11y/useAnchorContent: useRender injects the item label into the anchor
+              render={<a href="#components" />}
+            >
+              Settings
+            </DisplayMenuItem>
+            <DisplayMenuItem
+              disabled
+              // biome-ignore lint/a11y/useAnchorContent: useRender injects the item label into the anchor
+              render={<a href="#design" />}
+            >
+              Locked
+            </DisplayMenuItem>
+          </DisplayMenu>
         </Preview>
       </Section>
     </div>

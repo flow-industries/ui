@@ -13,6 +13,7 @@ export * from "./checkbox";
 export * from "./collapsible";
 export * from "./context-menu";
 export * from "./dialog";
+export * from "./display-menu";
 export * from "./dissolve-filter";
 export * from "./dock";
 export * from "./drawer";
