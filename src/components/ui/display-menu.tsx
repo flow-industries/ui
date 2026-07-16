@@ -16,7 +16,7 @@ function DisplayMenu({ className, ...props }: React.ComponentProps<"nav">) {
 }
 
 const displayMenuItemVariants = cva(
-  "flex w-fit items-baseline gap-3 text-left font-bold uppercase tracking-tight text-foreground outline-none transition-[color] duration-200 ease-(--ease-out)",
+  "flex w-fit items-baseline gap-3 text-left font-bold uppercase tracking-tight text-foreground outline-none transition-[color] duration-200 ease-(--ease-out) focus-visible:underline focus-visible:decoration-focus focus-visible:underline-offset-8",
   {
     variants: {
       size: {
@@ -67,12 +67,11 @@ function DisplayMenuItem({
     props: mergeProps<"button">(
       {
         type: render ? undefined : "button",
-        disabled: render ? undefined : Boolean(disabled),
         "aria-disabled": disabled || undefined,
         className: cn(displayMenuItemVariants({ size, disabled }), className),
         children: (
           <>
-            <span>{children}</span>
+            <span data-slot="display-menu-item-label">{children}</span>
             {trailing != null && (
               <span
                 data-slot="display-menu-item-trailing"
@@ -85,6 +84,16 @@ function DisplayMenuItem({
         ),
       },
       props,
+      disabled
+        ? {
+            onClick(event) {
+              event.preventDefault();
+              // mergeProps only decorates the event with preventBaseUIHandler
+              // when another onClick is merged in
+              event.preventBaseUIHandler?.();
+            },
+          }
+        : undefined,
     ),
     render,
     state: {

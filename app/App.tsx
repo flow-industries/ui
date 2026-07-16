@@ -2589,7 +2589,7 @@ function ComponentsShowcase() {
 
       {/* Display Menu */}
       <Section title="Display Menu" wide>
-        <Preview label="xl with trailing while disabled, lg items, anchor render">
+        <Preview label="xl with trailing while disabled, lg items, anchor render, disabled anchor blocks navigation">
           <DisplayMenu>
             <DisplayMenuItem size="xl" disabled trailing="42%">
               Play
@@ -2601,7 +2601,13 @@ function ComponentsShowcase() {
             >
               Settings
             </DisplayMenuItem>
-            <DisplayMenuItem disabled>Locked</DisplayMenuItem>
+            <DisplayMenuItem
+              disabled
+              // biome-ignore lint/a11y/useAnchorContent: useRender injects the item label into the anchor
+              render={<a href="#design" />}
+            >
+              Locked
+            </DisplayMenuItem>
           </DisplayMenu>
         </Preview>
       </Section>
