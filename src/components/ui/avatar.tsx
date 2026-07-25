@@ -38,7 +38,9 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
 
 /**
  * Anonymous head-and-shoulders silhouette — the stand-in for a user with no
- * avatar image. Scales to its box, so it works at any avatar size.
+ * avatar image. Scales to its box, so it works at any avatar size. The
+ * shoulders are stroked with a round join so their base corners stay as soft
+ * as the squircle they sit in.
  */
 function AvatarPlaceholder({
   className,
@@ -54,7 +56,12 @@ function AvatarPlaceholder({
       {...props}
     >
       <circle cx="24" cy="18" r="7.7" />
-      <path d="M12 44.4a12 12 0 0 1 24 0Z" />
+      <path
+        d="M15 41.4a9 6 0 0 1 18 0Z"
+        stroke="currentColor"
+        strokeWidth="6"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
