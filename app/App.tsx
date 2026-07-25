@@ -1774,6 +1774,15 @@ function ComponentsShowcase() {
           <Avatar>
             <AvatarFallback>KU</AvatarFallback>
           </Avatar>
+          <Avatar size="sm">
+            <AvatarFallback />
+          </Avatar>
+          <Avatar>
+            <AvatarFallback />
+          </Avatar>
+          <Avatar size="lg">
+            <AvatarFallback />
+          </Avatar>
         </Preview>
       </Section>
 

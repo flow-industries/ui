@@ -15,7 +15,7 @@ function Avatar({
       data-slot="avatar"
       data-size={size}
       className={cn(
-        "group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border-[length:var(--border-width)] after:border-secondary after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        "group/avatar relative flex size-8 shrink-0 rounded-squircle select-none after:absolute after:inset-0 after:rounded-squircle after:border-[length:var(--border-width)] after:border-secondary after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
         className,
       )}
       {...props}
@@ -28,7 +28,7 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
     <AvatarPrimitive.Image
       data-slot="avatar-image"
       className={cn(
-        "aspect-square size-full rounded-full object-cover",
+        "aspect-square size-full rounded-squircle object-cover",
         className,
       )}
       {...props}
@@ -36,7 +36,31 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
   );
 }
 
+/**
+ * Anonymous head-and-shoulders silhouette — the stand-in for a user with no
+ * avatar image. Scales to its box, so it works at any avatar size.
+ */
+function AvatarPlaceholder({
+  className,
+  ...props
+}: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      data-slot="avatar-placeholder"
+      viewBox="0 0 48 48"
+      fill="currentColor"
+      aria-hidden="true"
+      className={cn("size-full", className)}
+      {...props}
+    >
+      <circle cx="24" cy="18" r="7.7" />
+      <path d="M12 44.4a12 12 0 0 1 24 0Z" />
+    </svg>
+  );
+}
+
 function AvatarFallback({
+  children,
   className,
   ...props
 }: AvatarPrimitive.Fallback.Props) {
@@ -44,11 +68,13 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs",
+        "flex size-full items-center justify-center rounded-squircle bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs",
         className,
       )}
       {...props}
-    />
+    >
+      {children ?? <AvatarPlaceholder />}
+    </AvatarPrimitive.Fallback>
   );
 }
 
@@ -89,7 +115,7 @@ function AvatarGroupCount({
     <div
       data-slot="avatar-group-count"
       className={cn(
-        "relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3",
+        "relative flex size-8 shrink-0 items-center justify-center rounded-squircle bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3",
         className,
       )}
       {...props}
@@ -104,4 +130,5 @@ export {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
+  AvatarPlaceholder,
 };
