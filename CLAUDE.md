@@ -40,6 +40,7 @@ CI runs the shared quality gate (`flow-industries/lint` ts-check workflow): `bun
 - Components use Base UI (`@base-ui/react`) primitives — not Radix UI.
 - Use `render` prop (not `asChild`) for element composition.
 - Borders use `--border-width` / `--border-width-focus` tokens.
+- Square media (avatars, thumbnails) use `rounded-squircle`, never `rounded-full`: it is 50% where `corner-shape` is supported (the superellipse makes that a squircle) and 35% where it isn't, so the fallback is a rounded square instead of a circle. `rounded-full` stays for things that are genuinely round or pill-shaped (dots, switches, progress tracks).
 - Inputs use `border-transparent bg-input` default, `focus-visible:border-focus` on focus.
 - No focus rings — only border color changes for focus indication. Use `--focus` token (pink).
 - Never use `transition-all` — specify exact properties (e.g. `transition-[color,background-color,border-color]`).
