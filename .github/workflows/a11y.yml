@@ -1,0 +1,30 @@
+name: A11y
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: a11y-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  a11y:
+    # Public repo — flow-arc is unavailable (runner group blocks public repos).
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    steps:
+      - uses: actions/checkout@v4
+      # npm ships in the image; setup-bun needs unzip, which does not.
+      - run: npm install -g bun
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bunx playwright test tests/a11y.spec.ts
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: playwright-report/
+          retention-days: 14

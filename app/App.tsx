@@ -651,7 +651,11 @@ function AppShellShowcase() {
         </NavigationMenu>
         <div className="flex items-center gap-2">
           <Tooltip>
-            <TooltipTrigger render={<Button variant="ghost" size="icon" />}>
+            <TooltipTrigger
+              render={
+                <Button variant="ghost" size="icon" aria-label="Settings" />
+              }
+            >
               <Settings className="size-4" />
             </TooltipTrigger>
             <TooltipContent>Settings</TooltipContent>
@@ -792,7 +796,7 @@ function AccountSettingsShowcase() {
                 <div className="space-y-2">
                   <Label>Timezone</Label>
                   <Select>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Timezone">
                       <SelectValue placeholder="Select timezone" />
                     </SelectTrigger>
                     <SelectContent>
@@ -805,7 +809,7 @@ function AccountSettingsShowcase() {
                 </div>
                 <div className="space-y-2">
                   <Label>Language</Label>
-                  <NativeSelect>
+                  <NativeSelect aria-label="Language">
                     <NativeSelectOption value="en">English</NativeSelectOption>
                     <NativeSelectOption value="es">Spanish</NativeSelectOption>
                     <NativeSelectOption value="fr">French</NativeSelectOption>
@@ -1008,7 +1012,13 @@ function TeamMembersShowcase() {
                         <TooltipTrigger
                           render={
                             <DropdownMenuTrigger
-                              render={<Button variant="ghost" size="icon" />}
+                              render={
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="Row actions"
+                                />
+                              }
                             >
                               <MoreHorizontal className="size-4" />
                             </DropdownMenuTrigger>
@@ -1158,7 +1168,7 @@ function VerificationFlowShowcase() {
   return (
     <Showcase className="w-md mx-auto">
       <div className="space-y-6 min-h-64 flex flex-col justify-center">
-        <Progress value={(step / 3) * 100} />
+        <Progress value={(step / 3) * 100} aria-label="Sign-up progress" />
 
         {step === 1 && (
           <div className="space-y-4">
@@ -1298,7 +1308,11 @@ function MediaGalleryShowcase() {
       >
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Project Details</span>
-          <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
+          <CollapsibleTrigger
+            render={
+              <Button variant="ghost" size="icon" aria-label="Toggle items" />
+            }
+          >
             <ChevronsUpDown className="size-4" />
           </CollapsibleTrigger>
         </div>
@@ -1421,7 +1435,7 @@ function InboxShowcase() {
                 <div className="space-y-2">
                   <Label>Priority</Label>
                   <Select>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Priority">
                       <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
                     <SelectContent>
@@ -1443,10 +1457,18 @@ function InboxShowcase() {
           </DrawerContent>
         </Drawer>
         <Popover>
-          <PopoverTrigger render={<Button variant="outline" size="icon" />}>
+          <PopoverTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Filter messages"
+              />
+            }
+          >
             <Filter className="size-4" />
           </PopoverTrigger>
-          <PopoverContent className="w-48">
+          <PopoverContent className="w-48" aria-label="Filters">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Checkbox id="filter-unread" defaultChecked />
@@ -1595,7 +1617,7 @@ function ComponentsShowcase() {
           <Button size="sm">Small</Button>
           <Button size="default">Default</Button>
           <Button size="lg">Large</Button>
-          <Button size="icon">
+          <Button size="icon" aria-label="Favorite">
             <Star />
           </Button>
         </Preview>
@@ -1678,18 +1700,21 @@ function ComponentsShowcase() {
               inputSize="lg"
               status="checking"
               defaultValue="checking"
+              aria-label="Checking state example"
               readOnly
             />
             <ValidatedInput
               inputSize="lg"
               status="valid"
               defaultValue="available"
+              aria-label="Valid state example"
               readOnly
             />
             <ValidatedInput
               inputSize="lg"
               status="invalid"
               defaultValue="taken"
+              aria-label="Invalid state example"
               readOnly
             />
           </div>
@@ -1698,7 +1723,7 @@ function ComponentsShowcase() {
 
       {/* Input OTP */}
       <Section title="Input OTP">
-        <InputOTP maxLength={6}>
+        <InputOTP maxLength={6} aria-label="One-time code">
           <InputOTPGroup>
             <InputOTPSlot index={0} />
             <InputOTPSlot index={1} />
@@ -1849,6 +1874,7 @@ function ComponentsShowcase() {
       <Section title="Slider">
         <div className="max-w-sm space-y-2">
           <Slider
+            aria-label="Value"
             value={sliderValue}
             onValueChange={setSliderValue}
             max={100}
@@ -1861,7 +1887,7 @@ function ComponentsShowcase() {
       {/* Progress */}
       <Section title="Progress">
         <div className="max-w-sm space-y-2">
-          <Progress value={65} />
+          <Progress value={65} aria-label="Progress example" />
           <p className="text-xs text-muted-foreground">65%</p>
         </div>
       </Section>
@@ -1870,7 +1896,7 @@ function ComponentsShowcase() {
       <Section title="Select">
         <div className="max-w-xs">
           <Select>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Framework">
               <SelectValue placeholder="Choose a framework" />
             </SelectTrigger>
             <SelectContent>
@@ -2070,7 +2096,11 @@ function ComponentsShowcase() {
         >
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">3 items</span>
-            <CollapsibleTrigger render={<Button variant="ghost" size="icon" />}>
+            <CollapsibleTrigger
+              render={
+                <Button variant="ghost" size="icon" aria-label="Toggle items" />
+              }
+            >
               <ChevronsUpDown className="size-4" />
             </CollapsibleTrigger>
           </div>
@@ -2240,13 +2270,13 @@ function ComponentsShowcase() {
               </SheetHeader>
               <div className="py-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label>Notifications</Label>
-                  <Switch />
+                  <Label htmlFor="sheet-notifications">Notifications</Label>
+                  <Switch id="sheet-notifications" />
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <Label>Dark mode</Label>
-                  <Switch />
+                  <Label htmlFor="sheet-dark-mode">Dark mode</Label>
+                  <Switch id="sheet-dark-mode" />
                 </div>
               </div>
             </SheetContent>
@@ -2287,7 +2317,7 @@ function ComponentsShowcase() {
             <PopoverTrigger render={<Button variant="outline" />}>
               Open Popover
             </PopoverTrigger>
-            <PopoverContent className="w-64">
+            <PopoverContent className="w-64" aria-label="Dimensions">
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Dimensions</h4>
                 <div className="grid grid-cols-2 gap-2">
@@ -2887,7 +2917,12 @@ function ComponentsShowcase() {
               className="w-full max-w-sm space-y-4 rounded-xl bg-secondary p-5"
             >
               <p className="text-sm">اتجاه القراءة من اليمين إلى اليسار</p>
-              <Slider defaultValue={30} max={100} step={1} />
+              <Slider
+                aria-label="القيمة"
+                defaultValue={30}
+                max={100}
+                step={1}
+              />
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">
                   التالي
@@ -3741,6 +3776,7 @@ function PaletteHueGroup({ hue }: { hue: (typeof hues)[number] }) {
       >
         <HoverCardTrigger
           render={<button type="button" />}
+          aria-label={`${hue.fancy} Dark`}
           className="group cursor-pointer"
         >
           <div
@@ -3757,6 +3793,7 @@ function PaletteHueGroup({ hue }: { hue: (typeof hues)[number] }) {
       >
         <HoverCardTrigger
           render={<button type="button" />}
+          aria-label={hue.fancy}
           className="group cursor-pointer"
         >
           <div
@@ -3773,6 +3810,7 @@ function PaletteHueGroup({ hue }: { hue: (typeof hues)[number] }) {
       >
         <HoverCardTrigger
           render={<button type="button" />}
+          aria-label={`${hue.fancy} Light`}
           className="group cursor-pointer"
         >
           <div
@@ -3800,6 +3838,7 @@ function PaletteSwatch({ c }: { c: PaletteColor }) {
       >
         <HoverCardTrigger
           render={<button type="button" />}
+          aria-label={c.fancy ?? c.name}
           className="group/bg cursor-pointer"
           onMouseEnter={() => setFgHovered(false)}
         >
@@ -3818,6 +3857,7 @@ function PaletteSwatch({ c }: { c: PaletteColor }) {
         >
           <HoverCardTrigger
             render={<button type="button" />}
+            aria-label={`${c.name} Foreground`}
             className="group/fg absolute -bottom-1.5 -right-1.5 cursor-pointer z-10"
             onMouseEnter={() => setFgHovered(true)}
             onMouseLeave={() => setFgHovered(false)}

@@ -59,6 +59,7 @@ const iconSizeClasses: Record<DockSize, string> = {
 function DockIconButton({
   icon: Icon,
   customIcon,
+  label,
   onClick,
   className,
   customComponent,
@@ -77,6 +78,7 @@ function DockIconButton({
     <motion.button
       ref={ref}
       type="button"
+      aria-label={label}
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
       onMouseEnter={onHover}
