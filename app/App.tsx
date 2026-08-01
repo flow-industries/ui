@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Archive,
   Bell,
@@ -34,6 +35,9 @@ import {
   User,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { z } from "zod";
 import {
   BlueskyIcon,
   DiscordIcon,
@@ -86,12 +90,29 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../src/components/ui/carousel";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "../src/components/ui/chart";
 import { Checkbox } from "../src/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../src/components/ui/collapsible";
+import { ColorSwatch, HueGroup } from "../src/components/ui/color-swatch";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "../src/components/ui/combobox";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -109,6 +130,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../src/components/ui/dialog";
+import { DirectionProvider } from "../src/components/ui/direction";
 import {
   DisplayMenu,
   DisplayMenuItem,
@@ -140,6 +162,17 @@ import {
   EmptyTitle,
 } from "../src/components/ui/empty";
 import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+} from "../src/components/ui/field";
+import {
   Footer,
   FooterBottom,
   FooterBrand,
@@ -148,6 +181,15 @@ import {
   FooterLink,
   FooterSocials,
 } from "../src/components/ui/footer";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../src/components/ui/form";
 import {
   HoverCard,
   HoverCardContent,
@@ -165,6 +207,16 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "../src/components/ui/input-otp";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "../src/components/ui/item";
 import { Kbd } from "../src/components/ui/kbd";
 import { Label } from "../src/components/ui/label";
 import {
@@ -289,6 +341,7 @@ import {
   ValidatedInput,
   type ValidationStatus,
 } from "../src/components/ui/validated-input";
+import { WordFlash } from "../src/components/ui/word-flash";
 import { cn } from "../src/utils/cn";
 
 const hues = [
@@ -1494,6 +1547,30 @@ function InboxShowcase() {
   );
 }
 
+const engines = [
+  "Godot",
+  "Unity",
+  "Unreal",
+  "Bevy",
+  "Phaser",
+  "PlayCanvas",
+  "Defold",
+];
+
+const trafficData = [
+  { month: "Jan", visits: 186, signups: 80 },
+  { month: "Feb", visits: 305, signups: 200 },
+  { month: "Mar", visits: 237, signups: 120 },
+  { month: "Apr", visits: 73, signups: 190 },
+  { month: "May", visits: 209, signups: 130 },
+  { month: "Jun", visits: 214, signups: 140 },
+];
+
+const trafficConfig = {
+  visits: { label: "Visits", color: "var(--color-blue)" },
+  signups: { label: "Signups", color: "var(--color-pink)" },
+} satisfies ChartConfig;
+
 function ComponentsShowcase() {
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [sliderValue, setSliderValue] = useState(40);
@@ -1647,6 +1724,50 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Field */}
+      <Section title="Field">
+        <div className="w-full max-w-sm">
+          <FieldSet>
+            <FieldLegend>Profile</FieldLegend>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="field-display-name">
+                  Display name
+                </FieldLabel>
+                <Input id="field-display-name" placeholder="kualta" />
+                <FieldDescription>
+                  Shown next to your messages.
+                </FieldDescription>
+              </Field>
+              <Field data-invalid>
+                <FieldLabel htmlFor="field-handle">Handle</FieldLabel>
+                <Input
+                  id="field-handle"
+                  defaultValue="flow industries"
+                  aria-invalid
+                />
+                <FieldError>Handle cannot contain spaces.</FieldError>
+              </Field>
+              <FieldSeparator>Notifications</FieldSeparator>
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldLabel htmlFor="field-digest">Weekly digest</FieldLabel>
+                  <FieldDescription>
+                    Room activity, once a week.
+                  </FieldDescription>
+                </FieldContent>
+                <Switch id="field-digest" defaultChecked />
+              </Field>
+            </FieldGroup>
+          </FieldSet>
+        </div>
+      </Section>
+
+      {/* Form */}
+      <Section title="Form">
+        <FormDemo />
+      </Section>
+
       {/* Checkbox */}
       <Section title="Checkbox">
         <div className="space-y-3">
@@ -1762,6 +1883,25 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Combobox */}
+      <Section title="Combobox">
+        <div className="max-w-xs">
+          <Combobox items={engines}>
+            <ComboboxInput placeholder="Search engines" showClear />
+            <ComboboxContent>
+              <ComboboxEmpty>No engine found.</ComboboxEmpty>
+              <ComboboxList>
+                {(engine: string) => (
+                  <ComboboxItem key={engine} value={engine}>
+                    {engine}
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
+        </div>
+      </Section>
+
       {/* Avatar */}
       <Section title="Avatar">
         <Preview>
@@ -1822,6 +1962,43 @@ function ComponentsShowcase() {
               </p>
             </CardContent>
           </Card>
+        </div>
+      </Section>
+
+      {/* Item */}
+      <Section title="Item">
+        <div className="w-full max-w-md">
+          <ItemGroup>
+            <Item variant="outline">
+              <ItemMedia variant="icon">
+                <FileText />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>flow/docs</ItemTitle>
+                <ItemDescription>
+                  React Router + Fumadocs documentation site.
+                </ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Button variant="outline" size="sm">
+                  Open
+                </Button>
+              </ItemActions>
+            </Item>
+            <ItemSeparator />
+            <Item variant="muted" size="sm">
+              <ItemMedia variant="icon">
+                <Inbox />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>Inbox</ItemTitle>
+                <ItemDescription>Three unread messages.</ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Badge variant="secondary">3</Badge>
+              </ItemActions>
+            </Item>
+          </ItemGroup>
         </div>
       </Section>
 
@@ -1944,6 +2121,51 @@ function ComponentsShowcase() {
               </TableRow>
             </TableBody>
           </Table>
+        </div>
+      </Section>
+
+      {/* Chart */}
+      <Section title="Chart" wide>
+        <div className="grid w-full max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
+          {/* recharts animations are JS-driven and invisible to CSS animation
+              freezing, so they stay off to keep CI snapshots deterministic */}
+          <ChartContainer config={trafficConfig} className="h-56 w-full">
+            <BarChart data={trafficData}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Bar
+                dataKey="visits"
+                fill="var(--color-visits)"
+                radius={4}
+                isAnimationActive={false}
+              />
+              <Bar
+                dataKey="signups"
+                fill="var(--color-signups)"
+                radius={4}
+                isAnimationActive={false}
+              />
+            </BarChart>
+          </ChartContainer>
+          <ChartContainer config={trafficConfig} className="h-56 w-full">
+            <AreaChart data={trafficData}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} />
+              <ChartTooltip
+                content={<ChartTooltipContent indicator="line" />}
+              />
+              <Area
+                dataKey="visits"
+                type="natural"
+                fill="var(--color-visits)"
+                fillOpacity={0.3}
+                stroke="var(--color-visits)"
+                isAnimationActive={false}
+              />
+            </AreaChart>
+          </ChartContainer>
         </div>
       </Section>
 
@@ -2413,6 +2635,34 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Color Swatch */}
+      <Section title="Color Swatch">
+        <Preview label="Sizes">
+          <ColorSwatch color="bg-brand" size="sm" />
+          <ColorSwatch color="bg-brand" />
+          <ColorSwatch color="bg-brand" size="lg" />
+          <ColorSwatch color="bg-background" border />
+        </Preview>
+        <Preview label="Hue groups">
+          <HueGroup
+            dark="bg-dark-pink"
+            standard="bg-pink"
+            light="bg-light-pink"
+          />
+          <HueGroup
+            dark="bg-dark-blue"
+            standard="bg-blue"
+            light="bg-light-blue"
+          />
+          <HueGroup
+            dark="bg-dark-green"
+            standard="bg-green"
+            light="bg-light-green"
+            size="sm"
+          />
+        </Preview>
+      </Section>
+
       {/* Nav List */}
       <Section title="Nav List" wide>
         <NavList>
@@ -2567,6 +2817,13 @@ function ComponentsShowcase() {
         </Preview>
       </Section>
 
+      {/* Word Flash */}
+      <Section title="Word Flash">
+        <Preview label="Hover to flash words, then settle on full content">
+          <WordFlashDemo />
+        </Preview>
+      </Section>
+
       {/* Time */}
       <Section title="Time">
         <Preview label="TimeElapsed — relative until 3 weeks, then formatted date">
@@ -2620,6 +2877,29 @@ function ComponentsShowcase() {
           </DisplayMenu>
         </Preview>
       </Section>
+
+      {/* Direction */}
+      <Section title="Direction">
+        <Preview label="DirectionProvider flips Base UI primitives to RTL">
+          <DirectionProvider direction="rtl">
+            <div
+              dir="rtl"
+              className="w-full max-w-sm space-y-4 rounded-xl bg-secondary p-5"
+            >
+              <p className="text-sm">اتجاه القراءة من اليمين إلى اليسار</p>
+              <Slider defaultValue={30} max={100} step={1} />
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  التالي
+                </Button>
+                <Button variant="ghost" size="sm">
+                  رجوع
+                </Button>
+              </div>
+            </div>
+          </DirectionProvider>
+        </Preview>
+      </Section>
     </div>
   );
 }
@@ -2670,6 +2950,84 @@ function DissolveDemo() {
         Hover to dissolve
       </button>
     </>
+  );
+}
+
+const signupSchema = z.object({
+  username: z.string().min(3, "At least 3 characters"),
+  email: z.email("Enter a valid email"),
+});
+
+function FormDemo() {
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { username: "", email: "" },
+  });
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((values) => {
+          toast.success(`Account created for ${values.username}`);
+          form.reset();
+        })}
+        className="w-full max-w-sm space-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="kualta" {...field} />
+              </FormControl>
+              <FormDescription>Shown on your public profile.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Create account</Button>
+      </form>
+    </Form>
+  );
+}
+
+function WordFlashDemo() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      type="button"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      className="flex min-h-40 w-96 flex-col justify-center rounded-xl bg-secondary p-6 text-left"
+    >
+      <WordFlash
+        isHovered={hovered}
+        text="MOVE FAST STAY FLUID"
+        title={<span className="block text-xl font-medium">Flow</span>}
+        description={
+          <span className="mt-2 block text-sm text-muted-foreground">
+            Momentum-driven movement, made multiplayer.
+          </span>
+        }
+      />
+    </button>
   );
 }
 
@@ -2767,7 +3125,7 @@ export function App() {
                       <p className="text-xs text-muted-foreground">Hues</p>
                       <div className="flex flex-wrap gap-3">
                         {hues.map((hue) => (
-                          <HueGroup key={hue.name} hue={hue} />
+                          <PaletteHueGroup key={hue.name} hue={hue} />
                         ))}
                       </div>
                     </div>
@@ -3368,7 +3726,7 @@ function ColorPopover({
   );
 }
 
-function HueGroup({ hue }: { hue: (typeof hues)[number] }) {
+function PaletteHueGroup({ hue }: { hue: (typeof hues)[number] }) {
   const darkRef = useRef<HTMLDivElement>(null);
   const stdRef = useRef<HTMLDivElement>(null);
   const lightRef = useRef<HTMLDivElement>(null);
@@ -3427,7 +3785,7 @@ function HueGroup({ hue }: { hue: (typeof hues)[number] }) {
   );
 }
 
-function ColorSwatch({ c }: { c: PaletteColor }) {
+function PaletteSwatch({ c }: { c: PaletteColor }) {
   const swatchRef = useRef<HTMLDivElement>(null);
   const fgRef = useRef<HTMLDivElement>(null);
   const [fgHovered, setFgHovered] = useState(false);
@@ -3487,7 +3845,7 @@ function ColorRow({
       <p className="text-xs text-muted-foreground">{label}</p>
       <div className="flex flex-wrap gap-1.5">
         {colors.map((c) => (
-          <ColorSwatch key={c.token} c={c} />
+          <PaletteSwatch key={c.token} c={c} />
         ))}
       </div>
     </div>
