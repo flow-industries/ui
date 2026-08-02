@@ -8,11 +8,29 @@ export type ShowcaseTheme = (typeof themes)[number];
 
 const FIXED_TIME = new Date("2026-01-01T12:00:00Z");
 
+// The footer's StatusWidget fetches live fleet status, which changed between
+// runs and diffed the baselines. Every non-localhost request is blocked so no
+// external state can leak into a snapshot; the statuses endpoint gets a canned
+// operational payload so the pill renders its normal state.
+const OPERATIONAL_STATUSES = JSON.stringify([
+  { name: "probe", results: [{ success: true }] },
+]);
+
 export async function openShowcase(
   page: Page,
   hash: ShowcaseHash,
   theme: ShowcaseTheme,
 ) {
+  await page.route(
+    (url) => url.hostname !== "localhost",
+    (route) =>
+      route.request().url().includes("/api/v1/endpoints/statuses")
+        ? route.fulfill({
+            contentType: "application/json",
+            body: OPERATIONAL_STATUSES,
+          })
+        : route.abort(),
+  );
   await page.clock.setFixedTime(FIXED_TIME);
   await page.goto(`/#${hash}`, { waitUntil: "networkidle" });
   if (theme === "dark") {
