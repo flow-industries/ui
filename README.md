@@ -28,6 +28,20 @@ Full documentation at **[docs.flow.industries/en/ui](https://docs.flow.industrie
 bun run dev   # landing page at localhost:5173
 ```
 
+## Visual regression
+
+CI screenshots the showcase (`#design`, `#showcases`, `#components` in light and dark) against
+baselines committed under `tests/visual.spec.ts-snapshots/` and fails on any diff.
+
+```bash
+bun run build && bun run test   # compare against baselines (Linux only)
+./scripts/update-snapshots.sh   # re-render baselines after an intended visual change (Docker)
+```
+
+Baselines are rendered on Linux inside the pinned Playwright image — a bare macOS run
+diffs against them spuriously, so always update through the script (or grab the
+`visual-diffs` artifact from a failed CI run to inspect changes).
+
 ## License
 
 MIT

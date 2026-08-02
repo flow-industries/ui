@@ -10,6 +10,7 @@
     "build": "bunx vite build",
     "preview": "bunx vite preview",
     "lint": "biome check",
+    "test": "playwright test",
     "format": "biome format --write",
     "check": "biome check --write",
     "typecheck": "tsc --noEmit"
@@ -51,7 +52,9 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.12",
     "@flow-industries/lint": "0.1.0",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",

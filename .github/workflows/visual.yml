@@ -1,0 +1,35 @@
+name: Visual
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: visual-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    # Public repo — flow-arc is unavailable (runner group blocks public repos).
+    runs-on: ubuntu-latest
+    # The pinned Playwright image ships the matching browser build and fonts,
+    # so committed baselines render identically here and in
+    # scripts/update-snapshots.sh. Keep the tag in sync with @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    steps:
+      - uses: actions/checkout@v4
+      # npm ships in the image; setup-bun needs unzip, which does not.
+      - run: npm install -g bun
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bunx playwright test tests/visual.spec.ts
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
