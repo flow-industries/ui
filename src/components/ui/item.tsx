@@ -1,23 +1,27 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import * as React from "react";
 
 import { cn } from "../../utils/cn";
 import { Separator } from "./separator";
 
+const ItemGroupContext = React.createContext(false);
+
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    // biome-ignore lint/a11y/useSemanticElements: role="list" on a styled div avoids ul default list styles
-    <div
-      role="list"
-      data-slot="item-group"
-      className={cn(
-        "group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2",
-        className,
-      )}
-      {...props}
-    />
+    <ItemGroupContext.Provider value={true}>
+      {/* biome-ignore lint/a11y/useSemanticElements: role="list" on a styled div avoids ul default list styles */}
+      <div
+        role="list"
+        data-slot="item-group"
+        className={cn(
+          "group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2",
+          className,
+        )}
+        {...props}
+      />
+    </ItemGroupContext.Provider>
   );
 }
 
@@ -28,6 +32,7 @@ function ItemSeparator({
   return (
     <Separator
       data-slot="item-separator"
+      aria-hidden="true"
       orientation="horizontal"
       className={cn("my-2", className)}
       {...props}
@@ -64,11 +69,13 @@ function Item({
   render,
   ...props
 }: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
+  const inGroup = React.useContext(ItemGroupContext);
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(
       {
         className: cn(itemVariants({ variant, size, className })),
+        role: inGroup ? "listitem" : undefined,
       },
       props,
     ),

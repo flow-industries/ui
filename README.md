@@ -42,6 +42,17 @@ Baselines are rendered on Linux inside the pinned Playwright image — a bare ma
 diffs against them spuriously, so always update through the script (or grab the
 `visual-diffs` artifact from a failed CI run to inspect changes).
 
+## Accessibility
+
+CI also runs axe (`tests/a11y.spec.ts`) over the same pages and themes, plus each
+overlay in its open state, failing on serious/critical violations. Genuine findings get
+fixed or filed against the UI-3 audit — see `knownViolations` in the spec for the
+tracked exceptions; `allowlistedRules` is reserved for documented false positives.
+
+```bash
+bun run build && bunx playwright test tests/a11y.spec.ts
+```
+
 ## License
 
 MIT
