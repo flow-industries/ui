@@ -6,7 +6,10 @@ import { cn } from "../../utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
 const profilePillVariants = cva(
-  "group/profile-pill inline-flex w-fit items-center rounded-full text-foreground outline-none transition-colors [&:is(a,button):hover]:text-muted-foreground",
+  // normal-case/tracking-tight are load-bearing: app headers commonly set
+  // `uppercase tracking-widest` on the nav around it and both inherit, so the
+  // pill restates the base layer's own defaults rather than accepting them.
+  "group/profile-pill inline-flex w-fit items-center rounded-full text-foreground normal-case tracking-tight outline-none transition-colors [&:is(a,button):hover]:text-muted-foreground",
   {
     variants: {
       size: {
