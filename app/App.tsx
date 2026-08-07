@@ -258,6 +258,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../src/components/ui/popover";
+import { ProfilePill } from "../src/components/ui/profile-pill";
 import { Progress } from "../src/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "../src/components/ui/radio-group";
 import {
@@ -1949,6 +1950,28 @@ function ComponentsShowcase() {
           <Avatar size="lg">
             <AvatarFallback />
           </Avatar>
+        </Preview>
+      </Section>
+
+      <Section title="Profile Pill" wide>
+        <Preview>
+          <ProfilePill size="sm" username="kualta" />
+          <ProfilePill username="kualta" />
+          <ProfilePill size="lg" username="kualta" />
+          <ProfilePill size="lg" username="averyverylongusernameindeed" />
+          <ProfilePill
+            render={<span />}
+            username="static, not a button"
+            image="/FLOW LOGO.png"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<ProfilePill username="as-trigger" />}
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Sign out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </Preview>
       </Section>
 

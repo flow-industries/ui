@@ -34,6 +34,7 @@ export * from "./nav-list";
 export * from "./navigation-menu";
 export * from "./pagination";
 export * from "./popover";
+export * from "./profile-pill";
 export * from "./progress";
 export * from "./radio-group";
 export * from "./resizable";
