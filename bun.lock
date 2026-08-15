@@ -25,7 +25,7 @@
       "devDependencies": {
         "@axe-core/playwright": "^4.12.1",
         "@biomejs/biome": "2.4.12",
-        "@flow-industries/lint": "0.1.0",
+        "@flow-industries/lint": "0.2.0",
         "@oxlint/plugins": "1.78.0",
         "@playwright/test": "1.62.1",
         "@tailwindcss/vite": "^4.1.18",
@@ -175,7 +175,7 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.11", "", {}, "sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg=="],
 
-    "@flow-industries/lint": ["@flow-industries/lint@0.1.0", "", {}, "sha512-s5gWAt4+jdPz/wizOIkntI3SkCpSqdA+uxI1p+ZpNODBqR+uz6stlJGABdmhf+9VuzkTpWccsge60ee/xOFMcw=="],
+    "@flow-industries/lint": ["@flow-industries/lint@0.2.0", "", { "peerDependencies": { "@oxlint/plugins": ">=1.78.0", "oxlint": ">=1.78.0" }, "optionalPeers": ["@oxlint/plugins", "oxlint"] }, "sha512-Z2GDjQsKJMylqWaw3/OXLyG2AQW4CqCBLYxt16d+rw471lQagcC4bWa5pT5f1HRBXcyCDEP/WdcmWhTGMClzgA=="],
 
     "@hookform/resolvers": ["@hookform/resolvers@5.2.2", "", { "dependencies": { "@standard-schema/utils": "^0.3.0" }, "peerDependencies": { "react-hook-form": "^7.55.0" } }, "sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA=="],
 
