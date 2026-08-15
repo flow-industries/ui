@@ -12,20 +12,22 @@ interface Endpoint {
   results?: ProbeResult[];
 }
 
-const META: Record<Overall, { label: string; dot: string }> = {
+const META = {
   operational: { label: "All systems operational", dot: "bg-success" },
   degraded: { label: "Degraded performance", dot: "bg-orange" },
   down: { label: "Partial outage", dot: "bg-destructive" },
   unknown: { label: "Status unavailable", dot: "bg-muted-foreground" },
-};
+} satisfies Record<Overall, { label: string; dot: string }>;
 
 const RECENT = 10;
 
 // Mirrors the status page's worst-of derivation, kept self-contained so the widget has no app deps.
 function deriveOverall(endpoints: Endpoint[]): Overall {
-  const reporting = endpoints.filter((e) => (e.results?.length ?? 0) > 0);
-  if (reporting.length === 0) return "unknown";
-  const results = reporting.map((e) => e.results as ProbeResult[]);
+  const results = endpoints
+    .map((e) => e.results)
+    .filter((r) => r !== undefined)
+    .filter((r) => r.length > 0);
+  if (results.length === 0) return "unknown";
   if (results.some((r) => !r[r.length - 1].success)) return "down";
   if (results.some((r) => r.slice(-RECENT).some((x) => !x.success))) {
     return "degraded";

@@ -1,0 +1,7 @@
+{
+  "extends": ["./node_modules/@flow-industries/lint/oxlint.base.json"],
+  "jsPlugins": [
+    { "name": "anti-slop", "specifier": "@flow-industries/lint/anti-slop" }
+  ],
+  "ignorePatterns": [".claude/**", "dist/**"]
+}

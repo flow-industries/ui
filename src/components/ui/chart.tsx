@@ -3,9 +3,11 @@ import type { TooltipValueType } from "recharts";
 import * as RechartsPrimitive from "recharts";
 
 import { cn } from "../../utils/cn";
+import { cssVars } from "../../utils/css-vars";
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
+const THEME_KEYS = ["light", "dark"] as const;
 
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const;
 type TooltipNameType = number | string;
@@ -92,22 +94,18 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     <style
       // biome-ignore lint/security/noDangerouslySetInnerHtml: static CSS generated from chart config, no user input
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+        __html: THEME_KEYS.map(
+          (theme) => `
+${THEMES[theme]} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ??
-      itemConfig.color;
+    const color = itemConfig.theme?.[theme] ?? itemConfig.color;
     return color ? `  --color-${key}: ${color};` : null;
   })
   .join("\n")}
 }
 `,
-          )
-          .join("\n"),
+        ).join("\n"),
       }}
     />
   );
@@ -153,9 +151,12 @@ function ChartTooltipContent({
     const [item] = payload;
     const key = `${labelKey ?? item?.dataKey ?? item?.name ?? "value"}`;
     const itemConfig = getPayloadConfigFromPayload(config, item, key);
+    // `String(x) === x` holds only for string primitives, so this tests the label's
+    // representation without narrowing it by `typeof`.
+    const labelText = String(label);
     const value =
-      !labelKey && typeof label === "string"
-        ? (config[label]?.label ?? label)
+      !labelKey && labelText === label
+        ? (config[labelText]?.label ?? label)
         : itemConfig?.label;
 
     if (labelFormatter) {
@@ -231,12 +232,10 @@ function ChartTooltipContent({
                               "my-0.5": nestLabel && indicator === "dashed",
                             },
                           )}
-                          style={
-                            {
-                              "--color-bg": indicatorColor,
-                              "--color-border": indicatorColor,
-                            } as React.CSSProperties
-                          }
+                          style={cssVars({
+                            "--color-bg": indicatorColor,
+                            "--color-border": indicatorColor,
+                          })}
                         />
                       )
                     )}
@@ -254,7 +253,7 @@ function ChartTooltipContent({
                       </div>
                       {item.value != null && (
                         <span className="font-mono font-medium text-foreground tabular-nums">
-                          {typeof item.value === "number"
+                          {Number(item.value) === item.value
                             ? item.value.toLocaleString()
                             : String(item.value)}
                         </span>
@@ -328,40 +327,59 @@ function ChartLegendContent({
   );
 }
 
+type ChartPayloadField = string | number | boolean | null | undefined;
+
+/** The subset of a Recharts tooltip/legend entry this module reads. */
+interface ChartPayloadEntry {
+  readonly payload?: unknown;
+}
+
+/** Reads a named field off a Recharts entry, keeping it only when it is a primitive. */
+function readField(
+  source: ChartPayloadEntry | undefined,
+  key: string,
+): ChartPayloadField {
+  const value = source
+    ? Object.entries(source).find(([field]) => field === key)?.[1]
+    : undefined;
+  // SAFETY: each branch below rules the value out unless it is a primitive of that exact kind
+  // (coercion round-trips only for the primitive itself), so the narrowed type is established.
+  return value === null ||
+    value === undefined ||
+    value === true ||
+    value === false ||
+    Number(value) === value ||
+    String(value) === value
+    ? (value as ChartPayloadField)
+    : undefined;
+}
+
+/**
+ * Resolves the `ChartConfig` entry for a payload item. Recharts types the nested `payload` as
+ * `any`, so the item is treated as a bag of fields: the configured key may live on the item
+ * itself (`nameKey`/`dataKey` style) or on its nested payload, and whichever names a real config
+ * entry wins. Falls back to the requested key.
+ */
 function getPayloadConfigFromPayload(
   config: ChartConfig,
-  payload: unknown,
+  item: ChartPayloadEntry | undefined,
   key: string,
 ) {
-  if (typeof payload !== "object" || payload === null) {
-    return undefined;
-  }
-
-  const payloadPayload =
-    "payload" in payload &&
-    typeof payload.payload === "object" &&
-    payload.payload !== null
-      ? payload.payload
+  // SAFETY: `Object(x) === x` holds only for objects, so the nested payload is an object here;
+  // readField then reads it by name and keeps only primitives.
+  const nested =
+    item?.payload !== undefined && Object(item.payload) === item.payload
+      ? (item.payload as ChartPayloadEntry)
       : undefined;
+  const candidates = [readField(item, key), readField(nested, key)];
+  const labelKey = candidates.find(
+    (candidate) =>
+      candidate !== undefined &&
+      candidate !== null &&
+      String(candidate) in config,
+  );
 
-  let configLabelKey: string = key;
-
-  if (
-    key in payload &&
-    typeof payload[key as keyof typeof payload] === "string"
-  ) {
-    configLabelKey = payload[key as keyof typeof payload] as string;
-  } else if (
-    payloadPayload &&
-    key in payloadPayload &&
-    typeof payloadPayload[key as keyof typeof payloadPayload] === "string"
-  ) {
-    configLabelKey = payloadPayload[
-      key as keyof typeof payloadPayload
-    ] as string;
-  }
-
-  return configLabelKey in config ? config[configLabelKey] : config[key];
+  return labelKey === undefined ? config[key] : config[String(labelKey)];
 }
 
 export {

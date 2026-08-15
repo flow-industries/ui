@@ -63,7 +63,7 @@ function ProfilePill({
         // Only when we own the element: `type` on a caller-supplied `render`
         // element would be an invalid attribute (and the base layer turns any
         // [type=button] into a pointer cursor, even on a span).
-        ...(render ? {} : { type: "button" as const }),
+        type: render ? undefined : ("button" as const),
         className: cn(profilePillVariants({ size, className })),
       },
       props,

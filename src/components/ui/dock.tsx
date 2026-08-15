@@ -32,29 +32,29 @@ interface DockIconButtonProps extends DockItem {
   ref?: React.Ref<HTMLButtonElement>;
 }
 
-const variantClasses: Record<DockVariant, string> = {
+const variantClasses = {
   default: "hover:bg-secondary/50",
   secondary: "bg-secondary/50 hover:bg-primary hover:text-primary-foreground",
   primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-};
+} satisfies Record<DockVariant, string>;
 
-const containerSizeClasses: Record<DockSize, string> = {
+const containerSizeClasses = {
   sm: "gap-1 rounded-xl p-1.5",
   md: "gap-1.5 rounded-xl p-2",
   lg: "gap-2 rounded-2xl p-2 md:gap-3",
-};
+} satisfies Record<DockSize, string>;
 
-const buttonSizeClasses: Record<DockSize, string> = {
+const buttonSizeClasses = {
   sm: "h-8 w-8 rounded-lg p-1.5",
   md: "h-10 w-10 rounded-xl p-2",
   lg: "h-12 w-12 rounded-2xl p-3 md:h-14 md:w-14",
-};
+} satisfies Record<DockSize, string>;
 
-const iconSizeClasses: Record<DockSize, string> = {
+const iconSizeClasses = {
   sm: "h-4 w-4",
   md: "h-5 w-5",
   lg: "h-5 w-5 md:h-6 md:w-6",
-};
+} satisfies Record<DockSize, string>;
 
 function DockIconButton({
   icon: Icon,
