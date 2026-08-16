@@ -14,7 +14,7 @@ export function Logo({ className, size = 28, color }: LogoProps) {
       style={{
         width: size,
         height: size,
-        ...(color ? { backgroundColor: color } : {}),
+        backgroundColor: color,
       }}
     />
   );

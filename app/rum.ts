@@ -9,7 +9,7 @@ const ENV = import.meta.env.PROD ? "production" : "development";
 let initialized = false;
 
 export function initRum(clientToken: string, version = "dev") {
-  if (typeof window === "undefined") return;
+  if (import.meta.env.SSR) return;
   if (initialized) return;
   if (!clientToken) return;
 
