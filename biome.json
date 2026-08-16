@@ -1,6 +1,10 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
-  "extends": ["@flow-industries/lint/biome", "@flow-industries/lint/react"],
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
+  "extends": [
+    "@flow-industries/lint/biome",
+    "@flow-industries/lint/react",
+    "biome-anti-slop"
+  ],
   "files": {
     "includes": ["!**/*.css"]
   }
