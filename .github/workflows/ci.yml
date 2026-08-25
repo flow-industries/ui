@@ -11,3 +11,11 @@ concurrency:
 jobs:
   check:
     uses: flow-industries/lint/.github/workflows/ts-check.yml@v1
+
+  container-lifecycle:
+    name: Container lifecycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - run: ./scripts/test-container-shutdown.sh
