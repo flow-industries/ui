@@ -1,6 +1,7 @@
 "use client";
 
 import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "../../utils/cn";
@@ -27,22 +28,36 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   );
 }
 
+// Size classes are emitted as plain utilities rather than `data-[size=...]:`
+// rules so tailwind-merge can drop them for a consumer's own height class. An
+// attribute-scoped rule outranks a bare class on specificity, so `h-11` from a
+// consumer would land in the stylesheet and still lose (UI-45).
+const selectTriggerVariants = cva(
+  "flex w-fit items-center justify-between gap-1.5 rounded-lg border-[length:var(--border-width)] border-transparent bg-input py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors outline-none select-none pointer-coarse:min-h-11 focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-placeholder:text-muted-foreground *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:aria-invalid:border-destructive/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      size: {
+        default: "h-10",
+        sm: "h-7 rounded-[min(var(--radius-md),10px)]",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  },
+);
+
 function SelectTrigger({
   className,
   size = "default",
   children,
   ...props
-}: SelectPrimitive.Trigger.Props & {
-  size?: "sm" | "default";
-}) {
+}: SelectPrimitive.Trigger.Props & VariantProps<typeof selectTriggerVariants>) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       data-size={size}
-      className={cn(
-        "flex w-fit items-center justify-between gap-1.5 rounded-lg border-[length:var(--border-width)] border-transparent bg-input py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors outline-none select-none focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:aria-invalid:border-destructive/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(selectTriggerVariants({ size, className }))}
       {...props}
     >
       {children}
@@ -119,7 +134,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-muted focus:text-foreground not-data-[variant=destructive]:focus:**:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none pointer-coarse:min-h-11 focus:bg-muted focus:text-foreground not-data-[variant=destructive]:focus:**:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className,
       )}
       {...props}

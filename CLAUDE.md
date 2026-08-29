@@ -42,6 +42,8 @@ CI runs the shared quality gate (`flow-industries/lint` ts-check workflow): `bun
 - Borders use `--border-width` / `--border-width-focus` tokens.
 - Square media (avatars, thumbnails) use `rounded-squircle`, never `rounded-full`: it is 50% where `corner-shape` is supported (the superellipse makes that a squircle) and 35% where it isn't, so the fallback is a rounded square instead of a circle. `rounded-full` stays for things that are genuinely round or pill-shaped (dots, switches, progress tracks).
 - Inputs use `border-transparent bg-input` default, `focus-visible:border-focus` on focus.
+- Size variants emit plain utility classes (via `cva`), never `data-[size=...]:h-*`. An attribute-scoped rule outranks a consumer's bare `className`, so their override lands in the stylesheet and silently loses the cascade.
+- Interactive controls guarantee a 44px touch target with `pointer-coarse:min-h-11`. It is a floor on coarse pointers only — fine-pointer density is unchanged, and a consumer opting out needs the same variant (`pointer-coarse:min-h-0`).
 - No focus rings — only border color changes for focus indication. Use `--focus` token (pink).
 - Never use `transition-all` — specify exact properties (e.g. `transition-[color,background-color,border-color]`).
 - Use animation tokens: `ease-(--ease-out)`, `ease-(--ease-out-expo)`, `ease-(--ease-spring)`.
