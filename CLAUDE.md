@@ -4,10 +4,12 @@ Shared UI components and design system for Flow applications. Published as `@flo
 
 ## Architecture
 
-Ships raw TypeScript/TSX source — no build step. Consumers compile via their own Vite + Tailwind pipelines.
+The repo holds two things: the **package** in `src/` and the **showcase site** in `app/`.
+
+The published package ships raw TypeScript/TSX source — no build step. Consumers compile via their own Vite + Tailwind pipelines (`files: ["src"]` in `package.json`, so `app/` is never published).
 
 ```
-src/
+src/                    <- the published package
   index.ts              <- cn utility, useIsMobile hook
   styles/
     tokens.css          <- Design tokens (@theme, :root, .dark)
@@ -18,16 +20,41 @@ src/
   components/
     logo.tsx            <- Flow logo + LogoSpinner
     icons.tsx           <- Social icons (X, Discord, GitHub, Bluesky)
-    ui/                 <- 50+ components (including typography)
+    ui/                 <- 60+ components (including typography)
+
+app/                    <- the showcase site (Vite, NOT published)
+  App.tsx               <- every showcase page
+  main.tsx              <- entry, initializes browser RUM
+  rum.ts                <- OpenObserve browser RUM setup
+Dockerfile / nginx.conf <- build + serve the showcase as a container
 ```
+
+Components are exported through the `./components` subpath, not the root barrel — `src/index.ts` only exports `cn` and `useIsMobile`. To enumerate what the package exposes, read `src/components/ui/index.ts`.
+
+### The showcase site
+
+`app/` is a live component gallery, deployed at **https://ui.flow.industries**. Run it locally with `bun run dev`. It is hash-routed into three pages, switched from a `Dock` pinned to the right edge:
+
+| Hash | Contents |
+|---|---|
+| `#design` | Palette, type scale, fonts, brand marks |
+| `#showcases` | Composed demos (app shell, sign-in, inbox, team members) |
+| `#components` | One section per component — the closest thing to a Storybook |
+
+The Dock also holds the **light/dark toggle**, which flips `.dark` on `documentElement`. Note the Dock is `hidden sm:flex`, so below the `sm` breakpoint there is no visible way to switch page or theme — set the hash and the `.dark` class directly when driving the page programmatically.
+
+**Adding a component means adding it to `app/App.tsx` too.** A component that renders nowhere in the showcase is invisible to reviewers and to any future visual/a11y regression gate.
 
 ## Commands
 
 ```bash
+bun run dev                 # showcase dev server (vite)
+bun run build               # build the showcase to dist/
+bun run preview             # serve the built showcase
 bun run typecheck           # tsc --noEmit
 bun run lint                # biome check
 bun run check               # biome check --write (auto-fix lint + formatting)
-bun publish --access public # publish to npm
+bun publish --access public # publish the package to npm
 ```
 
 ### Before pushing: CI must pass
