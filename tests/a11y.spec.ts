@@ -77,3 +77,37 @@ for (const { slot, trigger } of overlays) {
     });
   }
 }
+
+// UI-45: touch targets are a floor on coarse pointers only, so the assertion
+// has to run under emulation — a fine-pointer run passes at any size.
+const TOUCH_TARGET_MIN = 44;
+
+test.describe("touch targets on a coarse pointer", () => {
+  test.use({ hasTouch: true, isMobile: true });
+
+  test("select trigger and options are at least 44px tall", async ({
+    page,
+  }) => {
+    await openShowcase(page, "components", "light");
+    expect(
+      await page.evaluate(() => matchMedia("(pointer: coarse)").matches),
+    ).toBe(true);
+
+    const trigger = page.getByRole("combobox", { name: "Framework" });
+    await trigger.scrollIntoViewIfNeeded();
+    expect((await trigger.boundingBox())?.height).toBeGreaterThanOrEqual(
+      TOUCH_TARGET_MIN,
+    );
+
+    await trigger.click();
+    const options = page.locator('[data-slot="select-item"]');
+    await options.first().waitFor({ state: "visible" });
+    const heights = await options.evaluateAll((items) =>
+      items.map((item) => item.getBoundingClientRect().height),
+    );
+    expect(heights.length).toBeGreaterThan(0);
+    for (const height of heights) {
+      expect(height).toBeGreaterThanOrEqual(TOUCH_TARGET_MIN);
+    }
+  });
+});
