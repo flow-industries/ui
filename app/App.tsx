@@ -1910,6 +1910,27 @@ function ComponentsShowcase() {
         </div>
       </Section>
 
+      {/* Native Select */}
+      <Section title="Native Select">
+        <Preview>
+          <NativeSelect aria-label="Theme">
+            <NativeSelectOption value="system">System</NativeSelectOption>
+            <NativeSelectOption value="light">Light</NativeSelectOption>
+            <NativeSelectOption value="dark">Dark</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect size="sm" aria-label="Theme, compact">
+            <NativeSelectOption value="system">System</NativeSelectOption>
+            <NativeSelectOption value="light">Light</NativeSelectOption>
+            <NativeSelectOption value="dark">Dark</NativeSelectOption>
+          </NativeSelect>
+          <NativeSelect className="h-11" aria-label="Theme, tall">
+            <NativeSelectOption value="system">System</NativeSelectOption>
+            <NativeSelectOption value="light">Light</NativeSelectOption>
+            <NativeSelectOption value="dark">Dark</NativeSelectOption>
+          </NativeSelect>
+        </Preview>
+      </Section>
+
       {/* Combobox */}
       <Section title="Combobox">
         <div className="max-w-xs">

@@ -110,4 +110,36 @@ test.describe("touch targets on a coarse pointer", () => {
       expect(height).toBeGreaterThanOrEqual(TOUCH_TARGET_MIN);
     }
   });
+
+  // UI-46: the native control had no coarse-pointer floor at all, so a 40px
+  // target — 28px at size="sm" — shipped to touch devices.
+  test("native select is at least 44px tall at every size", async ({
+    page,
+  }) => {
+    await openShowcase(page, "components", "light");
+
+    for (const name of ["Theme", "Theme, compact", "Theme, tall"]) {
+      const control = page.getByRole("combobox", { name, exact: true });
+      await control.scrollIntoViewIfNeeded();
+      expect((await control.boundingBox())?.height).toBeGreaterThanOrEqual(
+        TOUCH_TARGET_MIN,
+      );
+    }
+  });
+});
+
+// UI-46: NativeSelect used to route `className` to its wrapper, so a consumer
+// height class sized a box nobody sees while the control kept its own height.
+// The class list is not the assertion — only the measured control proves it.
+test("a consumer height class sizes the native select control", async ({
+  page,
+}) => {
+  await openShowcase(page, "components", "light");
+
+  const control = page.getByRole("combobox", { name: "Theme, tall" });
+  await control.scrollIntoViewIfNeeded();
+  expect((await control.boundingBox())?.height).toBeCloseTo(44, 1);
+
+  const unstyled = page.getByRole("combobox", { name: "Theme", exact: true });
+  expect((await unstyled.boundingBox())?.height).toBeCloseTo(40, 1);
 });
