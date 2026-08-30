@@ -34,6 +34,24 @@ bun publish --access public # publish to npm
 
 CI runs the shared quality gate (`flow-industries/lint` ts-check workflow): `bun run lint` and `bun run typecheck`. Both must be clean before every push — run them locally and fix everything they surface (`bun run check` auto-fixes most lint/format issues). Never push with a failing gate.
 
+## Publishing
+
+`@flow-industries/ui` publishes to npm **automatically on a version bump**. Change `version` in
+`package.json`, open a PR, merge it — the push to `main` runs `.github/workflows/publish.yml`,
+which publishes that exact version through npm trusted publishing (GitHub OIDC; there is no npm
+token stored anywhere).
+
+- **Never run `npm publish` by hand.** The workflow is the only publisher. A manual publish from a
+  stale checkout is how you get `You cannot publish over the previously published versions`.
+- **The version is the trigger, not the file.** Merging any other `package.json` change is a no-op:
+  the workflow checks the registry first and skips a version that already exists.
+- **Do not rename `publish.yml`.** npm authenticates the run against that exact filename, so it can
+  only change if the trusted publisher on npmjs.com changes with it.
+- **Automatic publishing does not remove the coordination.** Consumers pin a caret range, so a
+  breaking change still needs every consumer bumped in the same pass — see UI-46, where moving
+  `className` from the wrapper to the control required renaming three call sites in `talk` and
+  `game` to `containerClassName`.
+
 ## Conventions
 
 - No `@/` path aliases. All imports are relative within the package.
