@@ -1,6 +1,13 @@
 {
   "name": "@flow-industries/ui",
   "version": "0.20.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flow-industries/ui.git"
+  },
+  "homepage": "https://ui.flow.industries",
+  "bugs": "https://github.com/flow-industries/ui/issues",
   "type": "module",
   "files": [
     "src"
