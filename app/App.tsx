@@ -172,15 +172,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from "../src/components/ui/field";
-import {
-  Footer,
-  FooterBottom,
-  FooterBrand,
-  FooterContent,
-  FooterCopyright,
-  FooterLink,
-  FooterSocials,
-} from "../src/components/ui/footer";
+import { FLOW_LINKS, FlowFooter } from "../src/components/ui/flow-footer";
 import {
   Form,
   FormControl,
@@ -190,6 +182,11 @@ import {
   FormLabel,
   FormMessage,
 } from "../src/components/ui/form";
+import {
+  Header,
+  HeaderActions,
+  HeaderBrand,
+} from "../src/components/ui/header";
 import {
   HoverCard,
   HoverCardContent,
@@ -301,7 +298,6 @@ import {
 import { Skeleton } from "../src/components/ui/skeleton";
 import { Slider } from "../src/components/ui/slider";
 import { Spinner } from "../src/components/ui/spinner";
-import { StatusWidget } from "../src/components/ui/status-widget";
 import { Switch } from "../src/components/ui/switch";
 import {
   Table,
@@ -3548,97 +3544,21 @@ export function App() {
             {page === "components" && <ComponentsShowcase />}
           </main>
 
-          <Footer className="px-6 md:px-12 p-8 mt-12 mb-8 max-w-5xl mx-auto bg-secondary rounded-xl">
-            <FooterContent>
-              <NavList className="w-full justify-between">
-                <NavListGroup>
-                  <NavListHeader>Products</NavListHeader>
-                  <NavListItem href="https://flow.game">
-                    <Logomark size="default" start="Flow" end="Game" />
-                  </NavListItem>
-                  <NavListItem href="https://flow.talk">
-                    <Logomark size="default" start="Flow" end="Talk" />
-                  </NavListItem>
-                  <NavListItem href="https://id.flow.industries">
-                    <Logomark size="default" start="Flow" end="ID" />
-                  </NavListItem>
-                  <NavListItem href="https://ui.flow.industries">
-                    <Logomark size="default" start="Flow" end="UI" />
-                  </NavListItem>
-                </NavListGroup>
-                <NavListGroup>
-                  <NavListHeader>Resources</NavListHeader>
-                  <NavListItem href="https://status.flow.industries">
-                    Status
-                  </NavListItem>
-                  <NavListItem
-                    href="https://github.com/flow-industries"
-                    target="_blank"
-                  >
-                    GitHub
-                  </NavListItem>
-                  <NavListItem
-                    href="https://discord.gg/g2JXf8t4Vg"
-                    target="_blank"
-                  >
-                    Discord
-                  </NavListItem>
-                </NavListGroup>
-                <NavListGroup>
-                  <NavListHeader>Legal</NavListHeader>
-                  <NavListItem href="https://flow.industries/terms">
-                    Terms
-                  </NavListItem>
-                  <NavListItem href="https://flow.industries/privacy">
-                    Privacy
-                  </NavListItem>
-                </NavListGroup>
-              </NavList>
-            </FooterContent>
-            <FooterBottom className="flex-col items-start gap-4">
-              <div className="flex w-full items-center justify-between">
-                <FooterBrand>
-                  <a href="https://flow.industries">
-                    <Logomark size="lg" start="Flow" end="Industries" />
-                  </a>
-                </FooterBrand>
-                <FooterSocials>
-                  <FooterLink
-                    href="https://x.com/flowdotgame"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <XIcon className="w-4 h-4" />
-                  </FooterLink>
-                  <FooterLink
-                    href="https://discord.gg/g2JXf8t4Vg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <DiscordIcon className="w-5 h-5" />
-                  </FooterLink>
-                  <FooterLink
-                    href="https://github.com/flow-industries/ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <GitHubIcon className="w-4 h-4" />
-                  </FooterLink>
-                  <FooterLink
-                    href="https://bsky.app/profile/flow.industries"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <BlueskyIcon className="w-4 h-4" />
-                  </FooterLink>
-                </FooterSocials>
-              </div>
-              <div className="flex w-full items-center justify-between gap-4">
-                <FooterCopyright>&copy; 2026 Flow Industries</FooterCopyright>
-                <StatusWidget />
-              </div>
-            </FooterBottom>
-          </Footer>
+          <section className="px-6 md:px-12 mt-12 max-w-5xl mx-auto">
+            <Header className="rounded-xl bg-secondary px-6 py-4">
+              <HeaderBrand
+                label="Industries"
+                render={<a href={FLOW_LINKS.home} />}
+              />
+              <HeaderActions>
+                <Button variant="secondary" size="sm">
+                  Join
+                </Button>
+              </HeaderActions>
+            </Header>
+          </section>
+
+          <FlowFooter className="px-6 md:px-12 mt-12 mb-8 max-w-5xl mx-auto" />
         </div>
       </TooltipProvider>
     </ToastProvider>
