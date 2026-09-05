@@ -77,7 +77,7 @@ export function StatusWidget({
       data-slot="status-widget"
       href={statusUrl}
       className={cn(
-        "inline-flex items-center gap-2 text-muted-foreground text-xs [transition:color_80ms_ease] hover:text-foreground",
+        "-m-0.5 inline-flex items-center gap-2 rounded-sm border-[length:var(--border-width)] border-transparent text-muted-foreground text-xs outline-none [transition:color_80ms_ease] hover:text-foreground focus-visible:border-focus pointer-coarse:min-h-11",
         className,
       )}
       {...props}

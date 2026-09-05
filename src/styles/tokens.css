@@ -89,6 +89,7 @@
   --color-destructive: var(--destructive);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
+  --color-brand-text: var(--brand-text);
   --color-input: var(--input);
   --color-success: var(--success);
   --color-focus: var(--focus);
@@ -114,6 +115,7 @@
   --destructive: oklch(0.500 0.190 5.0);
   --brand: oklch(0.778 0.185 337.6);
   --brand-foreground: var(--foreground);
+  --brand-text: oklch(0.550 0.200 337.6);
 
   --input: oklch(0.97 0 0);
 
@@ -139,6 +141,7 @@
   --destructive: oklch(0.770 0.143 5.0);
   --brand: oklch(0.778 0.185 337.6);
   --brand-foreground: var(--primary-foreground);
+  --brand-text: var(--brand);
 
   --input: oklch(0.20 0 0);
 

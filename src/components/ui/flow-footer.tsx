@@ -44,9 +44,10 @@ type FlowFooterProps = React.ComponentProps<"footer"> & {
 };
 
 const NEW_TAB_HINT = "opens in new tab";
-
-const focusable =
-  "-m-0.5 rounded-sm border-[length:var(--border-width)] border-transparent outline-none focus-visible:border-focus";
+const EXTERNAL_LINK_PROPS = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
 
 const socials = [
   { name: "X", href: FLOW_LINKS.x, Icon: XIcon, icon: "size-4" },
@@ -100,10 +101,7 @@ function FooterGroup({
         <NavListItem
           key={href}
           href={href}
-          className={cn(focusable, "pointer-coarse:min-h-11")}
-          {...(external
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {})}
+          {...(external ? EXTERNAL_LINK_PROPS : {})}
         >
           {label}
           {external && <span className="sr-only"> ({NEW_TAB_HINT})</span>}
@@ -149,25 +147,21 @@ function FlowFooter({
       <FooterBottom className="flex-col items-start gap-4">
         <div className="flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-3">
           <FooterBrand>
-            <a
+            <FooterLink
               href={FLOW_LINKS.home}
-              className={cn(focusable, "inline-flex pointer-coarse:min-h-11")}
+              className="pointer-coarse:min-h-11 hover:text-foreground"
             >
               <Logomark size="lg" start="Flow" end="Industries" />
-            </a>
+            </FooterLink>
           </FooterBrand>
           <FooterSocials>
             {socials.map(({ name, href, Icon, icon }) => (
               <FooterLink
                 key={name}
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...EXTERNAL_LINK_PROPS}
                 aria-label={`Flow on ${name} (${NEW_TAB_HINT})`}
-                className={cn(
-                  focusable,
-                  "-m-1 inline-flex size-6 items-center justify-center pointer-coarse:m-0 pointer-coarse:size-11",
-                )}
+                className="-m-1 size-6 items-center justify-center pointer-coarse:m-0 pointer-coarse:size-11"
               >
                 <Icon className={icon} aria-hidden="true" />
               </FooterLink>
@@ -176,10 +170,7 @@ function FlowFooter({
         </div>
         <div className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3">
           <FooterCopyright>&copy; {year} Flow Industries</FooterCopyright>
-          <StatusWidget
-            apiUrl={statusApiUrl}
-            className={cn(focusable, "pointer-coarse:min-h-11")}
-          />
+          <StatusWidget apiUrl={statusApiUrl} />
         </div>
       </FooterBottom>
     </Footer>

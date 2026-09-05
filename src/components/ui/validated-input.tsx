@@ -53,7 +53,7 @@ function ValidatedInput({
               className="absolute inset-0"
               {...iconAnimation}
             >
-              <Check className="size-4 text-primary group-focus-within/validated-input:text-brand stroke-[3] transition-colors" />
+              <Check className="size-4 text-primary group-focus-within/validated-input:text-brand-text stroke-[3] transition-colors" />
             </motion.div>
           )}
           {status === "invalid" && (

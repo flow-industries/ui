@@ -39,7 +39,7 @@ function NavListItem({ className, ...props }: React.ComponentProps<"a">) {
     <a
       data-slot="nav-list-item"
       className={cn(
-        "inline-flex items-center gap-2 text-xs font-[450] tracking-wide text-foreground [transition:color_80ms_ease] hover:text-brand",
+        "inline-flex items-center gap-2 text-xs font-[450] tracking-wide text-foreground [transition:color_80ms_ease] hover:text-brand-text pointer-coarse:min-h-11 -m-0.5 rounded-sm border-[length:var(--border-width)] border-transparent outline-none focus-visible:border-focus",
         className,
       )}
       {...props}

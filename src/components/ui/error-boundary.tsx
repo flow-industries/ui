@@ -19,6 +19,7 @@ type ErrorFallbackProps = {
   homeLabel?: string;
   retryLabel?: string;
   showDetails?: boolean;
+  autoFocus?: boolean;
   className?: string;
 };
 
@@ -31,13 +32,14 @@ function ErrorFallback({
   homeLabel = "Back to home",
   retryLabel = "Try again",
   showDetails = false,
+  autoFocus = true,
   className,
 }: ErrorFallbackProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    headingRef.current?.focus({ preventScroll: true });
-  }, []);
+    if (autoFocus) headingRef.current?.focus({ preventScroll: true });
+  }, [autoFocus]);
 
   const details =
     showDetails && error !== undefined

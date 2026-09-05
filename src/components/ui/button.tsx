@@ -23,7 +23,7 @@ const buttonVariants = cva(
         brand: "bg-brand text-brand-foreground hover:bg-brand/70",
         link: "text-primary underline-offset-4 hover:underline",
         "brand-link":
-          "text-foreground hover:text-brand [transition:color_80ms_ease]",
+          "text-foreground hover:text-brand-text [transition:color_80ms_ease]",
       },
       size: {
         default:

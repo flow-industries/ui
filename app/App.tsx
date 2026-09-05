@@ -3015,6 +3015,7 @@ function ComponentsShowcase() {
               reset={() => {}}
               homeHref="#components"
               showDetails
+              autoFocus={false}
             />
           </div>
         </Preview>

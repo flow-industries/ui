@@ -1,7 +1,6 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type * as React from "react";
-import { isValidElement } from "react";
 
 import { cn } from "../../utils/cn";
 import { Logo } from "../logo";
@@ -46,20 +45,6 @@ type HeaderBrandProps = useRender.ComponentProps<"span"> & {
   logoSize?: number;
 };
 
-// A bare brand is static text; once it renders as a link or button it needs the
-// same touch floor and focus border as every other control.
-function isInteractive(render: HeaderBrandProps["render"]): boolean {
-  if (!isValidElement<{ href?: string; onClick?: unknown }>(render)) {
-    return false;
-  }
-  return (
-    render.type === "a" ||
-    render.type === "button" ||
-    render.props.href !== undefined ||
-    render.props.onClick !== undefined
-  );
-}
-
 function HeaderBrand({
   className,
   label,
@@ -71,7 +56,9 @@ function HeaderBrand({
   ...props
 }: HeaderBrandProps) {
   const s = brandSizes[size];
-  const interactive = onClick !== undefined || isInteractive(render);
+  // A bare brand is static text; rendered as a link or button it needs the
+  // same touch floor and focus border as every other control.
+  const interactive = render !== undefined || onClick !== undefined;
 
   return useRender({
     defaultTagName: "span",
