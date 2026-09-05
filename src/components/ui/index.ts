@@ -19,6 +19,7 @@ export * from "./dock";
 export * from "./drawer";
 export * from "./dropdown-menu";
 export * from "./empty";
+export * from "./error-boundary";
 export * from "./field";
 export * from "./footer";
 export * from "./form";

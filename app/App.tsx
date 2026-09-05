@@ -162,6 +162,10 @@ import {
   EmptyTitle,
 } from "../src/components/ui/empty";
 import {
+  ErrorBoundary,
+  ErrorFallback,
+} from "../src/components/ui/error-boundary";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -1594,6 +1598,32 @@ const trafficConfig = {
   signups: { label: "Signups", color: "var(--color-pink)" },
 } satisfies ChartConfig;
 
+function CrashableChild({ crash }: { crash: boolean }) {
+  if (crash) {
+    throw new Error("Showcase render error");
+  }
+  return (
+    <p className="text-sm text-muted-foreground">
+      This child renders normally until it throws.
+    </p>
+  );
+}
+
+function ErrorBoundaryShowcase() {
+  const [crash, setCrash] = useState(false);
+
+  return (
+    <div className="w-full max-w-lg space-y-3 rounded-xl bg-secondary p-5">
+      <ErrorBoundary onReset={() => setCrash(false)}>
+        <CrashableChild crash={crash} />
+        <Button variant="outline" size="sm" onClick={() => setCrash(true)}>
+          Throw render error
+        </Button>
+      </ErrorBoundary>
+    </div>
+  );
+}
+
 function ComponentsShowcase() {
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [sliderValue, setSliderValue] = useState(40);
@@ -2977,6 +3007,23 @@ function ComponentsShowcase() {
               </div>
             </div>
           </DirectionProvider>
+        </Preview>
+      </Section>
+
+      {/* Error Boundary */}
+      <Section title="Error Boundary" wide>
+        <Preview label="ErrorFallback with details">
+          <div className="w-full max-w-lg rounded-xl bg-secondary py-4">
+            <ErrorFallback
+              error={new Error("Failed to load the room roster")}
+              reset={() => {}}
+              homeHref="#components"
+              showDetails
+            />
+          </div>
+        </Preview>
+        <Preview label="ErrorBoundary catches a throwing child">
+          <ErrorBoundaryShowcase />
         </Preview>
       </Section>
     </div>
