@@ -87,7 +87,7 @@ function ErrorFallback({
       </div>
       {details && (
         <details className="w-full max-w-lg text-left">
-          <summary className="cursor-pointer text-sm text-muted-foreground outline-none focus-visible:text-focus">
+          <summary className="cursor-pointer rounded-sm border-[length:var(--border-width)] border-transparent text-sm text-muted-foreground outline-none focus-visible:border-focus">
             Error details
           </summary>
           <pre className="mt-2 max-h-64 overflow-auto rounded-lg bg-muted p-3 font-mono text-xs leading-relaxed text-foreground/80 whitespace-pre-wrap break-words">
@@ -106,12 +106,13 @@ type ErrorBoundaryFallback =
 type ErrorBoundaryProps = {
   children: ReactNode;
   fallback?: ErrorBoundaryFallback;
-  onError?: (error: Error, info: ErrorInfo) => void;
+  // biome-ignore lint/plugin: React can catch any thrown JavaScript value.
+  onError?: (error: unknown, info: ErrorInfo) => void;
   onReset?: () => void;
   resetKeys?: unknown[];
 };
 
-type ErrorBoundaryState = { error: Error | null };
+type ErrorBoundaryState = { hasError: boolean; error: unknown };
 
 function resetKeysChanged(previous?: unknown[], next?: unknown[]) {
   if (previous === next) return false;
@@ -120,19 +121,21 @@ function resetKeysChanged(previous?: unknown[], next?: unknown[]) {
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { error: null };
+  state: ErrorBoundaryState = { hasError: false, error: null };
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { error };
+  // biome-ignore lint/plugin: React can catch any thrown JavaScript value.
+  static getDerivedStateFromError(error: unknown): ErrorBoundaryState {
+    return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  // biome-ignore lint/plugin: React can catch any thrown JavaScript value.
+  componentDidCatch(error: unknown, info: ErrorInfo) {
     this.props.onError?.(error, info);
   }
 
   componentDidUpdate(previousProps: ErrorBoundaryProps) {
     if (
-      this.state.error !== null &&
+      this.state.hasError &&
       resetKeysChanged(previousProps.resetKeys, this.props.resetKeys)
     ) {
       this.reset();
@@ -141,12 +144,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   reset = () => {
     this.props.onReset?.();
-    this.setState({ error: null });
+    this.setState({ hasError: false, error: null });
   };
 
   render() {
-    const { error } = this.state;
-    if (error === null) return this.props.children;
+    const { hasError, error } = this.state;
+    if (!hasError) return this.props.children;
 
     const { fallback } = this.props;
     if (fallback instanceof Function) {
