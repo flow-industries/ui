@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
+import type { AriaAttributes } from "react";
 import { cn } from "../utils/cn";
 
 interface LogoProps {
@@ -20,11 +21,24 @@ export function Logo({ className, size = 28, color }: LogoProps) {
   );
 }
 
-export function LogoSpinner({ className, size = 64 }: LogoProps) {
+interface LogoSpinnerProps extends LogoProps {
+  label?: string;
+  "aria-hidden"?: AriaAttributes["aria-hidden"];
+}
+
+export function LogoSpinner({
+  className,
+  size = 64,
+  label = "Loading",
+  "aria-hidden": ariaHidden,
+}: LogoSpinnerProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <motion.div
+      role="status"
+      aria-label={label}
+      aria-hidden={ariaHidden}
       className={cn("bg-pink rounded-sm", className)}
       style={{ width: size, height: size }}
       animate={{ rotate: shouldReduceMotion ? 0 : 90 }}
@@ -35,7 +49,9 @@ export function LogoSpinner({ className, size = 64 }: LogoProps) {
         repeat: Infinity,
         repeatDelay: 0.05,
       }}
-    />
+    >
+      <span className="sr-only">{label}</span>
+    </motion.div>
   );
 }
 

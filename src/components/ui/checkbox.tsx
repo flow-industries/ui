@@ -2,13 +2,14 @@
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import { CheckIcon } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 import { cn } from "../../utils/cn";
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
   const ref = React.useRef<HTMLButtonElement>(null);
   const [checked, setChecked] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     const el = ref.current;
@@ -37,10 +38,13 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
       <AnimatePresence>
         {checked && (
           <motion.span
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: shouldReduceMotion ? 1 : 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
+            exit={{ scale: shouldReduceMotion ? 1 : 0.8, opacity: 0 }}
+            transition={{
+              duration: shouldReduceMotion ? 0 : 0.12,
+              ease: [0.23, 1, 0.32, 1],
+            }}
             className="grid place-content-center text-primary [&>svg]:size-4"
           >
             <CheckIcon strokeWidth={3} />

@@ -11,11 +11,7 @@ const allowlistedRules: { id: string; reason: string }[] = [];
 // while a filed finding is being fixed. Remove the entry when its ticket
 // closes. Caveat: while a rule is listed, additional instances of that same
 // rule are masked too — keep this list short-lived.
-const knownViolations: { id: string; ticket: string }[] = [
-  // Token-level contrast failures (brand/success buttons, muted-foreground);
-  // fixing them is a palette decision, not a showcase change.
-  { id: "color-contrast", ticket: "UI-32" },
-];
+const knownViolations: { id: string; ticket: string }[] = [];
 
 async function expectNoSevereViolations(page: Page, include?: string) {
   let builder = new AxeBuilder({ page });
@@ -142,4 +138,31 @@ test("a consumer height class sizes the native select control", async ({
 
   const unstyled = page.getByRole("combobox", { name: "Theme", exact: true });
   expect((await unstyled.boundingBox())?.height).toBeCloseTo(40, 1);
+});
+
+// UI-4: the config runs every test with reducedMotion "reduce", so the
+// indicators below must already be at rest here. The base rule shortens every
+// animation to 0.01ms only for consumers importing base.css; the utility class
+// is what makes the component honour the preference on its own.
+test.describe("reduced motion", () => {
+  test("spinner and status dot do not animate", async ({ page }) => {
+    await openShowcase(page, "components", "light");
+    expect(
+      await page.evaluate(
+        () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+      ),
+    ).toBe(true);
+
+    const animationNames = await page
+      .locator(
+        '[role="status"][aria-label="Loading"], [data-slot="status-widget"] .animate-ping',
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => getComputedStyle(node).animationName),
+      );
+    expect(animationNames.length).toBeGreaterThan(0);
+    for (const name of animationNames) {
+      expect(name).toBe("none");
+    }
+  });
 });

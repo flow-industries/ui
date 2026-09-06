@@ -21,7 +21,7 @@ jobs:
       - run: npm install -g bun
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bunx playwright test tests/a11y.spec.ts
+      - run: bunx playwright test tests/a11y.spec.ts tests/error-boundary.spec.ts
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

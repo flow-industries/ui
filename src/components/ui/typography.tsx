@@ -55,7 +55,7 @@ function Overline({
       data-slot="overline"
       className={cn(
         "text-sm font-[550] tracking-wide",
-        variant === "brand" ? "text-brand" : "text-muted-foreground",
+        variant === "brand" ? "text-brand-text" : "text-muted-foreground",
         className,
       )}
       {...props}
