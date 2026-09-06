@@ -8,7 +8,7 @@ import { cn } from "../../utils/cn";
 // attribute-scoped rule outranks a bare class on specificity, so `h-11` from a
 // consumer would land in the stylesheet and still lose (UI-45).
 const nativeSelectVariants = cva(
-  "w-full min-w-0 appearance-none rounded-lg border-[length:var(--border-width)] border-transparent bg-input pr-8 pl-2.5 text-sm transition-colors outline-none select-none pointer-coarse:min-h-11 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive dark:aria-invalid:border-destructive/50",
+  "w-full min-w-0 appearance-none rounded-lg border-[length:var(--border-width)] border-transparent bg-input pr-8 pl-2.5 text-sm transition-colors outline-none select-none pointer-coarse:min-h-11 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-[length:var(--border-width-focus)] focus-visible:border-focus focus-visible:bg-input-focus disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive dark:aria-invalid:border-destructive/50",
   {
     variants: {
       size: {

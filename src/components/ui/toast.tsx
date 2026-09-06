@@ -60,7 +60,14 @@ function ToastList() {
         style={
           accent
             ? {
-                backgroundImage: `radial-gradient(circle at top left, color-mix(in oklch, ${accent} 10%, transparent) 0%, transparent 50%)`,
+                backgroundColor:
+                  variant === "success"
+                    ? "var(--success-background)"
+                    : undefined,
+                backgroundImage:
+                  variant === "success"
+                    ? undefined
+                    : `radial-gradient(circle at top left, color-mix(in oklch, ${accent} 10%, transparent) 0%, transparent 50%)`,
                 boxShadow: `0 0 0 var(--border-width) color-mix(in oklch, ${accent} 25%, transparent), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)`,
               }
             : undefined
