@@ -60,7 +60,7 @@ function FooterLink({ className, ...props }: React.ComponentProps<"a">) {
     <a
       data-slot="footer-link"
       className={cn(
-        "inline-flex [transition:color_80ms_ease] hover:text-foreground -m-0.5 rounded-sm border-[length:var(--border-width)] border-transparent outline-none focus-visible:border-focus",
+        "inline-flex [transition:color_80ms_ease] hover:text-brand -m-0.5 rounded-sm border-[length:var(--border-width)] border-transparent outline-none focus-visible:border-focus",
         className,
       )}
       {...props}
