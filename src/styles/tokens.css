@@ -124,7 +124,7 @@
 
   --success: #09b270;
   --success-background: color-mix(in oklab, var(--success) 12%, var(--background));
-  --success-foreground: var(--foreground);
+  --success-foreground: var(--success);
   --input-focus: color-mix(in oklab, var(--focus) 12%, var(--input));
   --focus: var(--color-pink);
   --overlay: oklch(0 0 0 / 0.75);
@@ -153,7 +153,7 @@
 
   --success: #09b270;
   --success-background: color-mix(in oklab, var(--success) 12%, var(--background));
-  --success-foreground: var(--foreground);
+  --success-foreground: var(--success);
   --input-focus: color-mix(in oklab, var(--focus) 12%, var(--input));
   --focus: var(--color-pink);
   --overlay: oklch(0 0 0 / 0.5);
