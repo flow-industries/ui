@@ -24,7 +24,7 @@ function getTimeAgo(date: Date): string {
   return `${diffInYears}y`;
 }
 
-interface TimeElapsedProps extends React.ComponentProps<"span"> {
+interface TimeElapsedProps extends React.ComponentProps<"time"> {
   date: Date | string | number;
   longFormat?: string;
 }
@@ -59,15 +59,24 @@ function TimeElapsed({
   const diffInWeeks =
     (Date.now() - dateObj.getTime()) / (1000 * 60 * 60 * 24 * 7);
   const display = diffInWeeks > 3 ? format(dateObj, longFormat) : label;
+  const absoluteLabel = format(dateObj, "PPPPpppp");
 
   return (
-    <span ref={ref} data-slot="time-elapsed" className={className} {...props}>
-      {display}
-    </span>
+    <time
+      ref={ref}
+      data-slot="time-elapsed"
+      className={className}
+      dateTime={dateObj.toISOString()}
+      title={absoluteLabel}
+      {...props}
+    >
+      <span aria-hidden="true">{display}</span>
+      <span className="sr-only">{absoluteLabel}</span>
+    </time>
   );
 }
 
-interface TimeSinceProps extends React.ComponentProps<"span"> {
+interface TimeSinceProps extends React.ComponentProps<"time"> {
   date: Date | string | number;
   format?: string;
 }
@@ -79,10 +88,20 @@ function TimeSince({
   ref,
   ...props
 }: TimeSinceProps) {
+  const dateObj = toDate(date);
+  const absoluteLabel = format(dateObj, "PPPPpppp");
   return (
-    <span ref={ref} data-slot="time-since" className={className} {...props}>
-      {format(toDate(date), fmt)}
-    </span>
+    <time
+      ref={ref}
+      data-slot="time-since"
+      className={className}
+      dateTime={dateObj.toISOString()}
+      title={absoluteLabel}
+      {...props}
+    >
+      <span aria-hidden="true">{format(dateObj, fmt)}</span>
+      <span className="sr-only">{absoluteLabel}</span>
+    </time>
   );
 }
 

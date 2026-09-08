@@ -3279,6 +3279,14 @@ export function App() {
 
                 {/* Typography */}
                 <Section title="Typography" wide>
+                  <div className="mb-6">
+                    <Title size="lg" level={2}>
+                      Large section heading
+                    </Title>
+                    <p className="text-sm text-muted-foreground">
+                      An h2 with large title styling.
+                    </p>
+                  </div>
                   <div className="flex flex-wrap gap-12">
                     {/* Fonts */}
                     <div className="space-y-3 w-full">

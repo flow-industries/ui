@@ -9,12 +9,25 @@ const titleStyles = {
 
 const titleTags = { sm: "h3", default: "h2", md: "h2", lg: "h1" } as const;
 
+const headingTags = {
+  1: "h1",
+  2: "h2",
+  3: "h3",
+  4: "h4",
+  5: "h5",
+  6: "h6",
+} as const;
+
 function Title({
   className,
   size = "default",
+  level,
   ...props
-}: React.ComponentProps<"h1"> & { size?: "sm" | "default" | "md" | "lg" }) {
-  const Tag = titleTags[size];
+}: React.ComponentProps<"h1"> & {
+  size?: "sm" | "default" | "md" | "lg";
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+}) {
+  const Tag = level ? headingTags[level] : titleTags[size];
   return (
     <Tag
       data-slot="title"
