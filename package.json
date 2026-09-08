@@ -30,12 +30,14 @@
     "./icons": "./src/components/icons.tsx",
     "./styles/tokens.css": "./src/styles/tokens.css",
     "./styles/base.css": "./src/styles/base.css",
-    "./styles/fonts.css": "./src/styles/fonts.css"
+    "./styles/fonts.css": "./src/styles/fonts.css",
+    "./focus": "./src/focus/index.ts"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
-    "tailwindcss": ">=4.0.0"
+    "tailwindcss": ">=4.0.0",
+    "@flow-industries/id": ">=0.22.0"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
@@ -72,6 +74,12 @@
     "react-dom": "^19.2.3",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
-    "vite": "^7.2.7"
+    "vite": "^7.2.7",
+    "@flow-industries/id": "0.22.0"
+  },
+  "peerDependenciesMeta": {
+    "@flow-industries/id": {
+      "optional": true
+    }
   }
 }
