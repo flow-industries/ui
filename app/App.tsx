@@ -3476,7 +3476,9 @@ export function App() {
                         <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
                           Title lg
                         </span>
-                        <Title size="lg">Welcome to Flow</Title>
+                        <Title size="lg" level={2}>
+                          Welcome to Flow
+                        </Title>
                       </div>
                       <div className="flex items-baseline gap-6">
                         <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">

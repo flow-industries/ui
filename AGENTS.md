@@ -27,7 +27,6 @@ src/
 bun run typecheck           # tsc --noEmit
 bun run lint                # biome check
 bun run check               # biome check --write (auto-fix lint + formatting)
-bun publish --access public # publish to npm
 ```
 
 ### Before pushing: CI must pass
