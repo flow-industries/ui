@@ -5,7 +5,7 @@ test("heading level overrides size without changing its style", async ({
 }) => {
   await page.goto("/#design");
   const heading = page.getByRole("heading", {
-    name: "Large section heading",
+    name: "Welcome to Flow",
     exact: true,
   });
   await expect(heading).toHaveJSProperty("tagName", "H2");

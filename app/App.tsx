@@ -3279,14 +3279,6 @@ export function App() {
 
                 {/* Typography */}
                 <Section title="Typography" wide>
-                  <div className="mb-6">
-                    <Title size="lg" level={2}>
-                      Large section heading
-                    </Title>
-                    <p className="text-sm text-muted-foreground">
-                      An h2 with large title styling.
-                    </p>
-                  </div>
                   <div className="flex flex-wrap gap-12">
                     {/* Fonts */}
                     <div className="space-y-3 w-full">
@@ -3484,7 +3476,9 @@ export function App() {
                         <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
                           Title lg
                         </span>
-                        <Title size="lg">Welcome to Flow</Title>
+                        <Title size="lg" level={2}>
+                          Welcome to Flow
+                        </Title>
                       </div>
                       <div className="flex items-baseline gap-6">
                         <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
