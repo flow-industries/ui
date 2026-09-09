@@ -20,7 +20,8 @@
     "test": "playwright test",
     "format": "biome format --write",
     "check": "biome check --write",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:package": "bash scripts/test-package.sh"
   },
   "exports": {
     ".": "./src/index.ts",

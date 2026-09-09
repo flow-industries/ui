@@ -1,5 +1,6 @@
 name: CI
 on:
+  workflow_call:
   pull_request:
   push:
     branches: [main]
@@ -19,3 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: ./scripts/test-container-shutdown.sh
+
+  package:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y --no-install-recommends unzip
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run test:package

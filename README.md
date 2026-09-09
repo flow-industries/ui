@@ -100,3 +100,19 @@ The showcase at `/#focus` provides account, delay, error, reload, and theme
 controls with local fixture data. Run `bun run build` then
 `bunx playwright test tests/focus.spec.ts` for recovery, privacy, keyboard and
 failure checks.
+
+## Packed package compatibility
+
+`bun run test:package` packs the same `src` allowlist installed from npm and
+installs it into disposable React 19.0.0 and 19.2.3 consumers with React Router
+7.8.2, Vite 7.2.7 and Tailwind 4.1.18. Each consumer renders on the server,
+builds browser assets, then hydrates in Chromium and exercises keyboard focus,
+select/input rendering, button interaction and emitted CSS tokens. Install the
+browser first with `bunx playwright install chromium`.
+
+The check removes the component export and token stylesheet in the installed
+copy and requires each broken build to fail, then restores the files and repeats
+the successful browser check. PR CI and the publishing workflow both require
+this gate. A new supported consumer configuration belongs in this matrix before
+a release depends on it; incompatible changes require a coordinated package
+version and consumer update. These checks use package imports, never source aliases.

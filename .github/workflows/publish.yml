@@ -15,7 +15,11 @@ permissions:
   id-token: write
 
 jobs:
+  quality:
+    uses: ./.github/workflows/ci.yml
+
   publish:
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
