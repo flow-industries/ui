@@ -1,10 +1,10 @@
 import { cn } from "../../utils/cn";
 
 const titleStyles = {
-  sm: "text-sm font-medium",
-  default: "text-base font-semibold tracking-tighter",
-  md: "text-2xl font-semibold tracking-tighter",
-  lg: "text-3xl font-semibold tracking-tighter",
+  sm: "text-sm font-semibold",
+  default: "text-base font-bold tracking-tighter",
+  md: "text-2xl font-bold tracking-tighter",
+  lg: "text-3xl font-bold tracking-tighter",
 } as const;
 
 const titleTags = { sm: "h3", default: "h2", md: "h2", lg: "h1" } as const;
@@ -38,10 +38,10 @@ function Title({
 }
 
 const subtitleStyles = {
-  sm: "text-xs text-muted-foreground",
-  default: "text-sm text-muted-foreground",
-  md: "text-base text-muted-foreground",
-  lg: "text-lg text-muted-foreground",
+  sm: "text-xs font-medium text-muted-foreground",
+  default: "text-sm font-medium text-muted-foreground",
+  md: "text-base font-medium text-muted-foreground",
+  lg: "text-lg font-medium text-muted-foreground",
 } as const;
 
 function Subtitle({
