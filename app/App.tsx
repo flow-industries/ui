@@ -3473,62 +3473,100 @@ export function App() {
                     <p className="text-xs text-muted-foreground">Patterns</p>
                     <div className="space-y-4 rounded-xl bg-secondary p-6">
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
                           Title lg
-                        </span>
+                        </Mono>
                         <Title size="lg" level={2}>
                           Welcome to Flow
                         </Title>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Title md
+                        </Mono>
+                        <Title size="md">Continue to Flow</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Title default
+                        </Mono>
+                        <Title>Account Settings</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Title sm
+                        </Mono>
+                        <Title size="sm">Email address</Title>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
                           Subtitle lg
-                        </span>
+                        </Mono>
                         <Subtitle size="lg">
                           Sign in to start your journey.
                         </Subtitle>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
-                          Title
-                        </span>
-                        <Title>Account Settings</Title>
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Subtitle md
+                        </Mono>
+                        <Subtitle size="md">
+                          Enter the code sent to your email.
+                        </Subtitle>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
-                          Subtitle
-                        </span>
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Subtitle default
+                        </Mono>
                         <Subtitle>Manage your account preferences.</Subtitle>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
-                          Title sm
-                        </span>
-                        <Title size="sm">Email address</Title>
-                      </div>
-                      <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
                           Subtitle sm
-                        </span>
+                        </Mono>
                         <Subtitle size="sm">Last updated 2 hours ago</Subtitle>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Paragraph lg
+                        </Mono>
+                        <Paragraph size="lg">Flow Game</Paragraph>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Paragraph default
+                        </Mono>
+                        <Paragraph size="default">Flow Game</Paragraph>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Paragraph sm
+                        </Mono>
+                        <Paragraph size="sm">Flow Game</Paragraph>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Paragraph xs
+                        </Mono>
+                        <Paragraph size="xs">Flow Game</Paragraph>
+                      </div>
+                      <div className="flex items-baseline gap-6">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
                           Overline
-                        </span>
+                        </Mono>
                         <Overline>Getting Started</Overline>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
                           Overline Brand
-                        </span>
+                        </Mono>
                         <Overline variant="brand">Products</Overline>
                       </div>
                       <div className="flex items-baseline gap-6">
-                        <span className="text-xs text-muted-foreground font-mono w-28 shrink-0">
-                          Paragraph
-                        </span>
-                        <Paragraph>Flow Game</Paragraph>
+                        <Mono className="w-40 shrink-0 text-muted-foreground">
+                          Mono
+                        </Mono>
+                        <Mono>bun add @flow-industries/ui</Mono>
                       </div>
                     </div>
                   </div>
