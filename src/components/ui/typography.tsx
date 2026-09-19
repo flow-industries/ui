@@ -2,7 +2,7 @@ import { cn } from "../../utils/cn";
 
 const titleStyles = {
   sm: "text-sm font-medium",
-  default: "text-base font-medium tracking-tighter",
+  default: "text-base font-semibold tracking-tighter",
   md: "text-2xl font-semibold tracking-tighter",
   lg: "text-3xl font-semibold tracking-tighter",
 } as const;
