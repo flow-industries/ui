@@ -4,7 +4,7 @@ const titleStyles = {
   sm: "text-sm font-semibold",
   default: "text-base font-bold tracking-tighter",
   md: "text-2xl font-bold tracking-tighter",
-  lg: "text-3xl font-semibold tracking-tighter",
+  lg: "text-3xl font-bold tracking-tighter",
 } as const;
 
 const titleTags = { sm: "h3", default: "h2", md: "h2", lg: "h1" } as const;
