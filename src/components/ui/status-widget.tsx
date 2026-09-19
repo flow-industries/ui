@@ -28,7 +28,7 @@ function deriveOverall(endpoints: Endpoint[]): Overall {
     .filter((r) => r !== undefined)
     .filter((r) => r.length > 0);
   if (results.length === 0) return "unknown";
-  if (results.some((r) => !r[r.length - 1].success)) return "down";
+  if (results.some((r) => r.at(-1)?.success === false)) return "down";
   if (results.some((r) => r.slice(-RECENT).some((x) => !x.success))) {
     return "degraded";
   }
