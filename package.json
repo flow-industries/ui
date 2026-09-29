@@ -60,7 +60,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@biomejs/biome": "2.5.8",
-    "@flow-industries/id": "0.26.1",
+    "@flow-industries/id": "0.26.2",
     "@flow-industries/lint": "0.3.0",
     "@openobserve/browser-logs": "^0.3.1",
     "@openobserve/browser-rum": "^0.3.1",
