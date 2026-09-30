@@ -5,11 +5,19 @@ import type * as React from "react";
 import { cn } from "../../utils/cn";
 import { Logo } from "../logo";
 
-function Header({ className, ...props }: React.ComponentProps<"header">) {
+type HeaderProps = React.ComponentProps<"header"> & {
+  layout?: "plain" | "product";
+};
+
+function Header({ className, layout = "plain", ...props }: HeaderProps) {
   return (
     <header
       data-slot="header"
-      className={cn("flex items-center justify-between gap-4", className)}
+      className={cn(
+        "flex items-center justify-between gap-4",
+        layout === "product" && "flow-product-header",
+        className,
+      )}
       {...props}
     />
   );
@@ -65,7 +73,7 @@ function HeaderBrand({
     props: mergeProps<"span">(
       {
         className: cn(
-          "inline-flex items-center leading-tight text-foreground",
+          "inline-flex shrink-0 items-center leading-tight text-foreground",
           s.gap,
           interactive &&
             "-m-0.5 rounded-sm border-[length:var(--border-width)] border-transparent outline-none pointer-coarse:min-h-11 focus-visible:border-focus",
@@ -74,7 +82,7 @@ function HeaderBrand({
         onClick,
         children: (
           <>
-            <Logo size={logoSize ?? s.logo} />
+            <Logo size={logoSize ?? s.logo} className="shrink-0" />
             <span className={cn("uppercase", s.text)}>
               <span className="font-extralight">{start}</span>
               <span className={cn("font-semibold", s.label)}>{label}</span>
@@ -102,5 +110,5 @@ function HeaderActions({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export type { HeaderBrandProps, HeaderBrandSize };
+export type { HeaderBrandProps, HeaderBrandSize, HeaderProps };
 export { Header, HeaderActions, HeaderBrand };

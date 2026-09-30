@@ -11,7 +11,6 @@ concurrency:
 
 jobs:
   visual:
-    # Public repo — flow-arc is unavailable (runner group blocks public repos).
     runs-on: ubuntu-latest
     # The pinned Playwright image ships the matching browser build and fonts,
     # so committed baselines render identically here and in
@@ -24,7 +23,7 @@ jobs:
       - run: npm install -g bun
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bunx playwright test tests/visual.spec.ts
+      - run: bunx playwright test tests/visual.spec.ts tests/header.spec.tsx
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

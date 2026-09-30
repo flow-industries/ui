@@ -3186,8 +3186,8 @@ export function App() {
     <ToastProvider>
       <TooltipProvider>
         <div className="min-h-screen">
-          <header className="flex items-center justify-between px-6 md:px-12 py-8">
-            <Logomark start="Flow" end="UI" />
+          <Header layout="product">
+            <HeaderBrand label="UI" />
             <a
               href="https://github.com/flow-industries/ui"
               target="_blank"
@@ -3196,7 +3196,7 @@ export function App() {
             >
               <GitHubIcon className="w-5 h-5" />
             </a>
-          </header>
+          </Header>
 
           <Dock
             size="md"
