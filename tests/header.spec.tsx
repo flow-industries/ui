@@ -68,7 +68,13 @@ for (const width of [320, 390, 768, 1280]) {
       );
       await page.route("**/api/users/*", async (route) => {
         await new Promise((resolve) => setTimeout(resolve, 350));
-        await route.fulfill({ json: { image: "/avatar.svg" } });
+        await route.fulfill({
+          json: {
+            image: route.request().url().endsWith("long_account_name")
+              ? "/failed-avatar.svg"
+              : "/avatar.svg",
+          },
+        });
       });
       await page.route("**/avatar.svg", async (route) => {
         await new Promise((resolve) => setTimeout(resolve, 350));
@@ -77,6 +83,9 @@ for (const width of [320, 390, 768, 1280]) {
           body: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="36" height="36" fill="pink"/></svg>',
         });
       });
+      await page.route("**/failed-avatar.svg", (route) =>
+        route.fulfill({ status: 404, body: "missing" }),
+      );
       await page.goto("/header-fixture");
       await page.evaluate(() => document.fonts.ready);
       const bounds = () =>
@@ -121,12 +130,20 @@ for (const width of [320, 390, 768, 1280]) {
         .getByRole("button", { name: "Account menu for alice" })
         .first()
         .click();
+      const failedAvatar = page.waitForResponse("**/failed-avatar.svg");
       await page.getByRole("menuitem", { name: /long_account_name/ }).click();
       await expect(
         page.getByRole("button", {
           name: "Account menu for long_account_name",
         }),
       ).toHaveCount(6);
+      expect((await failedAvatar).status()).toBe(404);
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
       expect(await bounds()).toEqual(initial);
       await page
         .getByRole("button", { name: "Signed out", exact: true })
