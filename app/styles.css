@@ -1,7 +1,9 @@
-@import "@flow-industries/ui/styles/tokens.css";
-@import "@flow-industries/ui/styles/base.css";
+@import "../src/styles/tokens.css";
+@import "../src/styles/base.css";
 
 @source "../src";
+@source "../tests";
+@source "../node_modules/@flow-industries/id/dist/sdk/react";
 @source ".";
 
 @font-face {

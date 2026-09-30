@@ -1,0 +1,24 @@
+.flow-product-header {
+  --flow-header-inset: 1rem;
+  --flow-header-row: 3rem;
+  width: 100%;
+  min-height: 6rem;
+  padding: calc(1.5rem + env(safe-area-inset-top, 0px)) var(--flow-header-inset) 1.5rem;
+}
+.flow-product-header [data-slot="header-brand"],
+.flow-product-header [data-slot="header-actions"] {
+  min-height: var(--flow-header-row);
+}
+.flow-product-header [data-slot="header-brand"] {
+  margin-block: 0;
+}
+.flow-product-header [data-slot="header-actions"] {
+  min-width: 0;
+}
+.flow-product-header [data-slot="header-actions"] > * {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (min-width: 48rem) {
+  .flow-product-header { --flow-header-inset: 2rem; }
+}
