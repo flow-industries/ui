@@ -47,7 +47,7 @@ token stored anywhere).
 - **Do not rename `publish.yml`.** npm authenticates the run against that exact filename, so it can
   only change if the trusted publisher on npmjs.com changes with it.
 - **Automatic publishing does not remove the coordination.** Consumers pin a caret range, so a
-  breaking change still needs every consumer bumped in the same pass — see UI-46, where moving
+  breaking change still needs every consumer bumped in the same pass — for example, moving
   `className` from the wrapper to the control required renaming three call sites in `talk` and
   `game` to `containerClassName`.
 
