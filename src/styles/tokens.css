@@ -3,7 +3,6 @@
 @theme inline {
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-pixel: "Geist Pixel Square", monospace;
 
   /* Typography scale (default + 10%) */
   --text-xs: 0.825rem;

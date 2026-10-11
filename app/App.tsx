@@ -465,87 +465,6 @@ function Section({
   );
 }
 
-const pixelVariants = ["Square", "Grid", "Circle", "Triangle", "Line"] as const;
-
-function PixelFontCard() {
-  const [variant, setVariant] =
-    useState<(typeof pixelVariants)[number]>("Square");
-  const fontFamily = `"Geist Pixel ${variant}", monospace`;
-
-  return (
-    <div className="space-y-3 rounded-xl bg-secondary p-5">
-      <div>
-        <p className="text-2xl font-normal" style={{ fontFamily }}>
-          Geist Pixel
-        </p>
-        <p className="text-xs text-muted-foreground font-mono mt-1">
-          font-pixel
-        </p>
-      </div>
-      <div
-        className="grid grid-cols-13 gap-1 text-center text-xl md:text-4xl"
-        style={{ fontFamily }}
-      >
-        {"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-          .match(/.{2}/g)!
-          .map((pair) => (
-            <span key={pair}>{pair}</span>
-          ))}
-      </div>
-      <div className="flex gap-1.5 flex-wrap">
-        {pixelVariants.map((v) => (
-          <button
-            type="button"
-            key={v}
-            onClick={() => setVariant(v)}
-            className={cn(
-              "text-sm px-2.5 py-1 rounded-lg transition-colors",
-              v === variant
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary hover:bg-muted",
-            )}
-            style={{ fontFamily: `"Geist Pixel ${v}", monospace` }}
-          >
-            {v}
-          </button>
-        ))}
-      </div>
-      <table className="w-full text-xs text-muted-foreground">
-        <tbody>
-          <tr>
-            <td className="py-0.5 pr-4 font-medium text-foreground">
-              Designed by
-            </td>
-            <td>Basement Studio</td>
-          </tr>
-          <tr>
-            <td className="py-0.5 pr-4 font-medium text-foreground">
-              Published by
-            </td>
-            <td>Vercel</td>
-          </tr>
-          <tr>
-            <td className="py-0.5 pr-4 font-medium text-foreground">
-              Classification
-            </td>
-            <td>Pixel / bitmap display</td>
-          </tr>
-          <tr>
-            <td className="py-0.5 pr-4 font-medium text-foreground">
-              Variants
-            </td>
-            <td>Square, Grid, Circle, Triangle, Line</td>
-          </tr>
-          <tr>
-            <td className="py-0.5 pr-4 font-medium text-foreground">License</td>
-            <td>SIL Open Font License 1.1</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 function Preview({
   label,
   children,
@@ -3384,7 +3303,6 @@ export function App() {
                             </tbody>
                           </table>
                         </div>
-                        <PixelFontCard />
                       </div>
                     </div>
 
