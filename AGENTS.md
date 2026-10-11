@@ -12,7 +12,7 @@ src/
   styles/
     tokens.css          <- Design tokens (@theme, :root, .dark)
     base.css            <- Tailwind imports + base layer + font import
-    fonts.css           <- @font-face declarations (Geist Sans, Mono, Pixel)
+    fonts.css           <- @font-face declarations (Geist Sans, Mono)
   utils/cn.ts           <- clsx + tailwind-merge
   hooks/use-mobile.ts   <- Mobile detection hook
   components/
