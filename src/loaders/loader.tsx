@@ -2,8 +2,6 @@ import { type ComponentProps, useEffect, useRef } from "react";
 import { cn } from "../utils/cn";
 import { HL } from "./kernel";
 
-type Point = [number, number];
-
 /** What a figure's `mount` receives: the stage it answers the pointer on, the svg it draws into, and its read-out. */
 export interface LoaderHost {
   stage: HTMLElement;
@@ -18,8 +16,9 @@ export interface LoaderHost {
 export interface LoaderFigure {
   name: string;
   means: string;
-  range: [number, number, number];
-  tour: (Point | null)[] | null;
+  /** The figure's own number at intensity 0, 0.5 and 1; the loader plays it at the middle one. */
+  range: readonly number[];
+  tour: readonly (readonly number[] | null)[] | null;
   mount: (
     host: LoaderHost,
     value: number,
