@@ -18,7 +18,7 @@ import type { LoaderFigure } from "../loader";
  * at the decks' rest height.
  */
 const {
-  Cam, clamp, facing, fillet, fit, flatDot, hull, mk, open, place, pointer, poly, prism, proj, put, rad,
+  Cam, clamp, facing, fillet, fit, hull, mk, open, pointer, poly, prism, proj, put, rad,
   reducedMotion, register, rings, rrect, run, seg, solid, spring, stepS, unproj, disposer,
 } = HL;
 
@@ -67,12 +67,11 @@ function mount({ stage, svg, read }, value) {
   const [qr, qi] = rings(QX0, QY0, QX1, 0, 6, 1.8);
   put(solid(g), prism(P, front, qr, qi, 0, QZ));
 
-  // Back to front, berth by berth along +x: the stern lines, then the hull, the cabin and the rig.
+  // Back to front, berth by berth along +x: the hull, the cabin and the rig.
   const boats = FLEET.map(([L, mh], i) => {
-    const x = X(i), dot = flatDot(g, C, 1.2, "dot off");
-    place(dot, P(x, -2.6, QZ));
+    const x = X(i);
     return {
-      x, L, mh, dot, line: mk("path", { class: "nf lo" }, g),
+      x, L, mh,
       foot: asRing(plan(L * 0.84, W * 0.74, -L * 0.05)), deck: asRing(plan(L, W)), inner: asRing(plan(L - 2.6, W - 2.6)),
       cabFoot: rrect(-4.4, -L * 0.3, 4.4, L * 0.02, 2.4, 4),
       cabTop: rrect(-3.4, -L * 0.3 + 1, 3.4, L * 0.02 - 3.5, 1.6, 4),
@@ -93,8 +92,6 @@ function mount({ stage, svg, read }, value) {
     put(b.cabin, { sil: poly(hull(ring(b.cabFoot, F).concat(ring(b.cabTop, F + CH)))), crease: open(ring(run(b.cabIn, front), F + CH)) });
     const mv = -b.L * 0.06, head = at(0, mv, F + b.mh), boom = F + CH + 3;
     b.rig.setAttribute("d", seg(at(0, mv, F + CH), head) + seg(head, at(0, b.L / 2 - 0.6, F + 0.4)) + seg(at(0, mv, boom), at(0, -b.L / 2 + 3, boom)));
-    const bollard = P(b.x, -2.6, QZ);
-    b.line.setAttribute("d", seg(bollard, at(-W * 0.3, -b.L / 2 + 1.5, F)) + seg(bollard, at(W * 0.3, -b.L / 2 + 1.5, F)));
   }
 
   let c = REST, held = false, lit = -1, drawn = "";
@@ -117,7 +114,6 @@ function mount({ stage, svg, read }, value) {
     lit = k;
     boats.forEach((b, i) => {
       for (const el of [b.hull.sil, b.cabin.sil, b.rig]) el.classList.toggle("hi", i === k);
-      b.dot.classList.toggle("off", i !== k);
     });
   }
 
