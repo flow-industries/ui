@@ -1,6 +1,6 @@
 {
   "name": "@flow-industries/ui",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "./components": "./src/components/ui/index.ts",
     "./components/*": "./src/components/ui/*.tsx",
     "./logo": "./src/components/logo.tsx",
+    "./loaders": "./src/loaders/index.ts",
     "./icons": "./src/components/icons.tsx",
     "./styles/tokens.css": "./src/styles/tokens.css",
     "./styles/base.css": "./src/styles/base.css",
