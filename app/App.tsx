@@ -343,6 +343,14 @@ import {
   type ValidationStatus,
 } from "../src/components/ui/validated-input";
 import { WordFlash } from "../src/components/ui/word-flash";
+import {
+  harbour,
+  keyring,
+  Loader,
+  lighthouse,
+  metronome,
+  pigeonholes,
+} from "../src/loaders";
 import { cn } from "../src/utils/cn";
 
 const hues = [
@@ -445,6 +453,14 @@ type PaletteColor = {
   border?: boolean;
   fg?: { token: string; cls: string };
 };
+
+const loaderFigures = [
+  { figure: metronome, label: "Loading your practice" },
+  { figure: harbour, label: "Loading the fleet" },
+  { figure: keyring, label: "Loading your account" },
+  { figure: lighthouse, label: "Loading service status" },
+  { figure: pigeonholes, label: "Loading messages" },
+];
 
 function Section({
   title,
@@ -2641,6 +2657,23 @@ function ComponentsShowcase() {
           <Spinner className="size-6" />
           <Spinner className="size-8" />
         </Preview>
+      </Section>
+
+      {/* Loader */}
+      <Section title="Loader">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {loaderFigures.map(({ figure, label }) => (
+            <figure
+              key={figure.name}
+              className="grid justify-items-center gap-2"
+            >
+              <Loader figure={figure} label={label} />
+              <figcaption className="text-xs text-muted-foreground">
+                {figure.means}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
       </Section>
 
       {/* Separator */}

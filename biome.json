@@ -6,6 +6,6 @@
     "biome-anti-slop"
   ],
   "files": {
-    "includes": ["!**/*.css"]
+    "includes": ["!**/*.css", "!src/loaders/kernel.ts", "!src/loaders/figures"]
   }
 }

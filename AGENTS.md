@@ -15,6 +15,7 @@ src/
     fonts.css           <- @font-face declarations (Geist Sans, Mono)
   utils/cn.ts           <- clsx + tailwind-merge
   hooks/use-mobile.ts   <- Mobile detection hook
+  loaders/              <- Loader + one Hairline figure per product (kernel vendored, MIT)
   components/
     logo.tsx            <- Flow logo + LogoSpinner
     icons.tsx           <- Social icons (X, Discord, GitHub, Bluesky)
@@ -69,4 +70,5 @@ token stored anywhere).
 - Toast uses Base UI native Toast, not sonner.
 - Drawer uses Base UI native Drawer, not vaul.
 - Motion-based components (accordion, tabs, word-flash) respect `useReducedMotion()`.
+- Page-level loading states use `Loader` from `@flow-industries/ui/loaders` with the product's figure, not full-page `Skeleton` layouts. Figures in `src/loaders/figures/` are written with the `hairline-create` skill (from `@lucasmarkes/hairline`) and kept in its format so they can be iterated there; `kernel.ts` is the package's kernel, unchanged. Biome skips both. A figure must loop on its own from the first frame and hold a composed rest pose under reduced motion.
 - No sidebar-specific color tokens — sidebar uses `secondary`, `tertiary`, `foreground` directly.
