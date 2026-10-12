@@ -1,7 +1,8 @@
 // @ts-nocheck
 // harbour: a Hairline figure, made with the hairline-create skill and checked with its look.mjs.
-// It stays in the skill's format so it can be iterated there; only this header and the export differ.
+// It stays in the skill's format so it can be iterated there; only this header and the typed export differ.
 import { HL } from "../kernel";
+import type { LoaderFigure } from "../loader";
 /**
  * Harbour: a quay with five boats moored stern-to along it, each a service in
  * the fleet, riding a swell that runs down the line. The swell comes in at an
@@ -158,4 +159,4 @@ export default {
   range: [4, 8, 12],
   tour: [[142, 167], [276, 234], [187, 189], null],
   mount,
-};
+} satisfies LoaderFigure;

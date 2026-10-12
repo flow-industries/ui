@@ -17,8 +17,8 @@ export interface LoaderFigure {
   name: string;
   means: string;
   /** The figure's own number at intensity 0, 0.5 and 1; the loader plays it at the middle one. */
-  range: readonly number[];
-  tour: readonly (readonly number[] | null)[] | null;
+  range: readonly [low: number, middle: number, high: number];
+  tour: readonly (readonly [number, number] | null)[] | null;
   mount: (
     host: LoaderHost,
     value: number,

@@ -1,7 +1,8 @@
 // @ts-nocheck
 // metronome: a Hairline figure, made with the hairline-create skill and checked with its look.mjs.
-// It stays in the skill's format so it can be iterated there; only this header and the export differ.
+// It stays in the skill's format so it can be iterated there; only this header and the typed export differ.
 import { HL } from "../kernel";
+import type { LoaderFigure } from "../loader";
 /**
  * Metronome: a pyramid metronome keeping time while the history loads. Its rod
  * pivots low in the recess of the front face and swings on an ambient loop,
@@ -121,4 +122,4 @@ export default {
   range: [14, 24, 34],
   tour: [[188, 81], [180, 153], [184, 129], null],
   mount,
-};
+} satisfies LoaderFigure;
