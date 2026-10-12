@@ -1,7 +1,8 @@
 // @ts-nocheck
 // lighthouse: a Hairline figure, made with the hairline-create skill and checked with its look.mjs.
-// It stays in the skill's format so it can be iterated there; only this header and the export differ.
+// It stays in the skill's format so it can be iterated there; only this header and the typed export differ.
 import { HL } from "../kernel";
+import type { LoaderFigure } from "../loader";
 /**
  * Lighthouse: a tapering tower on a rock, with a gallery and its rail, a
  * glazed lantern and a roof. Its beam, a thin plate at the lamp's height,
@@ -184,4 +185,4 @@ export default {
   range: [40, 55, 70],
   tour: [[327, 104], [110, 130], [80, 60], null],
   mount,
-};
+} satisfies LoaderFigure;

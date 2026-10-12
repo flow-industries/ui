@@ -1,7 +1,8 @@
 // @ts-nocheck
 // keyring: a Hairline figure, made with the hairline-create skill and checked with its look.mjs.
-// It stays in the skill's format so it can be iterated there; only this header and the export differ.
+// It stays in the skill's format so it can be iterated there; only this header and the typed export differ.
 import { HL } from "../kernel";
+import type { LoaderFigure } from "../loader";
 /**
  * Keyring: a split ring lying flat, holding six keys. Each key is a real one:
  * a bow of its own shape with the ring through its hole, a shoulder stop, and
@@ -191,4 +192,4 @@ export default {
   range: [0, 45, 90],
   tour: [[150, 208], [260, 113], [310, 159], null],
   mount,
-};
+} satisfies LoaderFigure;

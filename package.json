@@ -1,6 +1,6 @@
 {
   "name": "@flow-industries/ui",
-  "version": "0.25.1",
+  "version": "0.25.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "test": "playwright test",
     "format": "biome format --write",
     "check": "biome check --write",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.loaders.json",
     "test:package": "bash scripts/test-package.sh"
   },
   "exports": {
