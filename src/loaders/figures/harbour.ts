@@ -1,6 +1,6 @@
 // @ts-nocheck
 // harbour: a Hairline figure, made with the hairline-create skill and checked with its look.mjs.
-// It stays in the skill's format so it can be iterated there; only this header and the typed export differ.
+// It stays in the skill's format so it can be iterated there; only this header and the export differ.
 import { HL } from "../kernel";
 import type { LoaderFigure } from "../loader";
 /**
@@ -30,7 +30,9 @@ const LAP = (N + 0.6) * SP, PERIOD = 4.2, KAPPA = 2.2, WRAP0 = -0.8 * SP, SPEED 
 const REST = 2 * SP - 7;
 /** Each boat's length and its mast's height above the deck: one class of boat, not one mould. */
 const FLEET = [[42, 33], [38, 28], [44, 36], [40, 30], [42, 34]];
-const QX0 = -W / 2 - 12, QX1 = (N - 1) * SP + W / 2 + 12, QY0 = -18, QZ = 9, GAP = 5, YB = GAP + 22;
+/** Open water between the quay's face and the longest stern: enough that no hull rises over the quay's waterline on screen, at the highest swell and the steepest pitch. */
+const GAP = 28, YB = GAP + 22;
+const QX0 = -W / 2 - 12, QX1 = (N - 1) * SP + W / 2 + 12, QY0 = -14, QZ = 9;
 
 const X = (i) => i * SP;
 const wrap = (d) => ((((d + LAP / 2) % LAP) + LAP) % LAP) - LAP / 2;
@@ -54,10 +56,10 @@ function asRing(pts) {
 
 function mount({ stage, svg, read }, value) {
   const bag = disposer();
-  const C = Cam(45, 0.5, 2.25);
+  const C = Cam(45, 0.5, 2.1);
   // Fitted to the most extreme pose: the quay, the bows, and a masthead at the top of the highest swell.
-  const top = AMAX + F + 38, bows = YB + 28;
-  fit(C, [[QX0, QY0, 0], [QX1, QY0, QZ], [QX0, bows, 0], [QX1, bows, 0], [QX0 + 10, YB - 10, top], [QX1 - 10, YB, top]], 200, 166);
+  const top = AMAX + F + 38, bow = YB + 24, last = X(N - 1);
+  fit(C, [[QX0, QY0, 0], [QX1, QY0, QZ], [0, bow, 0], [last, bow, -5], [-5, YB - 9, top], [last + 5, YB + 9, top]], 200, 166);
   const P = proj(C), front = facing(C);
   let A = value;
 
@@ -157,6 +159,6 @@ export default {
   means: "Boats moored at a quay ride a swell down the line; the pointer moves the crest, and the boat under it is the one reporting.",
   rules: [1, 3, 5, 7],
   range: [4, 8, 12],
-  tour: [[142, 167], [276, 234], [187, 189], null],
+  tour: [[114, 169], [239, 231], [156, 190], null],
   mount,
 } satisfies LoaderFigure;
