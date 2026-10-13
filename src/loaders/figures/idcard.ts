@@ -86,7 +86,9 @@ function mount({ stage, svg, read }, value) {
     head.setAttribute("d", poly(at(HEAD)));
     shoulders.setAttribute("d", open(at(SHOULDERS)));
     const f = 3.4 - 2.6 * s, a = 5.5, [u0, v0, u1, v1] = [WIN[0] - f, WIN[1] - f, WIN[2] + f, WIN[3] + f];
-    brackets.setAttribute("d", [[u0, v1, 1, -1], [u1, v1, -1, -1], [u1, v0, -1, 1], [u0, v0, 1, 1]].map(([u, v, du, dv]) => open(at([[u, v + dv * a], [u, v], [u + du * a, v]]))).join(""));
+    // each bracket turns its corner on a quarter circle of radius r, so the scanner's corners read rounded
+    const r = 3.2, turn = (u, v, du, dv) => Array.from({ length: 7 }, (_, k) => { const t = (k / 6) * Math.PI / 2; return [u + du * r - du * r * Math.cos(t), v + dv * r - dv * r * Math.sin(t)]; });
+    brackets.setAttribute("d", [[u0, v1, 1, -1], [u1, v1, -1, -1], [u1, v0, -1, 1], [u0, v0, 1, 1]].map(([u, v, du, dv]) => open(at([[u, v + dv * a], ...turn(u, v, du, dv), [u + du * a, v]]))).join(""));
     brackets.classList.toggle("hi", focus === 0);
     LINES.forEach(([u, v, l, hh], i) => lines[i].setAttribute("d", poly(rrect(u, v - hh, u + l, v + hh, hh, 4).map((q) => Q(q.u, q.v)))));
     const ln = LINES[focus - 1];
