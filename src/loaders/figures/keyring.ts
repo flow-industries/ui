@@ -4,60 +4,54 @@
 import { HL } from "../kernel";
 import type { LoaderFigure } from "../loader";
 /**
- * Keyring: a split ring lying flat, holding six solid keys, each with its own bow, shoulder and bitting. On its own
- * the bright goes round: each key in turn gives a quarter turn on the wire, teeth up, as if tried in its app's lock,
- * and its neighbours slide apart. The pointer picks a key by its resting angle and the round waits until it leaves.
- * Under reduced motion it holds the rest pose. The slider is the stagger, in ms. Keys and the ring's six pieces are
- * plates with thickness; painted far to near, each piece runs over a bow on its near side and under it on the far
- * side, so the ring threads every hole.
+ * Keyring: a split ring of wire threaded through six solid keys. The bright goes round: each key in turn gives a quarter
+ * turn on the wire, teeth up, as if tried in its app's lock, and its neighbours slide apart. The pointer picks a key and
+ * the round waits until it leaves; reduced motion holds the rest pose. The slider is the stagger, in ms. The wire meets
+ * every hole at the hole's height: over a flat bow on its near side, under it on the far side, straight through a turned one.
  */
 const {
-  Cam, fillet, fit, hull, open, poly, proj, rad, seg, unproj,
+  Cam, clamp, fillet, fit, hull, lerp, open, poly, proj, rad, seg, unproj,
   tdone, tset, tval, tween, disposer, mk, pointer, reducedMotion, register,
 } = HL;
 
-const N = 6, RR = 26, RO = 27.9, RI = 24.1, ZR = 3, ZK = 3.4, TK = 3, HB = 4.2, HOLE = 2.6;
-const PART = [0, 9, 4, 0], STEP = 750, REST = 0, S = 2.4;
+const N = 6, RR = 28, D = 2.2, TK = 3, ZC = D + TK / 2, HB = 4.2, HOLE = 3.2, W1 = 19, W2 = 11;
+const PART = [0, 9, 4, 0], STEP = 750, REST = 0, S = 2.35;
 // each key: bow half-height, bow half-length, bow squareness (2 round, 6 square), blade length, cut depths tip to shoulder
 const KEYS = [
-  [9.4, 9.4, 2, 24, [2, 4, 1, 3, 2]], [8.4, 8.6, 4.5, 21, [3, 1, 4, 2]], [10, 8, 2.4, 23, [1, 3, 2, 4, 1]],
-  [8.2, 9.6, 2, 20, [4, 2, 3, 1]], [8, 9, 6, 25, [2, 2, 4, 1, 3]], [9, 8.4, 3, 22, [3, 4, 1, 2]],
+  [8.6, 9.4, 2, 24, [2, 4, 1, 3, 2]], [8, 8.6, 4.5, 21, [3, 1, 4, 2]], [8.8, 8, 2.4, 23, [1, 3, 2, 4, 1]],
+  [7.8, 9.6, 2, 20, [4, 2, 3, 1]], [7.6, 9, 6, 25, [2, 2, 4, 1, 3]], [8.4, 8.4, 3, 22, [3, 4, 1, 2]],
 ];
 const BASE = [0, 4, -3, 2, -4, 3].map((j, k) => -45 + k * 60 + j);
 const HOLE_RING = Array.from({ length: 16 }, (_, i) => [HOLE * Math.cos(i * Math.PI / 8), HOLE * Math.sin(i * Math.PI / 8)]);
 /** How near the viewer a point at th degrees round the ring lies, -1 to 1. */
 const near = (th) => Math.sin(rad(th + 45));
+/** 1 within W1 degrees of a hole, easing to 0 over the next W2: how much of a hole's height the wire still carries. */
+const carry = (x) => { const t = clamp((x - W1) / W2, 0, 1); return 1 - t * t * (3 - 2 * t); };
 
 /** Key k's outline in its own plane: u runs out along the blade from the hole, v across it, +v the bitting side. */
 function profile([bw, hl, p, len, cuts]) {
-  const ub = 2 * hl - 4.6, s = ub + 2.6, e = s + len, pts = [], rs = [];
+  const ub = 2 * hl - 5.2, s = ub + 2.6, e = s + len, pts = [], rs = [];
   const at = (u, v, r) => { pts.push([u, v]); rs.push(r); };
   at(ub - 1, -5, 0.9); at(s, -5, 0.6); at(s, -HB, 0.5); at(e - 3, -HB, 1.2); at(e, -1.2, 0.8); at(e, 1.2, 0.8); at(e - 4, HB, 0.6);
   const pitch = (len - 7) / cuts.length;
-  cuts.forEach((c, j) => {
-    const uc = e - 5.5 - (j + 0.5) * pitch;
-    at(uc + 1.2, HB, 0.3); at(uc, HB - 0.6 * c, 0.4); at(uc - 1.2, HB, 0.3);
-  });
+  cuts.forEach((c, j) => { const uc = e - 5.5 - (j + 0.5) * pitch; at(uc + 1.2, HB, 0.3); at(uc, HB - 0.6 * c, 0.4); at(uc - 1.2, HB, 0.3); });
   at(s + 1, HB, 0.4); at(s, 5.8, 0.5); at(ub - 1, 5.8, 0.9);
   // the bow: a superellipse round the hole, from where the neck leaves it on top, round the far end, back to the neck
   const sp = (x) => Math.sign(x) * Math.abs(x) ** (2 / p);
-  for (let i = 0; i <= 14; i++) {
-    const f = 0.75 + (i / 14) * (2 * Math.PI - 1.5);
-    at(hl - 4.6 + hl * sp(Math.cos(f)), bw * sp(Math.sin(f)), 0.2);
-  }
+  for (let f = 0.75; f < 2 * Math.PI - 0.74; f += (2 * Math.PI - 1.5) / 14) at(hl - 5.2 + hl * sp(Math.cos(f)), bw * sp(Math.sin(f)), 0.2);
   // the outline's points from the tip's taper back along the bitting and the shoulder to the bow: one straight edge
   return { shape: fillet(pts, rs, 3), s, e, top: [24, 4 * (9 + 3 * cuts.length) + 3] };
 }
 
-/** A key at th degrees round the ring, turned tw of a quarter about its blade (key.m: teeth up, face to the viewer) and
- *  swung key.yaw on its hole, out of face-on or edge-on: its top face on screen and o, the step from that face to its foot. */
+/** A key at th degrees round the ring, turned tw of a quarter about its blade through the hole's middle (key.m: teeth up,
+ *  face to the viewer) and swung key.yaw on its hole: its top face on screen and o, the step from that face to its foot. */
 function pose(P, key, th, tw) {
   const y = rad(th + key.yaw * tw), dx = Math.cos(y), dy = Math.sin(y), f = rad(90 * tw * key.m), cf = Math.cos(f), sf = Math.sin(f);
-  const w = (u, v, h = 0) => {
+  const w = (u, v, h = TK / 2) => {
     const a = key.m * v * cf - h * sf;
-    return P(RR * Math.cos(rad(th)) + u * dx - a * dy, RR * Math.sin(rad(th)) + u * dy + a * dx, ZK + key.m * v * sf + h * cf);
+    return P(RR * Math.cos(rad(th)) + u * dx - a * dy, RR * Math.sin(rad(th)) + u * dy + a * dx, ZC + key.m * v * sf + h * cf);
   };
-  const on = (pts) => pts.map(([u, v]) => w(u, v)), c = w(0, 0), b = w(0, 0, -TK), u = w(1, 0);
+  const on = (pts) => pts.map(([u, v]) => w(u, v)), c = w(0, 0), b = w(0, 0, -TK / 2), u = w(1, 0);
   return { face: on(key.shape), hole: poly(on(HOLE_RING)), o: [b[0] - c[0], b[1] - c[1]], along: [c[0] - u[0], c[1] - u[1]], groove: seg(w(key.s + 2, -1.4), w(key.e - 5, -1.4)) };
 }
 
@@ -97,8 +91,7 @@ function slab(c, o, { seam, K = 1, top = [-1, -1], along } = {}) {
 
 /** Where segments ab and cd cross, or null. */
 function meet(a, b, c, d) {
-  const r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0], e = [c[0] - a[0], c[1] - a[1]];
-  const t = (e[0] * s[1] - e[1] * s[0]) / den, u = (e[0] * r[1] - e[1] * r[0]) / den;
+  const r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0], e = [c[0] - a[0], c[1] - a[1]], t = (e[0] * s[1] - e[1] * s[0]) / den, u = (e[0] * r[1] - e[1] * r[0]) / den;
   return den && t > 0 && t < 1 && u > 0 && u < 1 ? [a[0] + t * r[0], a[1] + t * r[1]] : null;
 }
 
@@ -107,19 +100,16 @@ const steps = (i, a) => { const d = (((i - a) % N) + N) % N; return d > N / 2 ? 
 /** Where key i rests while key a is tried: pushed along the ring away from a, the nearest most. */
 const parted = (i, a) => BASE[i] + Math.sign(steps(i, a)) * PART[Math.abs(steps(i, a))];
 /** Whether a screen point lies in a convex hull. */
-function inside(h, x, y) {
-  const c = h.map((p, i) => { const q = h[(i + 1) % h.length]; return Math.sign((q[0] - p[0]) * (y - p[1]) - (q[1] - p[1]) * (x - p[0])); });
-  return !c.includes(1) || !c.includes(-1);
-}
+const inside = (h, x, y) => new Set(h.map((p, i) => { const q = h[(i + 1) % h.length]; return Math.sign((q[0] - p[0]) * (y - p[1]) - (q[1] - p[1]) * (x - p[0])) || 0; }).filter(Boolean)).size < 2;
 
 function mount({ stage, svg, read }, value) {
   const bag = disposer();
   let stag = value;
 
   // fitted to the longest flat keys and a key turned at the very back, so no pose of the round leaves the frame
-  const C = Cam(45, 0.5, S), F = 68 * Math.SQRT1_2, B2 = 34 * Math.SQRT1_2;
-  fit(C, [[F, -F, 0], [-F, F, 0], [F, F, -TK], [-F, -F, 0], [-B2, -B2, ZK + 10]], 200, 166);
-  const P = proj(C), g = mk("g", {}, svg), z0 = P(0, 0, 0), z1 = P(0, 0, ZR), drop = [z0[0] - z1[0], z0[1] - z1[1]];
+  const C = Cam(45, 0.5, S), F = 70 * Math.SQRT1_2, B2 = 34 * Math.SQRT1_2;
+  fit(C, [[F, -F, 0], [-F, F, 0], [F, F, -TK], [-F, -F, 0], [-B2, -B2, ZC + 10]], 200, 166);
+  const P = proj(C), g = mk("g", {}, svg), z0 = P(0, 0, 0), z1 = P(0, 0, D), drop = [z0[0] - z1[0], z0[1] - z1[1]];
 
   const keys = KEYS.map((spec, k) => {
     const key = profile(spec), view = (((BASE[k] - 45) % 180) + 180) % 180;   // 0 points the blade at the viewer, 90 shows its face
@@ -128,8 +118,8 @@ function mount({ stage, svg, read }, value) {
     key.depth = near(BASE[k]); key.reach = hull(pose(P, key, BASE[k], 1).face);
     return key;
   });
-  // the ring in six pieces, each from one key's hole to the next; with the keys, painted by how near they lie
-  const pieces = BASE.map((th, k) => ({ a: k, b: (k + 1) % N, depth: near((th + BASE[(k + 1) % N] + (k === N - 1 ? 360 : 0)) / 2) }));
+  // the wire in six pieces, hole to hole; a piece is on a key's near side when it leaves the hole the way its face turns
+  const pieces = BASE.map((th, k) => ({ a: k, b: (k + 1) % N, na: keys[k].m < 0, nb: keys[(k + 1) % N].m > 0, depth: near((th + BASE[(k + 1) % N] + (k === N - 1 ? 360 : 0)) / 2) }));
   const items = [...keys, ...pieces].sort((p, q) => p.depth - q.depth);
   for (const it of items) {
     const grp = mk("g", {}, g);
@@ -138,14 +128,21 @@ function mount({ stage, svg, read }, value) {
   }
   keys[REST].sil.classList.add("hi");
 
-  const arc = (R, a0, a1) => Array.from({ length: 17 }, (_, i) => rad(a0 + ((a1 - a0) * i) / 16)).map((a) => P(R * Math.cos(a), R * Math.sin(a), ZR));
+  /** The wire's underside at a hole: on a flat bow's top on its near side, the ground on its far side, the hole's middle once turned. */ const lift = (tw, nearSide) => lerp(nearSide ? D + TK : 0, ZC - D / 2, tw);
+  /** A piece's top outline from hole angle A to B, outer edge out and inner edge back, each point at the wire's height
+   *  there: each hole's height carried a little way out, and no lower between than the lower of the two. */
+  function wire(A, B, hA, hB) {
+    const edge = (R, a0, a1) => Array.from({ length: 41 }, (_, i) => a0 + ((a1 - a0) * i) / 40).map((a) => P(R * Math.cos(rad(a)), R * Math.sin(rad(a)), D + Math.max(hA * carry(a - A), hB * carry(B - a), Math.min(hA, hB))));
+    return edge(RR + D / 2, A, B).concat(edge(RR - D / 2, B, A));
+  }
   function draw(it, now) {
-    const at = it.shape ? [tval(it.th, now), tval(it.tw, now)] : [tval(keys[it.a].th, now), tval(keys[it.b].th, now) + (it.b ? 0 : 360)];
+    const ka = keys[it.a], kb = keys[it.b];
+    const at = it.shape ? [tval(it.th, now), tval(it.tw, now)] : [tval(ka.th, now), tval(kb.th, now) + (it.b ? 0 : 360), tval(ka.tw, now), tval(kb.tw, now)];
     const id = at.map((v) => v.toFixed(3)).join(",");
     if (id === it.drawn) return;
     it.drawn = id;
     const q = it.shape && pose(P, it, at[0], at[1]);
-    const s = q ? slab(q.face, q.o, { K: 6, top: it.top, along: q.along }) : slab(arc(RO, at[0], at[1]).concat(arc(RI, at[1], at[0])), drop, { seam: true });
+    const s = q ? slab(q.face, q.o, { K: 6, top: it.top, along: q.along }) : slab(wire(at[0], at[1], lift(at[2], it.na), lift(at[3], it.nb)), drop, { seam: true });
     it.sil.setAttribute("d", s.sil); it.lines.setAttribute("d", s.lines);
     if (q) { it.hole.setAttribute("d", q.hole); it.groove.setAttribute("d", q.groove); }
   }
@@ -157,8 +154,7 @@ function mount({ stage, svg, read }, value) {
     act = a;
     keys.forEach((key, i) => {
       const delay = Math.abs(steps(i, a)) * stag;
-      tset(key.tw, i === a ? 1 : 0, now, delay);
-      tset(key.th, parted(i, a), now, delay);
+      tset(key.tw, i === a ? 1 : 0, now, delay); tset(key.th, parted(i, a), now, delay);
       key.sil.classList.toggle("hi", i === a);
     });
   }
@@ -178,9 +174,9 @@ function mount({ stage, svg, read }, value) {
   /** The key under a viewBox point: the one tried while the point is on its turned pose, else the nearest resting angle round the ring; -1 off the keys. */
   function hit([sx, sy]) {
     if (inside(keys[act].reach, sx, sy)) return act;
-    const [x, y] = unproj(C, sx, sy, ZK), r = Math.hypot(x, y), ang = Math.atan2(y, x) / rad(1);
+    const [x, y] = unproj(C, sx, sy, ZC), r = Math.hypot(x, y), ang = Math.atan2(y, x) / rad(1);
     const gap = (k) => Math.abs(((((ang - BASE[k]) % 360) + 540) % 360) - 180);
-    return r < RI - 2 || r > RR + 46 ? -1 : BASE.reduce((b, _, k) => (gap(k) < gap(b) ? k : b), 0);
+    return r < RR - 4 || r > RR + 46 ? -1 : BASE.reduce((b, _, k) => (gap(k) < gap(b) ? k : b), 0);
   }
 
   function aim(k) {
