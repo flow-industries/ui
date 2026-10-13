@@ -41,28 +41,69 @@ const palette = [
 ];
 
 /**
+ * How long an unmounted loader's figure keeps its place, so a loader for the same figure that mounts
+ * in the next moment (a page swapping one loading state for the next) carries on with the same loop.
+ */
+const HANDOFF_MS = 1500;
+
+interface Running {
+  stage: HTMLElement;
+  destroy: () => void;
+  timer?: ReturnType<typeof setTimeout>;
+}
+
+const parked = new Map<LoaderFigure, Running>();
+
+function start(figure: LoaderFigure, doc: Document): Running {
+  HL.inject(doc);
+  const stage = doc.createElement("div");
+  stage.dataset.hairline = figure.name;
+  stage.className = "block aspect-[5/4] w-full";
+  const svg: SVGSVGElement = HL.mk(
+    "svg",
+    { viewBox: "0 0 400 320", "aria-hidden": "true" },
+    stage,
+  );
+  const handle = figure.mount(
+    { stage, svg, read: { textContent: null } },
+    figure.range[1],
+  );
+  return {
+    stage,
+    destroy: () => {
+      handle.destroy();
+      stage.remove();
+    },
+  };
+}
+
+/**
  * A page-level loading animation: a Hairline figure playing its own loop. It holds its rest pose under
  * reduced motion, and server-renders as an empty 5:4 box so nothing shifts when it draws.
  */
 export function Loader({ figure, label, className, ...props }: LoaderProps) {
-  const stageRef = useRef<HTMLDivElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    HL.inject(stage.ownerDocument);
-    const svg: SVGSVGElement = HL.mk(
-      "svg",
-      { viewBox: "0 0 400 320", "aria-hidden": "true" },
-      stage,
-    );
-    const handle = figure.mount(
-      { stage, svg, read: { textContent: null } },
-      figure.range[1],
-    );
+    const host = hostRef.current;
+    if (!host) return;
+    const waiting = parked.get(figure);
+    parked.delete(figure);
+    clearTimeout(waiting?.timer);
+    const running = waiting ?? start(figure, host.ownerDocument);
+    host.append(running.stage);
     return () => {
-      handle.destroy();
-      svg.remove();
+      running.stage.remove();
+      const previous = parked.get(figure);
+      if (previous) {
+        clearTimeout(previous.timer);
+        previous.destroy();
+      }
+      running.timer = setTimeout(() => {
+        if (parked.get(figure) === running) parked.delete(figure);
+        running.destroy();
+      }, HANDOFF_MS);
+      parked.set(figure, running);
     };
   }, [figure]);
 
@@ -73,11 +114,7 @@ export function Loader({ figure, label, className, ...props }: LoaderProps) {
       {...props}
     >
       <span className="sr-only">{label}</span>
-      <div
-        ref={stageRef}
-        data-hairline={figure.name}
-        className="block aspect-[5/4] w-full"
-      />
+      <div ref={hostRef} className="aspect-[5/4] w-full" />
     </div>
   );
 }
