@@ -345,11 +345,11 @@ import {
 import { WordFlash } from "../src/components/ui/word-flash";
 import {
   harbour,
-  keyring,
+  idcard,
   Loader,
   lighthouse,
   metronome,
-  pigeonholes,
+  paperplane,
 } from "../src/loaders";
 import { cn } from "../src/utils/cn";
 
@@ -457,9 +457,9 @@ type PaletteColor = {
 const loaderFigures = [
   { figure: metronome, label: "Loading your practice" },
   { figure: harbour, label: "Loading the fleet" },
-  { figure: keyring, label: "Loading your account" },
+  { figure: idcard, label: "Loading your account" },
   { figure: lighthouse, label: "Loading service status" },
-  { figure: pigeonholes, label: "Loading messages" },
+  { figure: paperplane, label: "Loading messages" },
 ];
 
 function Section({

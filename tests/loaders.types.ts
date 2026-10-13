@@ -1,18 +1,18 @@
 import {
   harbour,
-  keyring,
+  idcard,
   type LoaderFigure,
   lighthouse,
   metronome,
-  pigeonholes,
+  paperplane,
 } from "../src/loaders";
 
 // Compile-time only: the figures are `@ts-nocheck` modules, so their inferred
 // types are what consumers see when they pass one to `<Loader figure>`.
 export const figures: LoaderFigure[] = [
   harbour,
-  keyring,
+  idcard,
   lighthouse,
   metronome,
-  pigeonholes,
+  paperplane,
 ];
