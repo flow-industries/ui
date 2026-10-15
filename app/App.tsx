@@ -259,6 +259,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../src/components/ui/popover";
+import { PresenceIndicator } from "../src/components/ui/presence-indicator";
 import { ProfilePill } from "../src/components/ui/profile-pill";
 import { Progress } from "../src/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "../src/components/ui/radio-group";
@@ -1955,6 +1956,66 @@ function ComponentsShowcase() {
             </DropdownMenuContent>
           </DropdownMenu>
         </Preview>
+      </Section>
+
+      <Section title="Presence" wide>
+        <div className="flex flex-col gap-6" data-testid="presence-showcase">
+          <p className="text-muted-foreground">
+            Availability uses both shape and text. Invisible is shown only to
+            you; other people see Offline. Missing presence leaves the avatar
+            unmarked.
+          </p>
+          {(["sm", "default", "lg"] as const).map((size) => (
+            <div
+              key={size}
+              className="flex flex-wrap items-center gap-6"
+              data-presence-size={size}
+            >
+              {(
+                ["online", "idle", "busy", "invisible", "offline"] as const
+              ).map((status) => (
+                <ProfilePill
+                  key={status}
+                  render={<span />}
+                  username={status}
+                  status={status}
+                  self
+                  size={size}
+                />
+              ))}
+            </div>
+          ))}
+          <div className="flex flex-wrap items-center gap-6">
+            <ProfilePill
+              render={<span />}
+              username="public-invisible"
+              status="invisible"
+            />
+            <ProfilePill render={<span />} username="unknown" />
+            <ProfilePill
+              render={<span />}
+              username="averyverylongusernameindeed"
+              status="busy"
+            />
+            <span className="inline-flex items-center gap-2">
+              <PresenceIndicator status="idle" aria-hidden="true" /> Idle
+            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <ProfilePill
+                    username="presence-trigger"
+                    status="online"
+                    self
+                  />
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>View profile</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
       </Section>
 
       {/* Card */}

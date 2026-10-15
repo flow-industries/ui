@@ -14,6 +14,12 @@ test("installed SSR markup hydrates with styles and keyboard controls", async ({
   await expect(
     page.getByRole("heading", { name: "Installed package consumer" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: "Invisible", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: "Offline", exact: true }),
+  ).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Name")).toBeFocused();
   await page.keyboard.press("Tab");

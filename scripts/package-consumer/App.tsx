@@ -1,9 +1,10 @@
 import { cn } from "@flow-industries/ui";
-import { Button, Input } from "@flow-industries/ui/components";
+import { Button, Input, ProfilePill } from "@flow-industries/ui/components";
 import {
   NativeSelect,
   NativeSelectOption,
 } from "@flow-industries/ui/components/native-select";
+import { PresenceIndicator } from "@flow-industries/ui/components/presence-indicator";
 import { useState } from "react";
 import { MemoryRouter } from "react-router";
 
@@ -20,6 +21,13 @@ export function App(): React.JSX.Element {
           <NativeSelectOption value="lobby">Lobby</NativeSelectOption>
           <NativeSelectOption value="arena">Arena</NativeSelectOption>
         </NativeSelect>
+        <ProfilePill
+          render={<span />}
+          username="Alice"
+          status="invisible"
+          self
+        />
+        <PresenceIndicator status="invisible" />
         <Button onClick={() => setCount(count + 1)}>Joined {count}</Button>
       </main>
     </MemoryRouter>

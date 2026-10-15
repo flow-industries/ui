@@ -4,12 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { PresenceIndicator, type PresenceStatus } from "./presence-indicator";
 
 const profilePillVariants = cva(
   // normal-case/tracking-tight are load-bearing: app headers commonly set
   // `uppercase tracking-widest` on the nav around it and both inherit, so the
   // pill restates the base layer's own defaults rather than accepting them.
-  "group/profile-pill inline-flex w-fit items-center rounded-full text-foreground normal-case tracking-tight outline-none transition-colors [&:is(a,button):hover]:text-muted-foreground",
+  "group/profile-pill inline-flex w-fit max-w-full items-center rounded-full text-foreground normal-case tracking-tight outline-none transition-colors [&:is(a,button):hover]:text-muted-foreground",
   {
     variants: {
       size: {
@@ -47,6 +48,8 @@ const profilePillVariants = cva(
 function ProfilePill({
   username,
   image,
+  status,
+  self,
   size = "default",
   className,
   render,
@@ -55,6 +58,8 @@ function ProfilePill({
   VariantProps<typeof profilePillVariants> & {
     username: string;
     image?: string | null;
+    status?: PresenceStatus | null;
+    self?: boolean;
   }) {
   return useRender({
     defaultTagName: "button",
@@ -74,6 +79,12 @@ function ProfilePill({
             <Avatar size={size ?? "default"}>
               {image ? <AvatarImage src={image} alt="" /> : null}
               <AvatarFallback />
+              <PresenceIndicator
+                status={status}
+                self={self}
+                size={size === "lg" ? "default" : "sm"}
+                className="absolute -right-0.5 -bottom-0.5 z-10"
+              />
             </Avatar>
           </>
         ),

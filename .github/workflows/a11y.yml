@@ -21,10 +21,16 @@ jobs:
       - run: npm install -g bun
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bunx playwright test tests/a11y.spec.ts tests/error-boundary.spec.ts tests/semantics.spec.ts tests/focus.spec.ts tests/focus-provider.spec.ts
+      - run: bunx playwright test tests/a11y.spec.ts tests/error-boundary.spec.ts tests/semantics.spec.ts tests/focus.spec.ts tests/focus-provider.spec.ts tests/presence.spec.ts
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: a11y-report
           path: playwright-report/
+          retention-days: 14
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: presence-browser-evidence
+          path: test-results/presence-*/
           retention-days: 14
