@@ -1,0 +1,209 @@
+/* Floating chrome: the top row (FloatingHeader) and the Dock. */
+
+/* The dock switches between a right-edge rail and a phone bottom bar at 40rem.
+   `layout="rail"` or `layout="bar"` pins one of them. */
+@custom-variant dock-rail {
+  &:where([data-dock-layout="rail"], [data-dock-layout="rail"] *) {
+    @slot;
+  }
+  @media (width >= 40rem) {
+    &:where([data-dock-layout="auto"], [data-dock-layout="auto"] *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant dock-bar {
+  &:where([data-dock-layout="bar"], [data-dock-layout="bar"] *) {
+    @slot;
+  }
+  @media (width < 40rem) {
+    &:where([data-dock-layout="auto"], [data-dock-layout="auto"] *) {
+      @slot;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    /* Side inset shared by the top row and the dock. */
+    --flow-top-row-inset: 1rem;
+    /* Room the floating row covers at the top of the page: content starts below it,
+       and an inner scroller that runs under the row pads its top by it. */
+    --flow-top-row-height: calc(6rem + env(safe-area-inset-top, 0px));
+    /* The scroll-edge fade's full height, and the page's scroll-padding-top. */
+    --flow-top-row-fade-height: calc(6.5rem + env(safe-area-inset-top, 0px));
+    /* Room content keeps clear of the desktop rail (inline end) and the phone bar plus its fade (block end). */
+    --flow-dock-rail-room: 5rem;
+    --flow-dock-bar-room: calc(6.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (width >= 48rem) {
+    :root {
+      --flow-top-row-inset: 2rem;
+    }
+  }
+
+  /* The row returns to the page flow for short windows, large text and zoom (rem-based,
+     since CSS can't detect zoom), forced colours and print: nothing is covered then. */
+  @media (height < 32rem), (forced-colors: active), print {
+    :root {
+      --flow-top-row-height: 0px;
+      --flow-top-row-fade-height: 0px;
+    }
+  }
+
+  html:has(.flow-top-row) {
+    scroll-padding-top: var(--flow-top-row-fade-height);
+  }
+}
+
+@layer components {
+  .flow-top-row-spacer {
+    flex: none;
+    min-height: var(--flow-top-row-height);
+  }
+
+  .flow-top-row-spacer[data-spacer="false"] {
+    min-height: 0;
+  }
+
+  .flow-top-row {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 40;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: calc(6rem + env(safe-area-inset-top, 0px));
+    padding: calc(1.5rem + env(safe-area-inset-top, 0px))
+      calc(var(--flow-top-row-inset) + env(safe-area-inset-right, 0px)) 1.5rem
+      calc(var(--flow-top-row-inset) + env(safe-area-inset-left, 0px));
+    pointer-events: none;
+  }
+
+  .flow-top-row > [data-slot="floating-header-brand"],
+  .flow-top-row > [data-slot="floating-header-end"] {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 3rem;
+    pointer-events: auto;
+  }
+
+  .flow-top-row > [data-slot="floating-header-brand"] {
+    flex: none;
+  }
+
+  .flow-top-row > [data-slot="floating-header-end"] {
+    justify-content: flex-end;
+  }
+
+  /* The profile pill's focus border and its gap (4px) sit past the inset, so the
+     presence ring's outer edge lands on it. */
+  .flow-top-row
+    > [data-slot="floating-header-end"]
+    > .flow-profile-pill:last-child {
+    margin-inline-end: -4px;
+  }
+
+  /* Page-coloured, solid to the islands' lowest edge plus 8px, then a 24px ramp. It sits in
+     the row's own stacking context, under the islands, and shows only once content is under it. */
+  .flow-top-row-fade {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: var(--flow-top-row-fade-height);
+    background: linear-gradient(
+      to bottom,
+      var(--flow-fade-color, var(--background))
+        calc(5rem + env(safe-area-inset-top, 0px)),
+      transparent
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms var(--ease-out);
+  }
+
+  .flow-top-row[data-scrolled] > .flow-top-row-fade {
+    opacity: 1;
+  }
+
+  @media (height < 32rem), (forced-colors: active), print {
+    .flow-top-row {
+      position: relative;
+      z-index: auto;
+    }
+
+    .flow-top-row-fade {
+      display: none;
+    }
+  }
+
+  [data-slot="dock"] {
+    --flow-dock-item: 2.5rem;
+    /* The rail's centre line is the profile avatar's: the inset, the ring's 4px and half of the
+       24px avatar, less half an item. A left rail centres on the logo mark instead. */
+    --flow-dock-rail-right: calc(
+      var(--flow-top-row-inset) + env(safe-area-inset-right, 0px) + 4px + 0.75rem -
+        var(--flow-dock-item) / 2
+    );
+    --flow-dock-rail-left: calc(
+      var(--flow-top-row-inset) + env(safe-area-inset-left, 0px) + 0.625rem -
+        var(--flow-dock-item) / 2
+    );
+    --flow-dock-bar-left: calc(
+      var(--flow-top-row-inset) + env(safe-area-inset-left, 0px)
+    );
+    --flow-dock-bar-right: calc(
+      var(--flow-top-row-inset) + env(safe-area-inset-right, 0px)
+    );
+    --flow-dock-bar-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (pointer: coarse) {
+    [data-slot="dock"] {
+      --flow-dock-item: 2.75rem;
+    }
+  }
+
+  [data-slot="dock-fade"] {
+    background: linear-gradient(
+      to top,
+      var(--flow-fade-color, var(--background)) 58%,
+      transparent
+    );
+  }
+}
+
+/* In the utilities layer, so it outranks the dock's own display utilities. */
+@layer utilities {
+  /* Hide the phone bar while someone types: the keyboard is open. */
+  @media (pointer: coarse) {
+    html:has(
+        :is(
+            input:not(
+                [type="button"],
+                [type="checkbox"],
+                [type="color"],
+                [type="file"],
+                [type="radio"],
+                [type="range"],
+                [type="reset"],
+                [type="submit"]
+              ),
+            textarea,
+            [contenteditable]:not([contenteditable="false"])
+          ):focus
+      )
+      :is([data-slot="dock"], [data-slot="dock-fade"]) {
+      @variant dock-bar {
+        display: none;
+      }
+    }
+  }
+}
