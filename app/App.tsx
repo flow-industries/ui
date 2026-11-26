@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Archive,
-  Bell,
+  ArrowDownUp,
   Bold,
   Check,
   ChevronsUpDown,
@@ -15,6 +15,7 @@ import {
   Image as ImageIcon,
   Inbox,
   Italic,
+  Languages,
   LayoutGrid,
   LogOut,
   Mail,
@@ -28,7 +29,6 @@ import {
   Send,
   Settings,
   Star,
-  Sun,
   Trash2,
   Type,
   Underline,
@@ -136,7 +136,7 @@ import {
   DisplayMenuItem,
 } from "../src/components/ui/display-menu";
 import { DissolveFilter } from "../src/components/ui/dissolve-filter";
-import { Dock } from "../src/components/ui/dock";
+import { Dock, type DockItem } from "../src/components/ui/dock";
 import {
   Drawer,
   DrawerContent,
@@ -187,6 +187,7 @@ import {
   FormMessage,
 } from "../src/components/ui/form";
 import {
+  FloatingHeader,
   Header,
   HeaderActions,
   HeaderBrand,
@@ -1937,9 +1938,9 @@ function ComponentsShowcase() {
       </Section>
 
       <Section title="Profile Pill" wide>
-        <Preview>
-          <ProfilePill size="sm" username="kualta" />
+        <Preview label="Small (the default and the header size), md and lg; bare until focused">
           <ProfilePill username="kualta" />
+          <ProfilePill size="md" username="kualta" />
           <ProfilePill size="lg" username="kualta" />
           <ProfilePill size="lg" username="averyverylongusernameindeed" />
           <ProfilePill
@@ -1961,11 +1962,13 @@ function ComponentsShowcase() {
       <Section title="Presence" wide>
         <div className="flex flex-col gap-6" data-testid="presence-showcase">
           <p className="text-muted-foreground">
-            Availability uses both shape and text. Invisible is shown only to
+            Availability is a ring around the avatar, different in shape as well
+            as colour, and every ring is named. Idle opens clockwise from 12
+            o&apos;clock the longer someone is away. Invisible is shown only to
             you; other people see Offline. Missing presence leaves the avatar
             unmarked.
           </p>
-          {(["sm", "default", "lg"] as const).map((size) => (
+          {(["sm", "md", "lg"] as const).map((size) => (
             <div
               key={size}
               className="flex flex-wrap items-center gap-6"
@@ -1985,6 +1988,26 @@ function ComponentsShowcase() {
               ))}
             </div>
           ))}
+          <div
+            className="flex flex-wrap items-center gap-6"
+            data-testid="presence-away"
+          >
+            {[2, 12, 40, 90].map((away) => (
+              <ProfilePill
+                key={away}
+                render={<span />}
+                username={`away ${away}m`}
+                status="idle"
+                away={away}
+              />
+            ))}
+            <ProfilePill
+              render={<span />}
+              username="until 15:00"
+              status="busy"
+              statusLabel="Busy until 15:00"
+            />
+          </div>
           <div className="flex flex-wrap items-center gap-6">
             <ProfilePill
               render={<span />}
@@ -2902,25 +2925,14 @@ function ComponentsShowcase() {
         </Preview>
       </Section>
 
+      {/* Floating Header */}
+      <Section title="Floating Header" wide>
+        <FloatingHeaderShowcase />
+      </Section>
+
       {/* Dock */}
       <Section title="Dock" wide>
-        <div className="flex flex-wrap items-end gap-12">
-          {(["lg", "md", "sm"] as const).map((size) => (
-            <div key={size} className="space-y-2">
-              <p className="text-xs text-muted-foreground">{size}</p>
-              <Dock
-                size={size}
-                items={[
-                  { icon: Home, label: "Home", isActive: true },
-                  { icon: Inbox, label: "Inbox" },
-                  { icon: Bell, label: "Notifications", variant: "secondary" },
-                  { icon: Search, label: "Search" },
-                  { icon: Settings, label: "Settings", variant: "primary" },
-                ]}
-              />
-            </div>
-          ))}
-        </div>
+        <DockShowcase />
       </Section>
 
       {/* Dissolve Filter */}
@@ -3036,6 +3048,136 @@ function ComponentsShowcase() {
           <ErrorBoundaryShowcase />
         </Preview>
       </Section>
+    </div>
+  );
+}
+
+// A frame with `contain: layout` becomes the containing block for the
+// previews' fixed chrome, so each sits in its frame instead of the page.
+const chromeFrameClassName =
+  "relative h-80 overflow-hidden rounded-xl border-[length:var(--border-width)] border-secondary bg-background [contain:layout]";
+
+function FloatingHeaderShowcase() {
+  const [signedIn, setSignedIn] = useState(true);
+  const [scroller, setScroller] = useState<HTMLElement | null>(null);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <Switch
+          id="floating-header-signed-in"
+          checked={signedIn}
+          onCheckedChange={setSignedIn}
+        />
+        <Label htmlFor="floating-header-signed-in">Signed in</Label>
+      </div>
+      <div className={chromeFrameClassName} data-testid="floating-header-demo">
+        <FloatingHeader
+          spacer={false}
+          scrollTarget={scroller}
+          brand={<HeaderBrand label="Talk" render={<a href="#components" />} />}
+          end={
+            signedIn ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={<ProfilePill username="fern" status="online" self />}
+                />
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>View profile</DropdownMenuItem>
+                  <DropdownMenuItem>Sign out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="secondary">Sign in</Button>
+            )
+          }
+        />
+        <section
+          ref={setScroller}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: a scroller must be reachable by keyboard to scroll
+          tabIndex={0}
+          aria-label="Scrolling content"
+          className="h-full space-y-4 overflow-y-auto rounded-[inherit] border-[length:var(--border-width)] border-transparent px-8 pt-(--flow-top-row-height) pb-8 outline-none focus-visible:border-focus"
+        >
+          {[
+            "This box scrolls on its own, under the row: the header has no spacer and follows it with scrollTarget.",
+            "Scroll it, and a page-coloured fade appears behind the logo and the profile once content is under them.",
+            "The fade is solid to 80px, then ramps to 104px, and spans the full width.",
+            "The brand's mark sits on the left inset; the profile ring's outer edge on the right.",
+            "Both are centred 48px from the top whether signed in or out.",
+            "Content starts at --flow-top-row-height, 96px.",
+            "Short windows, large text, forced colours and print put the row back in the page flow.",
+          ].map((line) => (
+            <p key={line} className="max-w-prose text-muted-foreground">
+              {line}
+            </p>
+          ))}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function DockShowcase() {
+  const [dark, setDark] = useState(false);
+  const [place, setPlace] = useState("home");
+  const items: DockItem[] = [
+    { id: "home", label: "Home", icon: <Home /> },
+    {
+      id: "inbox",
+      label: "Inbox",
+      icon: <Inbox />,
+      badge: 3,
+      badgeTone: "accent",
+    },
+    { id: "rooms", label: "Rooms", icon: <LayoutGrid />, priority: 3 },
+    { id: "archive", label: "Archive", icon: <Archive />, priority: 8 },
+  ].map((item) => ({
+    ...item,
+    href: `#components`,
+    current: place === item.id,
+    onClick: (event: React.MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+      setPlace(item.id);
+    },
+  }));
+  items.push(
+    { label: "Search", icon: <Search />, shortcut: "⌘K", priority: 2 },
+    {
+      label: "Dark mode",
+      icon: <Moon />,
+      pressed: dark,
+      onClick: () => setDark((on) => !on),
+    },
+    { label: "Sort · Newest", icon: <ArrowDownUp /> },
+    { label: "Language · English", icon: <Languages /> },
+    {
+      label: "GitHub",
+      icon: <GitHubIcon />,
+      href: "https://github.com/flow-industries/ui",
+      external: true,
+      group: "control",
+    },
+  );
+
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_auto]">
+      <Preview label="Rail: places, then controls; labels on hover and keyboard focus">
+        <div
+          className={cn(chromeFrameClassName, "h-120 w-full")}
+          data-testid="dock-rail-demo"
+        >
+          <Dock layout="rail" items={items} />
+        </div>
+      </Preview>
+      <Preview label="Phone bar: what fits, then More">
+        <div
+          className={cn(chromeFrameClassName, "h-120 w-[390px] max-w-full")}
+          data-testid="dock-bar-demo"
+        >
+          <Dock layout="bar" items={items} />
+        </div>
+      </Preview>
     </div>
   );
 }
@@ -3198,45 +3340,45 @@ export function App() {
   return (
     <ToastProvider>
       <TooltipProvider>
-        <div className="min-h-screen">
-          <Header layout="product">
-            <HeaderBrand label="UI" />
-            <a
-              href="https://github.com/flow-industries/ui"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <GitHubIcon className="w-5 h-5" />
-            </a>
-          </Header>
+        <div className="min-h-screen max-sm:pb-(--flow-dock-bar-room) sm:px-(--flow-dock-rail-room)">
+          <FloatingHeader
+            brand={<HeaderBrand label="UI" render={<a href="#design" />} />}
+          />
 
           <Dock
-            size="md"
-            className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 sm:flex"
             items={[
               ...(
                 [
-                  { hash: "design", icon: Type, label: "Design System" },
-                  { hash: "showcases", icon: LayoutGrid, label: "Showcases" },
-                  { hash: "components", icon: Component, label: "Components" },
+                  { hash: "design", icon: <Type />, label: "Design System" },
+                  {
+                    hash: "showcases",
+                    icon: <LayoutGrid />,
+                    label: "Showcases",
+                  },
+                  {
+                    hash: "components",
+                    icon: <Component />,
+                    label: "Components",
+                  },
                 ] as const
               ).map(({ hash, icon, label }) => ({
                 icon,
                 label,
-                isActive: page === hash,
-                onClick: () => {
-                  window.location.hash = hash;
-                },
+                href: `#${hash}`,
+                current: page === hash,
               })),
               {
-                label: dark ? "Light mode" : "Dark mode",
-                customIcon: dark ? (
-                  <Sun className="size-5" />
-                ) : (
-                  <Moon className="size-5" />
-                ),
+                label: "Dark mode",
+                icon: <Moon />,
+                pressed: dark,
                 onClick: toggleTheme,
+              },
+              {
+                label: "GitHub",
+                icon: <GitHubIcon />,
+                href: "https://github.com/flow-industries/ui",
+                external: true,
+                group: "control",
               },
             ]}
           />

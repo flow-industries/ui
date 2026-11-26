@@ -25,9 +25,9 @@ for (const theme of ["light", "dark"] as const) {
       });
       await openShowcase(page, "components", theme);
       const showcase = page.getByTestId("presence-showcase");
-      for (const size of ["sm", "default", "lg"]) {
+      for (const size of ["sm", "md", "lg"]) {
         const row = showcase.locator(`[data-presence-size="${size}"]`);
-        const glyphs: string[] = [];
+        const signatures: string[] = [];
         for (const status of [
           "Online",
           "Idle",
@@ -35,22 +35,50 @@ for (const theme of ["light", "dark"] as const) {
           "Invisible",
           "Offline",
         ]) {
-          const indicator = row.getByRole("img", { name: status, exact: true });
-          await expect(indicator).toBeVisible();
-          const glyph = indicator.locator("svg");
-          await expect(glyph).toBeVisible();
-          const box = await glyph.boundingBox();
-          expect(box?.width).toBeGreaterThanOrEqual(14);
-          glyphs.push(
-            await glyph.evaluate(
-              (svg) =>
-                svg.innerHTML +
-                (getComputedStyle(svg).fill === "none" ? "hollow" : "filled"),
-            ),
-          );
+          const ring = row.getByRole("img", { name: status, exact: true });
+          await expect(ring).toBeVisible();
+          const geometry = await ring.evaluate((element) => {
+            const avatar = element.parentElement?.getBoundingClientRect();
+            const box = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            const photo = element.parentElement
+              ? getComputedStyle(element.parentElement).filter
+              : "";
+            return {
+              grow: avatar ? box.width - avatar.width : 0,
+              concentric: avatar
+                ? Math.abs(
+                    box.x + box.width / 2 - (avatar.x + avatar.width / 2),
+                  ) < 0.5 &&
+                  Math.abs(
+                    box.y + box.height / 2 - (avatar.y + avatar.height / 2),
+                  ) < 0.5
+                : false,
+              signature: [
+                style.borderTopStyle,
+                style.borderTopColor === "rgba(0, 0, 0, 0)" ? "none" : "ring",
+                style.maskImage === "none" ? "closed" : "open",
+                element.children.length > 0 ? "cut" : "whole",
+                photo.includes("grayscale") ? "grey" : "photo",
+              ].join(" "),
+            };
+          });
+          expect(geometry.grow).toBe(8);
+          expect(geometry.concentric).toBe(true);
+          signatures.push(geometry.signature);
         }
-        expect(new Set(glyphs).size).toBe(5);
+        expect(new Set(signatures).size).toBe(5);
       }
+      const away = page.getByTestId("presence-away");
+      await expect(
+        away.getByRole("img", { name: "Idle for 12 minutes" }),
+      ).toBeVisible();
+      await expect(
+        away.getByRole("img", { name: "Idle for 1 hour" }),
+      ).toBeVisible();
+      await expect(
+        away.getByRole("img", { name: "Busy until 15:00" }),
+      ).toBeVisible();
       const publicPill = showcase
         .locator('[data-slot="profile-pill"]')
         .filter({ hasText: "public-invisible" });
@@ -63,9 +91,9 @@ for (const theme of ["light", "dark"] as const) {
       const unknown = showcase
         .locator('[data-slot="profile-pill"]')
         .filter({ hasText: "unknown" });
-      await expect(
-        unknown.locator('[data-slot="presence-indicator"]'),
-      ).toHaveCount(0);
+      await expect(unknown.locator('[data-slot="presence-ring"]')).toHaveCount(
+        0,
+      );
       await expect(unknown).not.toHaveAttribute("type");
       await expect(unknown).not.toHaveAttribute("tabindex");
       const trigger = page.getByRole("button", {

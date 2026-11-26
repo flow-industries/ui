@@ -1,7 +1,9 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type * as React from "react";
+import { useRef } from "react";
 
+import { type ScrollTarget, useScrollEdge } from "../../hooks/use-scroll-edge";
 import { cn } from "../../utils/cn";
 import { Logo } from "../logo";
 
@@ -110,5 +112,84 @@ function HeaderActions({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export type { HeaderBrandProps, HeaderBrandSize, HeaderProps };
-export { Header, HeaderActions, HeaderBrand };
+type FloatingHeaderProps = Omit<React.ComponentProps<"header">, "children"> & {
+  /** The app's `HeaderBrand`, at its default size. */
+  brand: React.ReactNode;
+  /** The profile (`ProfilePill`, or its menu trigger), or Sign in while signed out. */
+  end?: React.ReactNode;
+  /**
+   * The element whose scroll shows the fade, when content scrolls in an inner box
+   * rather than the window. Pass the element itself (from a callback ref) if it
+   * mounts after the header; a ref object is read once, when the header mounts.
+   */
+  scrollTarget?: ScrollTarget;
+  /**
+   * Keep the row's room in the page flow (default). Pass `false` when the page
+   * leaves room itself, e.g. an inner scroller that runs under the row with
+   * `padding-top: var(--flow-top-row-height)`.
+   */
+  spacer?: boolean;
+  /** Classes for the spacer that holds the row's place: grid area, margins. */
+  containerClassName?: string;
+};
+
+/**
+ * The floating top row every Flow app shares: the brand on the left inset and
+ * the profile on the right, both centred 48px from the top, fixed while content
+ * scrolls beneath. It holds nothing else. It owns its 96px of room (content
+ * starts at `--flow-top-row-height`) and a page-coloured fade that appears once
+ * content is under the row. Short windows, large text, forced colours and print
+ * put it back in the page flow.
+ */
+function FloatingHeader({
+  brand,
+  end,
+  scrollTarget,
+  spacer = true,
+  className,
+  containerClassName,
+  ref,
+  ...props
+}: FloatingHeaderProps) {
+  const header = useRef<HTMLElement | null>(null);
+  useScrollEdge(header, { target: scrollTarget, scroll: true });
+  const row = useRender({
+    render: <header data-slot="floating-header" />,
+    ref: ref ? [header, ref] : header,
+    props: mergeProps<"header">(
+      {
+        className: cn("flow-top-row", className),
+        children: (
+          <>
+            <div
+              data-slot="floating-header-fade"
+              aria-hidden="true"
+              className="flow-top-row-fade"
+            />
+            <div data-slot="floating-header-brand">{brand}</div>
+            <div data-slot="floating-header-end">{end}</div>
+          </>
+        ),
+      },
+      props,
+    ),
+  });
+
+  return (
+    <div
+      data-slot="floating-header-spacer"
+      data-spacer={spacer ? undefined : "false"}
+      className={cn("flow-top-row-spacer", containerClassName)}
+    >
+      {row}
+    </div>
+  );
+}
+
+export type {
+  FloatingHeaderProps,
+  HeaderBrandProps,
+  HeaderBrandSize,
+  HeaderProps,
+};
+export { FloatingHeader, Header, HeaderActions, HeaderBrand };

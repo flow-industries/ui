@@ -4,31 +4,38 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { PresenceIndicator, type PresenceStatus } from "./presence-indicator";
+import { PresenceRing, type PresenceStatus } from "./presence-indicator";
 
 const profilePillVariants = cva(
+  // Bare: no fill or outline until focus. The -m-1 pulls the focus border and
+  // its 2px gap outside the visible pill, so in layout the pill ends at the
+  // presence ring's outer edge, which then lands exactly on a header's inset;
+  // max-w adds those margins back so a container's full width still fits.
   // normal-case/tracking-tight are load-bearing: app headers commonly set
   // `uppercase tracking-widest` on the nav around it and both inherit, so the
   // pill restates the base layer's own defaults rather than accepting them.
-  "group/profile-pill inline-flex w-fit max-w-full items-center rounded-full text-foreground normal-case tracking-tight outline-none transition-colors [&:is(a,button):hover]:text-muted-foreground",
+  "group/profile-pill -m-1 inline-flex w-fit max-w-[calc(100%+0.5rem)] items-center rounded-full border-[length:var(--border-width)] border-transparent p-0.5 text-foreground normal-case tracking-tight outline-none transition-[color,border-color] duration-150 ease-(--ease-out) focus-visible:border-focus [&:is(a,button)]:pointer-coarse:min-h-11 [&:is(a,button):hover]:text-muted-foreground",
   {
     variants: {
       size: {
-        sm: "gap-2 p-0.5 pl-3 font-medium text-sm",
-        default: "gap-2.5 p-0.5 pl-3.5 font-medium text-base",
-        lg: "gap-3 p-1 pl-4 font-semibold text-lg",
+        sm: "gap-1.5 font-medium text-sm",
+        md: "gap-1.5 font-medium text-base",
+        lg: "gap-2 font-semibold text-lg",
       },
     },
     defaultVariants: {
-      size: "default",
+      size: "sm",
     },
   },
 );
 
+const avatarSize = { sm: "sm", md: "default", lg: "lg" } as const;
+
 /**
- * The signed-in user's identity chip — username followed by their avatar — used
- * wherever an app shows who is signed in (Flow ID's own pill, the game menu, and
- * every app header). Rendering only: it holds no session state and fetches
+ * The signed-in user's identity — username, then their avatar with its presence
+ * ring — used wherever an app shows who is signed in: the top row's end slot,
+ * Flow ID's own pill, the game menu. Small (a 24px avatar) by default, which is
+ * the header size. Rendering only: it holds no session state and fetches
  * nothing, so callers pass whatever identity they already have.
  *
  * Renders a `button` by default, which is also what makes it a drop-in trigger:
@@ -37,20 +44,29 @@ const profilePillVariants = cva(
  * <DropdownMenuTrigger render={<ProfilePill username={user.username} />} />
  * ```
  *
- * Pass `render={<span />}` for a non-interactive display; the hover treatment
- * only applies while it is a button or a link.
+ * Pass `render={<span />}` for a non-interactive display; the hover, focus and
+ * touch-floor treatment only apply while it is a button or a link. The avatar
+ * always keeps the ring's 4px of room, so the pill doesn't move when presence
+ * loads.
  *
- * @param username Shown as-is, truncated past 12rem — callers guard the
- *                 signed-out case rather than passing an empty string.
- * @param image    Avatar URL; falls back to the anonymous silhouette when it is
- *                 absent or fails to load.
+ * @param username    Shown as-is, truncated past 12rem — callers guard the
+ *                    signed-out case rather than passing an empty string.
+ * @param image       Avatar URL; falls back to the anonymous silhouette when it
+ *                    is absent or fails to load.
+ * @param status      Presence, drawn as a ring; none leaves the avatar unmarked.
+ * @param self        The viewer's own pill: Invisible shows dashed rather than
+ *                    as Offline.
+ * @param away        Minutes idle: opens the idle ring and names it.
+ * @param statusLabel Overrides the ring's accessible name ("Busy until 15:00").
  */
 function ProfilePill({
   username,
   image,
   status,
   self,
-  size = "default",
+  away,
+  statusLabel,
+  size = "sm",
   className,
   render,
   ...props
@@ -60,6 +76,8 @@ function ProfilePill({
     image?: string | null;
     status?: PresenceStatus | null;
     self?: boolean;
+    away?: number;
+    statusLabel?: string;
   }) {
   return useRender({
     defaultTagName: "button",
@@ -76,14 +94,14 @@ function ProfilePill({
         children: (
           <>
             <span className="max-w-[12rem] truncate">{username}</span>
-            <Avatar size={size ?? "default"}>
+            <Avatar size={avatarSize[size ?? "sm"]} className="m-1">
               {image ? <AvatarImage src={image} alt="" /> : null}
               <AvatarFallback />
-              <PresenceIndicator
+              <PresenceRing
                 status={status}
                 self={self}
-                size={size === "lg" ? "default" : "sm"}
-                className="absolute -right-0.5 -bottom-0.5 z-10"
+                away={away}
+                label={statusLabel}
               />
             </Avatar>
           </>

@@ -16,6 +16,8 @@ function Avatar({
       data-size={size}
       className={cn(
         "group/avatar relative flex size-8 shrink-0 rounded-squircle select-none after:absolute after:inset-0 after:rounded-squircle after:border-[length:var(--border-width)] after:border-secondary after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        // An offline presence ring draws nothing; the photo greys instead.
+        "has-[>[data-slot=presence-ring][data-status=offline]]:opacity-55 has-[>[data-slot=presence-ring][data-status=offline]]:grayscale",
         className,
       )}
       {...props}
