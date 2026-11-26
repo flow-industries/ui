@@ -99,8 +99,19 @@
     flex: none;
   }
 
+  /* The brand never shrinks; the end slot takes what is left. Its content is
+     right-aligned, but `safe` sends any overflow off the far edge rather than
+     over the brand, and the slot is a container so the profile pill can drop
+     its name when the slot is too narrow for it. */
   .flow-top-row > [data-slot="floating-header-end"] {
-    justify-content: flex-end;
+    flex: 1 1 0;
+    justify-content: safe flex-end;
+    container: flow-top-row-end / inline-size;
+    pointer-events: none;
+  }
+
+  .flow-top-row > [data-slot="floating-header-end"] > * {
+    pointer-events: auto;
   }
 
   /* The profile pill's focus border and its gap (4px) sit past the inset, so the
@@ -180,8 +191,26 @@
   }
 }
 
-/* In the utilities layer, so it outranks the dock's own display utilities. */
+/* In the utilities layer, so these outrank the components' own utilities. */
 @layer utilities {
+  /* Too narrow for a few characters of the name: keep only the avatar and its
+     ring. The name stays in the accessibility tree. */
+  @container flow-top-row-end (width < 5rem) {
+    .flow-profile-pill {
+      padding-inline-start: 0.125rem;
+    }
+
+    .flow-profile-pill > [data-slot="profile-pill-name"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
   /* Hide the phone bar while someone types: the keyboard is open. */
   @media (pointer: coarse) {
     html:has(

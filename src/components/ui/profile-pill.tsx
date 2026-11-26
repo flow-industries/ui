@@ -46,7 +46,9 @@ const avatarSize = { sm: "sm", md: "default", lg: "lg" } as const;
  * Pass `render={<span />}` for a non-interactive display; the hover, focus and
  * touch-floor treatment only apply while it is a button or a link. The avatar
  * always keeps the ring's 4px of room, so the pill doesn't move when presence
- * loads.
+ * loads. The name truncates when space runs short; in a `FloatingHeader` end
+ * slot too narrow for a few characters it is hidden visually (still named for
+ * assistive technology), leaving the avatar and its ring.
  *
  * @param username    Shown as-is, truncated past 12rem — callers guard the
  *                    signed-out case rather than passing an empty string.
@@ -92,7 +94,12 @@ function ProfilePill({
       {
         children: (
           <>
-            <span className="max-w-[12rem] truncate">{username}</span>
+            <span
+              data-slot="profile-pill-name"
+              className="max-w-[12rem] min-w-0 truncate"
+            >
+              {username}
+            </span>
             <Avatar size={avatarSize[size ?? "sm"]} className="m-1">
               {image ? <AvatarImage src={image} alt="" /> : null}
               <AvatarFallback />

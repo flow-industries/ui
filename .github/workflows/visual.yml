@@ -23,7 +23,7 @@ jobs:
       - run: npm install -g bun
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bunx playwright test tests/visual.spec.ts tests/header.spec.tsx
+      - run: bunx playwright test tests/visual.spec.ts tests/header.spec.tsx tests/floating-header.spec.ts
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

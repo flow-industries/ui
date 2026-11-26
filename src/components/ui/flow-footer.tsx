@@ -35,6 +35,8 @@ type FooterLinkItem = {
 };
 
 type FlowFooterProps = React.ComponentProps<"footer"> & {
+  /** Show the live fleet status line. Pass `false` where the page already states it (the status app). */
+  status?: boolean;
   statusApiUrl?: string;
   legalBase?: string;
   products?: FooterLinkItem[];
@@ -114,10 +116,12 @@ function FooterGroup({
 /**
  * The canonical Flow footer: Products / Resources / Legal link groups, the Flow Industries brand,
  * social links, copyright and the live status pill. Every consumer renders this one composition;
- * pass `className` for margins and max-width, and the list props to swap a group's items.
+ * pass `className` for margins and max-width, the list props to swap a group's items, and
+ * `status={false}` to leave out the status line.
  */
 function FlowFooter({
   className,
+  status = true,
   statusApiUrl,
   legalBase = FLOW_LINKS.home,
   products = defaultProducts,
@@ -170,7 +174,7 @@ function FlowFooter({
         </div>
         <div className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3">
           <FooterCopyright>&copy; {year} Flow Industries</FooterCopyright>
-          <StatusWidget apiUrl={statusApiUrl} />
+          {status ? <StatusWidget apiUrl={statusApiUrl} /> : null}
         </div>
       </FooterBottom>
     </Footer>
