@@ -99,18 +99,23 @@
     flex: none;
   }
 
-  /* The brand never shrinks; the end slot takes what is left. Its content is
-     right-aligned, but `safe` sends any overflow off the far edge rather than
-     over the brand, and the slot is a container so the profile pill can drop
-     its name when the slot is too narrow for it. */
+  /* The brand never shrinks; the end slot takes what is left, right-aligned so
+     nothing crosses the right inset. Its first 8px are soft: content too wide
+     for the slot may use them, so the 16px gap to the brand shrinks to 8px
+     first. Wider content is capped there (a button compacts, then clips) and
+     never reaches the brand. The slot is a container, so the profile pill can
+     drop its name when the slot is too narrow for it. */
   .flow-top-row > [data-slot="floating-header-end"] {
     flex: 1 1 0;
-    justify-content: safe flex-end;
+    margin-inline-start: -0.5rem;
+    padding-inline-start: 0.5rem;
+    justify-content: flex-end;
     container: flow-top-row-end / inline-size;
     pointer-events: none;
   }
 
   .flow-top-row > [data-slot="floating-header-end"] > * {
+    max-width: calc(100% + 0.5rem);
     pointer-events: auto;
   }
 
@@ -195,6 +200,15 @@
 @layer utilities {
   /* Too narrow for a few characters of the name: keep only the avatar and its
      ring. The name stays in the accessibility tree. */
+  /* A Sign in or Join button that may not fit beside a long brand: tighter
+     padding, and clipped rather than pushed past the inset. */
+  @container flow-top-row-end (width < 4.5rem) {
+    [data-slot="floating-header-end"] > [data-slot="button"] {
+      padding-inline: 0.5rem;
+      overflow: hidden;
+    }
+  }
+
   @container flow-top-row-end (width < 5rem) {
     .flow-profile-pill {
       padding-inline-start: 0.125rem;

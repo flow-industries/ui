@@ -7,6 +7,7 @@ import { ProfilePill } from "../src/components/ui/profile-pill";
 const params = new URLSearchParams(window.location.search);
 const label = params.get("brand") ?? "Industries";
 const username = params.get("user");
+const button = params.get("button") ?? "Join";
 const footer = params.get("footer");
 
 const root = document.getElementById("root");
@@ -21,7 +22,7 @@ if (root) {
           username ? (
             <ProfilePill username={username} status="online" self />
           ) : (
-            <Button variant="secondary">Join</Button>
+            <Button variant="secondary">{button}</Button>
           )
         }
       />
