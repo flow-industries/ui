@@ -16,8 +16,8 @@ const LONG_NAME = "averyverylongusernameindeed";
 
 for (const width of [320, 360, 390]) {
   for (const brand of ["Industries", "Time"]) {
-    for (const user of ["fern", LONG_NAME, null]) {
-      test(`${brand} with ${user ?? "Join"} at ${width}px keeps the brand clear`, async ({
+    for (const user of ["fern", LONG_NAME, "Join", "Sign in"]) {
+      test(`${brand} with ${user} at ${width}px keeps the brand clear`, async ({
         browser,
       }) => {
         const context = await browser.newContext({
@@ -33,8 +33,9 @@ for (const width of [320, 360, 390]) {
         await page.route("**/floating-header-fixture.js", (route) =>
           route.fulfill({ contentType: "text/javascript", body: script }),
         );
+        const signedIn = user !== "Join" && user !== "Sign in";
         const query = new URLSearchParams({ brand });
-        if (user) query.set("user", user);
+        query.set(signedIn ? "user" : "button", user);
         await page.goto(`/floating-header-fixture?${query}`);
         await page
           .locator('[data-slot="floating-header-end"] > *')
@@ -67,10 +68,13 @@ for (const width of [320, 360, 390]) {
           };
         });
 
-        expect(row.endLeft).toBeGreaterThanOrEqual(row.brandRight);
-        expect(row.endRight).toBeLessThanOrEqual(width);
+        // At least 8px from the wordmark (the brand's box carries a 2px focus border).
+        expect(row.endLeft).toBeGreaterThanOrEqual(row.brandRight + 6 - 0.5);
         expect(row.overflow).toBe(0);
-        if (!user) return context.close();
+        if (!signedIn) {
+          expect(row.endRight).toBeLessThanOrEqual(width - 16);
+          return context.close();
+        }
 
         const pill = page.getByRole("button", { name: `${user} Online` });
         await expect(pill).toBeVisible();

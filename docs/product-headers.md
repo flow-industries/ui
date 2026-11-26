@@ -28,7 +28,7 @@ import { ProfilePill } from "@flow-industries/ui/components/profile-pill";
 | Brand | `HeaderBrand` at its default size: a 20px mark and 19.8px wordmark, the mark's left edge on the left inset |
 | Profile | `ProfilePill` at its default small size: a medium `text-sm` name, then a 24px avatar; the ring's outer edge on the right inset |
 | Signed out | Sign in (or Join) in the same slot, at the default button height (40px). Use the secondary variant where the page has its own main action |
-| Narrow rows | The brand never shrinks; the end slot takes what is left. The profile name truncates, and below 5rem of slot it is hidden (still announced), leaving the avatar and ring. Wider end content runs past the right inset rather than over the brand: at 320px beside FLOW INDUSTRIES, Join fits and Sign in does not |
+| Narrow rows | The brand never shrinks; the end slot takes what is left and never crosses the right inset. When its content doesn't fit, the 16px gap to the brand shrinks to 8px first. Past that, a button tightens its padding and is capped (its label clipped) rather than reaching the brand; the profile name truncates, and below 5rem of slot it is hidden (still announced), leaving the avatar and ring. At 320px beside FLOW INDUSTRIES, Join fits with tighter padding and Sign in only just fits |
 | Centres | Brand and avatar centred 48px from the top |
 | Room | 96px plus the top safe-area inset (`--flow-top-row-height`). `FloatingHeader` renders a spacer that holds it, so content starts at 96px |
 | Anchors | `scroll-padding-top: var(--flow-top-row-fade-height)` (104px) is set on the page whenever the row is present |

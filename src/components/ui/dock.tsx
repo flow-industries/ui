@@ -78,8 +78,6 @@ type DockEntry = {
   group: DockGroup;
 };
 
-const MORE_KEY = "\u0000more";
-
 const itemClassName = cn(
   "group/dock-item relative flex shrink-0 select-none items-center justify-center rounded-lg border-[length:var(--border-width)] border-transparent text-muted-foreground outline-none [-webkit-touch-callout:none]",
   "transition-[color,background-color,border-color] duration-150 ease-(--ease-out)",
@@ -94,6 +92,10 @@ const itemClassName = cn(
   "dock-rail:aria-pressed:after:bottom-0.5 dock-rail:aria-pressed:after:left-1/2 dock-rail:aria-pressed:after:-translate-x-1/2",
   "dock-bar:aria-pressed:after:top-1.5 dock-bar:aria-pressed:after:left-[calc(50%+11px)]",
 );
+
+// A bar item's width: its label plus padding and border, at least 56px.
+const measureClassName =
+  "min-w-14 shrink-0 border-[length:var(--border-width)] px-1.5 text-xs leading-tight font-medium whitespace-nowrap";
 
 const iconClassName =
   "flex [&_svg]:size-5 [&_svg]:shrink-0 [&_svg]:stroke-[2.25]";
@@ -432,9 +434,12 @@ function Dock({
     if (!bar || !row) return;
     const run = () => {
       const widths = new Map<string, number>();
+      let moreWidth = 0;
       for (const child of row.children) {
+        const width = child.getBoundingClientRect().width;
         const key = child.getAttribute("data-key");
-        if (key) widths.set(key, child.getBoundingClientRect().width);
+        if (key) widths.set(key, width);
+        else if (child.hasAttribute("data-more")) moreWidth = width;
       }
       const gap = Number.parseFloat(getComputedStyle(bar).columnGap) || 0;
       let slots = Math.min(barLimit, entries.length);
@@ -442,7 +447,7 @@ function Dock({
         const kept = barKeys(entries, slots);
         const more = kept.size < entries.length;
         let total = (kept.size + (more ? 1 : 0) - 1) * gap;
-        if (more) total += widths.get(MORE_KEY) ?? 0;
+        if (more) total += moreWidth;
         for (const key of kept) total += widths.get(key) ?? 0;
         if (total <= bar.clientWidth) break;
       }
@@ -549,15 +554,18 @@ function Dock({
               aria-hidden="true"
               className="pointer-events-none invisible absolute top-0 left-0 flex size-0 overflow-hidden"
             >
-              {[...entries, null].map((entry) => (
+              {entries.map((entry) => (
                 <span
-                  key={entry?.key ?? MORE_KEY}
-                  data-key={entry?.key ?? MORE_KEY}
-                  className="min-w-14 shrink-0 border-[length:var(--border-width)] px-1.5 text-xs leading-tight font-medium whitespace-nowrap"
+                  key={entry.key}
+                  data-key={entry.key}
+                  className={measureClassName}
                 >
-                  {entry?.item.label ?? words.more}
+                  {entry.item.label}
                 </span>
               ))}
+              <span data-more="" className={measureClassName}>
+                {words.more}
+              </span>
             </span>
           </>
         ),
