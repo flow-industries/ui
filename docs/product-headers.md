@@ -83,7 +83,7 @@ Put places a person moves between in the Dock; content navigation (a file tree, 
 
 ## Profile and presence
 
-`ProfilePill` is bare (no fill or outline until focused), reads name first and avatar last, and is small by default. In layout it ends at the presence ring's outer edge, so it lands exactly on the inset; its focus border sits outside that edge. The avatar always keeps the ring's 4px of room, so nothing moves when presence loads.
+`ProfilePill` is bare (no fill or outline until focused), reads name first and avatar last, and is small by default. Its focus border runs 2px outside the presence ring; in the top row's end slot the pill moves 4px outward so the ring's outer edge, not the focus border, lands on the inset. The avatar always keeps the ring's 4px of room, so nothing moves when presence loads.
 
 | Status | Ring |
 | --- | --- |

@@ -7,14 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { PresenceRing, type PresenceStatus } from "./presence-indicator";
 
 const profilePillVariants = cva(
-  // Bare: no fill or outline until focus. The -m-1 pulls the focus border and
-  // its 2px gap outside the visible pill, so in layout the pill ends at the
-  // presence ring's outer edge, which then lands exactly on a header's inset;
-  // max-w adds those margins back so a container's full width still fits.
+  // Bare: no fill or outline until focus, when a border shows 2px outside the
+  // presence ring. `flow-profile-pill` lets the top row pull that 4px past its
+  // inset, so the ring's outer edge, not the focus border, sits on the inset.
   // normal-case/tracking-tight are load-bearing: app headers commonly set
   // `uppercase tracking-widest` on the nav around it and both inherit, so the
   // pill restates the base layer's own defaults rather than accepting them.
-  "group/profile-pill -m-1 inline-flex w-fit max-w-[calc(100%+0.5rem)] items-center rounded-full border-[length:var(--border-width)] border-transparent p-0.5 text-foreground normal-case tracking-tight outline-none transition-[color,border-color] duration-150 ease-(--ease-out) focus-visible:border-focus [&:is(a,button)]:pointer-coarse:min-h-11 [&:is(a,button):hover]:text-muted-foreground",
+  "flow-profile-pill group/profile-pill inline-flex w-fit max-w-full items-center rounded-full border-[length:var(--border-width)] border-transparent py-0.5 pr-0.5 pl-2 text-foreground normal-case tracking-tight outline-none transition-[color,border-color] duration-150 ease-(--ease-out) focus-visible:border-focus [&:is(a,button)]:pointer-coarse:min-h-11 [&:is(a,button):hover]:text-muted-foreground",
   {
     variants: {
       size: {

@@ -103,6 +103,14 @@
     justify-content: flex-end;
   }
 
+  /* The profile pill's focus border and its gap (4px) sit past the inset, so the
+     presence ring's outer edge lands on it. */
+  .flow-top-row
+    > [data-slot="floating-header-end"]
+    > .flow-profile-pill:last-child {
+    margin-inline-end: -4px;
+  }
+
   /* Page-coloured, solid to the islands' lowest edge plus 8px, then a 24px ramp. It sits in
      the row's own stacking context, under the islands, and shows only once content is under it. */
   .flow-top-row-fade {
